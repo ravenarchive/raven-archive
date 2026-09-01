@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黒い森 — RAVEN ARCHIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────
+   BASE
+───────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background-color:#070806;
+  color:#c4b090;
+  font-family:'Noto Serif JP','Cormorant Garamond',Georgia,serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:none;
+  min-height:100vh;
+}
+a{text-decoration:none;color:inherit}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;border:1px solid rgba(200,150,60,.75);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:screen}
+#cur.h{width:36px;height:36px;background:rgba(200,150,60,.07)}
+@media(pointer:coarse){#cur{display:none}}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:8000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.04}
+
+/* VEIL */
+#veil{position:fixed;inset:0;z-index:7000;background:#040403;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;transition:opacity 2s ease}
+#veil.out{opacity:0;pointer-events:none}
+.veil-main{font-family:'Cinzel',serif;font-size:clamp(.9rem,2.5vw,1.1rem);letter-spacing:.4em;color:#8a9870;opacity:0;animation:vfade 1.8s ease forwards .3s}
+.veil-line{width:48px;height:1px;background:linear-gradient(90deg,transparent,#8a9870,transparent);opacity:0;animation:vfade 1.8s ease forwards .7s}
+.veil-sub{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.6rem,1.8vw,.75rem);letter-spacing:.2em;color:#5a6a50;opacity:0;animation:vfade 1.8s ease forwards 1s}
+@keyframes vfade{from{opacity:0;transform:translateY(10px)}to{opacity:.85;transform:translateY(0)}}
+
+/* ─────────────────────────────────────
+   NAV
+───────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:400;padding:1.4rem 5vw;display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,6,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(120,160,80,.07)}
+.logo{display:flex;flex-direction:column;gap:3px;text-decoration:none}
+.logo-en{font-family:'Cinzel',serif;font-size:clamp(.72rem,1.8vw,.9rem);letter-spacing:.28em;color:#e0cba8;font-weight:400}
+.logo-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.52rem,1.2vw,.62rem);letter-spacing:.18em;color:#6a5a40}
+.nav-back{font-family:'Cinzel',serif;font-size:clamp(.5rem,1.1vw,.6rem);letter-spacing:.22em;text-transform:uppercase;color:#8a9870;border:1px solid rgba(120,160,80,.2);padding:.38rem .9rem;transition:all .3s}
+.nav-back:hover{color:#aac880;border-color:rgba(120,160,80,.5)}
+
+/* ─────────────────────────────────────
+   HERO / MAIN BG
+───────────────────────────────────── */
+.forest-bg{
+  position:fixed;inset:0;z-index:0;
+  background-image:url('img_forest_warm.jpg');
+  background-size:cover;background-position:center;
+  filter:brightness(.28) saturate(.5);
+  transition:filter 2s ease;
+}
+.forest-bg.legend-glow{filter:brightness(.2) saturate(.5)}
+
+body::after{display:none} /* override grain for forest */
+#grain{mix-blend-mode:overlay;opacity:.06}
+
+/* dark vignette always */
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 50%,transparent 20%,rgba(7,8,6,.7) 80%),
+    linear-gradient(to bottom,rgba(7,8,6,.8) 0%,rgba(7,8,6,.3) 30%,rgba(7,8,6,.3) 70%,rgba(7,8,6,.9) 100%);
+}
+
+/* ─────────────────────────────────────
+   PAGE WRAPPER
+───────────────────────────────────── */
+.page{
+  position:relative;z-index:20;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:clamp(7rem,14vh,10rem) 5vw clamp(4rem,8vh,7rem);
+}
+
+/* ─────────────────────────────────────
+   HEADER
+───────────────────────────────────── */
+.forest-header{text-align:center;margin-bottom:clamp(3rem,6vh,5rem)}
+.fh-label{font-family:'Cinzel',serif;font-size:clamp(.5rem,1vw,.6rem);letter-spacing:.5em;text-transform:uppercase;color:#8a9870;opacity:.65;display:block;margin-bottom:.9rem}
+.fh-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(2.4rem,6vw,3.8rem);color:#e0d8c8;letter-spacing:.3em;display:block;text-shadow:0 0 80px rgba(100,140,60,.18)}
+.fh-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.9rem,2vw,1.2rem);color:#c4b090;opacity:.5;letter-spacing:.1em;display:block;margin-top:.7rem}
+.fh-rule{width:44px;height:1px;background:linear-gradient(to right,transparent,rgba(140,160,100,.5),transparent);margin:1.4rem auto}
+.fh-sub{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.82rem,1.6vw,.98rem);color:#c4b090;opacity:.5;line-height:2.1;letter-spacing:.06em;display:block}
+
+/* ─────────────────────────────────────
+   WALK BUTTON
+───────────────────────────────────── */
+.walk-wrap{text-align:center;margin-bottom:clamp(3rem,6vh,5rem)}
+.walk-btn{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:.8rem;
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.95rem,2vw,1.1rem);
+  letter-spacing:.2em;
+  color:#e0d8c8;
+  background:rgba(7,8,6,.7);
+  border:1px solid rgba(140,160,100,.3);
+  padding:clamp(1rem,2.5vw,1.3rem) clamp(2.5rem,5vw,4rem);
+  cursor:pointer;
+  transition:all .6s ease;
+  backdrop-filter:blur(8px);
+  overflow:hidden;
+}
+.walk-btn::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(120,160,80,.06) 0%,transparent 70%);
+  opacity:0;transition:opacity .5s;
+}
+.walk-btn:hover{border-color:rgba(140,160,100,.65);color:#d8e8c0}
+.walk-btn:hover::before{opacity:1}
+.walk-btn:active{transform:scale(.98)}
+.walk-btn.walking{opacity:.5;cursor:default;pointer-events:none}
+.walk-icon{font-size:1.2rem;opacity:.7}
+
+/* ─────────────────────────────────────
+   EVENT CARD
+───────────────────────────────────── */
+.event-area{width:100%;max-width:640px;position:relative}
+
+.event-card{
+  position:relative;
+  border:1px solid rgba(140,160,100,.18);
+  background:rgba(7,8,6,.72);
+  backdrop-filter:blur(16px);
+  padding:clamp(2rem,5vw,3rem) clamp(2rem,5vw,3.5rem);
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity 1.2s ease, transform 1.2s ease, border-color .6s;
+  pointer-events:none;
+}
+.event-card.visible{
+  opacity:1;transform:translateY(0);pointer-events:all;
+}
+.event-card::before{
+  content:'';position:absolute;
+  top:6px;left:6px;right:6px;bottom:6px;
+  border:1px solid rgba(140,160,100,.06);
+  pointer-events:none;
+}
+.event-card.legend-card{
+  border-color:rgba(200,150,60,.5);
+  box-shadow:0 0 60px rgba(200,150,60,.12), 0 0 120px rgba(200,150,60,.05);
+}
+.event-card.legend-card::before{border-color:rgba(200,150,60,.14)}
+
+/* Rarity accent line */
+.event-rarity-line{
+  position:absolute;top:0;left:20%;right:20%;
+  height:1px;
+  opacity:0;transition:opacity .8s;
+}
+.event-card.visible .event-rarity-line{opacity:1}
+.rarity-common .event-rarity-line{background:linear-gradient(to right,transparent,rgba(140,160,100,.3),transparent)}
+.rarity-rare .event-rarity-line{background:linear-gradient(to right,transparent,rgba(160,180,220,.4),transparent)}
+.rarity-legend .event-rarity-line{background:linear-gradient(to right,transparent,rgba(200,150,60,.7),transparent)}
+
+/* Event text — lines appear one by one */
+.event-lines{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.9rem,1.8vw,1.05rem);
+  color:#d8cbb8;
+  line-height:2.4;
+  letter-spacing:.06em;
+}
+.event-line{
+  display:block;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.event-line.show{opacity:1;transform:none}
+
+.event-line.legend-line{color:#e8d4a0}
+
+/* Corner ornaments */
+.corner{position:absolute;width:16px;height:16px}
+.corner-tl{top:4px;left:4px;border-top:1px solid rgba(140,160,100,.3);border-left:1px solid rgba(140,160,100,.3)}
+.corner-tr{top:4px;right:4px;border-top:1px solid rgba(140,160,100,.3);border-right:1px solid rgba(140,160,100,.3)}
+.corner-bl{bottom:4px;left:4px;border-bottom:1px solid rgba(140,160,100,.3);border-left:1px solid rgba(140,160,100,.3)}
+.corner-br{bottom:4px;right:4px;border-bottom:1px solid rgba(140,160,100,.3);border-right:1px solid rgba(140,160,100,.3)}
+.legend-card .corner-tl,.legend-card .corner-tr,.legend-card .corner-bl,.legend-card .corner-br{border-color:rgba(200,150,60,.4)}
+
+/* Pilgrim note */
+.pilgrim-note{
+  display:block;
+  text-align:right;
+  margin-top:2rem;
+  padding-top:1rem;
+  border-top:1px solid rgba(140,160,100,.08);
+  font-family:'Cinzel',serif;
+  font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;
+  color:#7a8870;opacity:0;
+  transition:opacity 1s ease .5s;
+}
+.event-card.visible .pilgrim-note{opacity:.6}
+
+/* Again link */
+.again-wrap{
+  text-align:center;
+  margin-top:2rem;
+  opacity:0;transition:opacity 1s ease 1.5s;
+}
+.event-card.visible ~ .again-wrap{opacity:1}
+.again-link{
+  font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;
+  color:#7a8870;border-bottom:1px solid rgba(140,160,100,.15);padding-bottom:2px;cursor:pointer;
+  transition:all .3s;background:none;border-top:none;border-left:none;border-right:none;
+}
+.again-link:hover{color:#aac880;border-bottom-color:rgba(140,160,100,.5)}
+
+/* ─────────────────────────────────────
+   LEGEND OVERLAY
+───────────────────────────────────── */
+#legend-overlay{
+  position:fixed;inset:0;z-index:15;pointer-events:none;
+  background:rgba(7,8,6,0);
+  transition:background 2s ease;
+}
+#legend-overlay.active{background:rgba(7,8,6,.45)}
+
+/* ─────────────────────────────────────
+   FOOTER
+───────────────────────────────────── */
+.forest-foot{
+  position:relative;z-index:20;
+  text-align:center;margin-top:auto;padding-top:3rem;
+}
+.forest-foot a{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:#5a6850;transition:color .3s}
+.forest-foot a:hover{color:#8a9870}
+
+/* ─────────────────────────────────────
+   PILGRIM STATUS BAR (bottom)
+───────────────────────────────────── */
+.pilgrim-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:30;
+  display:flex;align-items:center;justify-content:center;gap:2.5rem;
+  padding:.6rem 2rem;
+  background:rgba(7,8,6,.75);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(140,160,100,.07);
+}
+.pb-item{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#5a6850}
+.pb-item span{color:#8a9870}
+.pb-link{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#7a8870;border-bottom:1px solid rgba(140,160,100,.18);padding-bottom:1px;transition:all .3s}
+.pb-link:hover{color:#aac880;border-bottom-color:rgba(140,160,100,.5)}
+
+/* ─────────────────────────────────────
+   MOBILE
+───────────────────────────────────── */
+@media(max-width:600px){
+  .event-card{padding:1.8rem 1.6rem}
+  .pilgrim-bar{gap:1.2rem;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+<div class="forest-bg" id="forest-bg"></div>
+<div class="vignette"></div>
+<div id="legend-overlay"></div>
+
+<!-- VEIL -->
+<div id="veil">
+  <div class="veil-main">THE BLACK FOREST</div>
+  <div class="veil-line"></div>
+  <div class="veil-sub">黒い森へ、ようこそ</div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <span class="logo-en">🐦‍⬛ RAVEN ARCHIVE</span>
+    <span class="logo-jp">失われた世界の記録庫</span>
+  </a>
+  <a href="index.html" class="nav-back">← 記録庫へ戻る</a>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- Header -->
+  <header class="forest-header">
+    <span class="fh-label">The Black Forest</span>
+    <span class="fh-jp">黒い森</span>
+    <span class="fh-en">The Black Forest</span>
+    <div class="fh-rule"></div>
+    <span class="fh-sub">
+      忘れられた物語は、<br>
+      いつも森の奥で息をしている。
+    </span>
+  </header>
+
+  <!-- Walk Button -->
+  <div class="walk-wrap">
+    <button class="walk-btn" id="walk-btn" onclick="walkForest()">
+      <span class="walk-icon">🌲</span>
+      <span>森を歩く</span>
+    </button>
+  </div>
+
+  <!-- Event Area -->
+  <div class="event-area">
+    <div class="event-card" id="event-card">
+      <div class="event-rarity-line"></div>
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+      <div class="event-lines" id="event-lines"></div>
+      <span class="pilgrim-note">本日の巡礼を記録しました</span>
+    </div>
+    <div class="again-wrap" id="again-wrap">
+      <button class="again-link" onclick="walkAgain()">もう一度、森を歩く</button>
+    </div>
+  </div>
+
+  <div class="forest-foot">
+    <a href="pilgrim.html">巡礼者の手帳を見る →</a>
+  </div>
+
+</div>
+
+<!-- Pilgrim status bar -->
+<div class="pilgrim-bar">
+  <span class="pb-item">巡礼者 <span id="pb-num">—</span></span>
+  <span class="pb-item">巡礼進捗 <span id="pb-prog">— / 5</span></span>
+  <a href="pilgrim.html" class="pb-link">巡礼者の手帳を見る →</a>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   EVENTS — 32 entries, three rarities
+═══════════════════════════════════════════ */
+const EVENTS = [
+
+  /* ── COMMON (人物) ── */
+  {r:'common', lines:[
+    '森番が倒木の上に腰かけていた。',
+    '彼はこちらを一瞥して、',
+    '「森は急ぐ者には何も教えない」',
+    'それだけ言うと、霧へ消えた。',
+  ]},
+  {r:'common', lines:[
+    '巡礼者の一群に出会った。',
+    '誰も言葉を交わさなかった。',
+    'それでもその沈黙は、',
+    'ひとつの祈りのように聞こえた。',
+  ]},
+  {r:'common', lines:[
+    '羊飼いが崖の上に立っていた。',
+    '羊の鈴の音だけが聞こえた。',
+    '声をかけようとすると、',
+    '霧が彼を静かに包んだ。',
+  ]},
+  {r:'common', lines:[
+    '旅商人が木陰で休んでいた。',
+    '荷物の中に古い鍵があった。',
+    'どの扉のものかと尋ねると、',
+    '彼はただ笑って首を振った。',
+  ]},
+  {r:'common', lines:[
+    '黒衣の修道士が跪いていた。',
+    '祈りの言葉は聞こえなかった。',
+    'ただ、石の冷たさと静寂だけが',
+    'その場所に満ちていた。',
+  ]},
+
+  /* ── COMMON (風景) ── */
+  {r:'common', lines:[
+    '霧が低く漂っていた。',
+    '足元しか見えない道を、',
+    'ただひたすらに歩いた。',
+    '方向は、もうわからなかった。',
+  ]},
+  {r:'common', lines:[
+    '森の奥に小さな湖があった。',
+    '水面は黒く、動かない鏡のようだった。',
+    '何かが映っている気がしたが、',
+    '覗き込む勇気は持てなかった。',
+  ]},
+  {r:'common', lines:[
+    '朽ちた木の橋があった。',
+    '渡れるかどうか確かめた。',
+    'ぎしりと鳴いたが、落ちなかった。',
+    '向こう側には、また森が続いていた。',
+  ]},
+  {r:'common', lines:[
+    '一羽のカラスが枝に止まっていた。',
+    '何かを知っているような目で、',
+    'こちらを見続けていた。',
+    '飛び去った方向には、霧があった。',
+  ]},
+  {r:'common', lines:[
+    '遠くに一点の灯火が見えた。',
+    '近づこうとすると、',
+    'それは少しずつ遠ざかった。',
+    '追いかけるのをやめたとき、消えた。',
+  ]},
+  {r:'common', lines:[
+    '雨が降り始めた。',
+    '葉の上を滴る音だけが聞こえた。',
+    'しばらくそこに立って、',
+    '濡れるままにしていた。',
+  ]},
+  {r:'common', lines:[
+    '鹿が木々の間から顔を出した。',
+    'こちらを見て、動かなかった。',
+    '長い沈黙の後、',
+    '静かに森の奥へ消えた。',
+  ]},
+  {r:'common', lines:[
+    '大きな古木の根元に腰を下ろした。',
+    '幹に耳を当てると、',
+    '何かが動く音がした。',
+    '木は何かを知っている。',
+  ]},
+
+  /* ── COMMON (記録) ── */
+  {r:'common', lines:[
+    '羊皮紙の切れ端が落ちていた。',
+    '文字が書かれていたが、',
+    '雨で滲んで読めなかった。',
+    'それでも、誰かの祈りだったと思う。',
+  ]},
+  {r:'common', lines:[
+    '古い地図が木の根に挟まっていた。',
+    '描かれた場所に見覚えはない。',
+    'しかしどこかで、',
+    'この道を歩いた気がした。',
+  ]},
+  {r:'common', lines:[
+    '折りたたまれた手紙が落ちていた。',
+    '宛先の名前は消えていた。',
+    'おそらく届かなかったのだろう。',
+    '誰かの言葉が、森に残っている。',
+  ]},
+  {r:'common', lines:[
+    '欠けた日記が苔の上にあった。',
+    '最後のページは白紙だった。',
+    '書きかけて、やめたのか。',
+    '書き終えて、捨てたのか。',
+  ]},
+  {r:'common', lines:[
+    '古銭を一枚見つけた。',
+    'どこの国のものかわからない。',
+    '持ち帰ることはできなかった。',
+    'ただ、また元の場所に置いてきた。',
+  ]},
+  {r:'common', lines:[
+    '鉄の鍵が落ちていた。',
+    '錆びていて、どの扉にも合わなさそうだった。',
+    'しかし手に持つと、',
+    '何か重要なものに思えた。',
+  ]},
+  {r:'common', lines:[
+    '大きな黒い羽根が落ちていた。',
+    '誰のものかは分からない。',
+    '持ち帰ることはできない。',
+    'だが今日だけは、あなたの記憶に残る。',
+  ]},
+
+  /* ── COMMON (何も起こらない) ── */
+  {r:'common', lines:[
+    '今日は何も起こらなかった。',
+    'しかし森は、',
+    'あなたを覚えている。',
+  ]},
+  {r:'common', lines:[
+    '静かな一日だった。',
+    '風が葉を揺らすだけで、',
+    'それ以上は何もなかった。',
+    '何もない日も、記録される。',
+  ]},
+  {r:'common', lines:[
+    '何も見つからなかった。',
+    '道が続いているだけだった。',
+    '森だけが、風に揺れていた。',
+  ]},
+
+  /* ── RARE ── */
+  {r:'rare', lines:[
+    '石碑が苔に埋もれていた。',
+    '文字は読めない。',
+    'だが誰かが毎年花を供えているのか、',
+    '枯れた草花がその前に並んでいた。',
+    'ここには、長い祈りがある。',
+  ]},
+  {r:'rare', lines:[
+    '森の中心に石造りの礼拝堂があった。',
+    '扉は開いていた。',
+    '中には蝋燭が一本、灯っていた。',
+    '誰も火をつけた者はいないはずだった。',
+    '静かに跪いて、祈った。',
+  ]},
+  {r:'rare', lines:[
+    '老いた巡礼者が立ち止まっていた。',
+    '「あなたは何を探しているのか」',
+    '答えに詰まると、彼は言った。',
+    '「探しているものは、いつも足元にある」',
+    '気づいたとき、彼の姿はなかった。',
+  ]},
+  {r:'rare', lines:[
+    '木の洞に小さな蝋燭が置かれていた。',
+    '誰かが点けて、そのまま立ち去ったのだろう。',
+    'しばらく火を見ていた。',
+    '風がなかった。',
+    '炎は一度も揺れなかった。',
+  ]},
+  {r:'rare', lines:[
+    '森の中に白い鹿がいた。',
+    'こちらを見て、逃げなかった。',
+    'しばらく見つめ合った後、',
+    '静かに霧の中へ消えた。',
+    'その足跡は、なかった。',
+  ]},
+  {r:'rare', lines:[
+    '黒衣の修道士に声をかけられた。',
+    '「記録する者よ、耳を貸しなさい」',
+    '彼が語ったことを書き留めようとしたが、',
+    'ペンを取り出した瞬間、',
+    'すべての言葉を忘れた。',
+  ]},
+  {r:'rare', lines:[
+    '石の上に古い聖書が置かれていた。',
+    '特定のページが折られていた。',
+    '開くと、そこだけ文字が消えていた。',
+    '何かが書かれていたはずの、',
+    '白いページだけが残っていた。',
+  ]},
+
+  /* ── LEGEND ── */
+  {r:'legend', lines:[
+    '深い霧の中に、光る木があった。',
+    '幹から薄い金色の光が漏れていた。',
+    '触れると、何かを思い出した。',
+    'それが何だったかは、帰り道には忘れた。',
+    'だが確かに、あの瞬間だけは、',
+    '世界の本当の名前を知っていた。',
+  ]},
+  {r:'legend', lines:[
+    '森の奥に図書館があった。',
+    '石造りで、蔦に覆われていた。',
+    '中には誰もいなかった。',
+    '棚には無数の本が並んでいた。',
+    'あなたの名前が背表紙に書かれた本を見つけた。',
+    'ページを開こうとしたとき、目が覚めた。',
+  ]},
+  {r:'legend', lines:[
+    'カラスが言葉を話した。',
+    '「お前はここに来るべきではなかった」',
+    '「しかしもう、お前はここを知っている」',
+    '「それは祝福でも呪いでもない」',
+    '「ただの、記録だ」',
+    '飛び去った後、空に文字が残った。',
+    '読み終える前に、風が消した。',
+  ]},
+];
+
+/* Weight table — legend ~3% */
+function pickEvent(){
+  const commons  = EVENTS.filter(e=>e.r==='common');
+  const rares    = EVENTS.filter(e=>e.r==='rare');
+  const legends  = EVENTS.filter(e=>e.r==='legend');
+  const roll = Math.random();
+  let pool;
+  if(roll < 0.03)      pool = legends;
+  else if(roll < 0.22) pool = rares;
+  else                 pool = commons;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+/* ═══════════════════════════════════════════
+   WALK
+═══════════════════════════════════════════ */
+let walking = false;
+
+function walkForest(){
+  if(walking) return;
+  walking = true;
+
+  const btn   = document.getElementById('walk-btn');
+  const card  = document.getElementById('event-card');
+  const lines = document.getElementById('event-lines');
+  const again = document.getElementById('again-wrap');
+  const bg    = document.getElementById('forest-bg');
+  const overlay = document.getElementById('legend-overlay');
+
+  btn.classList.add('walking');
+  btn.querySelector('span:last-child').textContent = '森を歩いている……';
+
+  /* Reset card */
+  card.classList.remove('visible','legend-card','rarity-common','rarity-rare','rarity-legend');
+  again.style.opacity = '0';
+  again.style.pointerEvents = 'none';
+  lines.innerHTML = '';
+  overlay.classList.remove('active');
+  bg.classList.remove('legend-glow');
+
+  /* Pick event */
+  const evt = pickEvent();
+  const isLegend = evt.r === 'legend';
+
+  setTimeout(()=>{
+
+    /* Apply rarity class */
+    card.classList.add('rarity-'+evt.r);
+    if(isLegend){
+      card.classList.add('legend-card');
+      bg.classList.add('legend-glow');
+      overlay.classList.add('active');
+    }
+
+    /* Build lines */
+    evt.lines.forEach(text=>{
+      const span = document.createElement('span');
+      span.className = 'event-line' + (isLegend?' legend-line':'');
+      span.textContent = text;
+      lines.appendChild(span);
+    });
+
+    /* Show card */
+    card.classList.add('visible');
+
+    /* Stagger lines */
+    const lineEls = lines.querySelectorAll('.event-line');
+    const baseDelay = isLegend ? 400 : 280;
+    lineEls.forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('show'), 200 + i * baseDelay);
+    });
+
+    /* Show again button */
+    const totalDelay = 200 + lineEls.length * baseDelay + 800;
+    setTimeout(()=>{
+      again.style.opacity = '1';
+      again.style.pointerEvents = 'all';
+    }, totalDelay);
+
+    /* Record visit in pilgrim localStorage */
+    recordForestVisit();
+
+    /* Reset btn */
+    setTimeout(()=>{
+      btn.classList.remove('walking');
+      btn.querySelector('span:last-child').textContent = '森を歩く';
+      walking = false;
+    }, 1200);
+
+  }, isLegend ? 1400 : 700);
+}
+
+function walkAgain(){
+  const again = document.getElementById('again-wrap');
+  again.style.opacity = '0';
+  again.style.pointerEvents = 'none';
+  setTimeout(walkForest, 300);
+}
+
+/* ═══════════════════════════════════════════
+   PILGRIM TRACKING
+═══════════════════════════════════════════ */
+function getPilgrim(){
+  try{const r=localStorage.getItem('raven_pilgrim');return r?JSON.parse(r):null}catch(e){return null}
+}
+function setPilgrim(d){
+  try{localStorage.setItem('raven_pilgrim',JSON.stringify(d))}catch(e){}
+}
+
+function recordForestVisit(){
+  let d = getPilgrim();
+  if(!d){
+    const num = String(Math.floor(10000+Math.random()*90000));
+    d = { num, since:Date.now(), visits:{}, log:[] };
+  }
+  if(!d.visits['forest']){
+    d.visits['forest'] = Date.now();
+    if(!d.log) d.log = [];
+    d.log.push({ ts:Date.now(), realm_id:'forest' });
+    setPilgrim(d);
+    updateStatusBar(d);
+  }
+}
+
+function updateStatusBar(d){
+  const count = Object.keys(d.visits||{}).length;
+  document.getElementById('pb-num').textContent  = 'No.'+d.num;
+  document.getElementById('pb-prog').textContent = count+' / 5';
+}
+
+/* Init status bar */
+(function(){
+  const d = getPilgrim();
+  if(d){
+    updateStatusBar(d);
+  } else {
+    document.getElementById('pb-num').textContent  = '未登録';
+    document.getElementById('pb-prog').textContent = '0 / 5';
+  }
+})();
+
+/* ═══════════════════════════════════════════
+   VEIL + CURSOR + REVEAL
+═══════════════════════════════════════════ */
+setTimeout(()=>{
+  const v=document.getElementById('veil');
+  v.classList.add('out');
+  setTimeout(()=>v.remove(),2100);
+},2000);
+
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+},{passive:true});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('h'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('h'));
+});
+</script>
+</body>
+</html>

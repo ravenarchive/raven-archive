@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAVEN ARCHIVE — 失われた世界の記録庫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#07050300;background-color:#080604;color:#c4b090;font-family:'Noto Serif JP','Cormorant Garamond',Georgia,serif;font-weight:300;overflow-x:hidden;cursor:none}
+img{display:block;width:100%;height:100%;object-fit:cover}
+a{text-decoration:none;color:inherit}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;border:1px solid rgba(200,150,60,.75);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:screen}
+#cur.h{width:36px;height:36px;background:rgba(200,150,60,.07)}
+@media(pointer:coarse){#cur{display:none}}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:8000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.042}
+
+/* RAIN */
+#rain{position:fixed;inset:0;pointer-events:none;z-index:12;opacity:.18}
+
+/* VEIL */
+#veil{position:fixed;inset:0;z-index:7000;background:#040302;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;transition:opacity 2s ease}
+#veil.out{opacity:0;pointer-events:none}
+.veil-main{font-family:'Cinzel',serif;font-size:clamp(1rem,3.5vw,1.4rem);letter-spacing:.45em;color:#c8903c;opacity:0;animation:vfade 2s ease forwards .4s}
+.veil-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,#c8903c,transparent);opacity:0;animation:vfade 2s ease forwards .9s}
+.veil-sub{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.65rem,2vw,.82rem);letter-spacing:.2em;color:#7a6a50;opacity:0;animation:vfade 2s ease forwards 1.2s}
+@keyframes vfade{from{opacity:0;transform:translateY(12px)}to{opacity:.9;transform:translateY(0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:400;padding:1.4rem 5vw;display:flex;align-items:center;justify-content:space-between;transition:background .6s,backdrop-filter .6s}
+nav.solid{background:rgba(6,4,2,.93);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,150,60,.07)}
+.logo{display:flex;flex-direction:column;gap:3px;text-decoration:none}
+.logo-en{font-family:'Cinzel',serif;font-size:clamp(.72rem,1.8vw,.9rem);letter-spacing:.28em;color:#e0cba8;font-weight:400}
+.logo-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.52rem,1.2vw,.62rem);letter-spacing:.18em;color:#6a5a40}
+.nav-links{display:flex;gap:clamp(.8rem,2.5vw,2.2rem);list-style:none}
+.nav-links a{font-family:'Cinzel',serif;font-size:clamp(.48rem,1.1vw,.6rem);letter-spacing:.22em;text-transform:uppercase;color:#8a7a60;transition:color .3s}
+.nav-links a:hover{color:#c8963c}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-bag{font-family:'Cinzel',serif;font-size:clamp(.48rem,1vw,.58rem);letter-spacing:.15em;text-transform:uppercase;color:#8a7a60;border:1px solid rgba(200,150,60,.18);padding:.38rem .9rem;transition:all .3s}
+.nav-bag:hover{color:#c8963c;border-color:rgba(200,150,60,.5)}
+
+/* SHARED */
+section{position:relative;z-index:20}
+.anchor-pt{position:absolute;top:0;left:0;width:0;height:0;display:block}
+.rv{opacity:0;transform:translateY(28px);transition:opacity 1s ease,transform 1s ease}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}
+.lbl{font-family:'Cinzel',serif;font-size:clamp(.5rem,1.1vw,.6rem);letter-spacing:.45em;text-transform:uppercase;color:#c8963c;opacity:.6;display:block}
+.ttl{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(1.6rem,4vw,2.8rem);color:#e8d8b8;letter-spacing:.08em;display:block;margin-top:.5rem;line-height:1.3}
+.rule{width:44px;height:1px;background:linear-gradient(90deg,#c8963c,transparent);opacity:.4;margin-top:1.2rem}
+
+/* ═══════════════════════════════
+   1. HERO
+   img_hero.jpg = ゴシック回廊(黄金光)
+═══════════════════════════════ */
+#hero{position:relative;height:100svh;min-height:640px;overflow:hidden;z-index:20}
+.hero-photo{
+  position:absolute;inset:0;
+  background-image:url('img_hero.jpg');
+  background-size:cover;background-position:center 40%;
+  filter:brightness(.48) saturate(.65);
+  animation:hzoom 22s ease-in-out infinite alternate;
+}
+@keyframes hzoom{from{transform:scale(1.05)}to{transform:scale(1)}}
+.hero-vignette{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 50%,transparent 10%,rgba(6,4,2,.5) 70%),
+    linear-gradient(to bottom,rgba(6,4,2,.35) 0%,transparent 25%,transparent 55%,rgba(6,4,2,.98) 100%);
+}
+.hero-text{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:0 8vw clamp(3.5rem,9vh,6.5rem);
+  z-index:10;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;
+  animation:hfade 2.5s ease forwards 1s;opacity:0;
+}
+@keyframes hfade{to{opacity:1}}
+.hero-site{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(3rem,8vw,6.5rem);letter-spacing:.06em;color:#ede0c4;line-height:.95;display:block;text-shadow:0 0 120px rgba(160,100,20,.2)}
+.hero-sub-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.82rem,1.8vw,1rem);letter-spacing:.18em;color:#c4b090;opacity:.72;display:block;margin-top:.8rem}
+.hero-sub2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.85rem,1.6vw,1rem);color:#c4b090;opacity:.48;display:block;margin-top:.35rem}
+.hero-cta{display:inline-flex;align-items:center;gap:.8rem;margin-top:2rem;font-family:'Cinzel',serif;font-size:clamp(.52rem,1.1vw,.62rem);letter-spacing:.35em;text-transform:uppercase;color:#e0cba8;border:1px solid rgba(224,203,168,.28);padding:.82rem 2.4rem;transition:all .45s}
+.hero-cta:hover{border-color:rgba(200,150,60,.65);color:#c8963c}
+.hero-cta::after{content:'→';font-family:serif;letter-spacing:0;margin-left:.2rem}
+.hero-quote-wrap{display:flex;justify-content:flex-end;align-items:flex-end;padding-bottom:.5rem}
+.hero-quote-box{border:1px solid rgba(200,150,60,.22);padding:2rem 2.4rem;max-width:320px;position:relative}
+.hero-quote-box::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(200,150,60,.08);pointer-events:none}
+.hero-quote{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(1rem,2vw,1.35rem);color:#e8d8b8;line-height:1.8;letter-spacing:.12em;display:block}
+.hero-quote-rule{width:20px;height:1px;background:rgba(200,150,60,.5);margin:1.2rem 0 0}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:.35;animation:scpulse 3s ease-in-out infinite}
+.hero-scroll span{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.5em;text-transform:uppercase;color:#c4b090}
+.hero-scroll::after{content:'';width:1px;height:46px;background:linear-gradient(to bottom,#c8963c,transparent)}
+@keyframes scpulse{0%,100%{opacity:.35;transform:translateX(-50%) translateY(0)}50%{opacity:.65;transform:translateX(-50%) translateY(7px)}}
+
+/* ═══════════════════════════════
+   2. 本棚 BOOKSHELF
+   BG: img_books_shelf.jpg = 古書棚接写
+═══════════════════════════════ */
+#bookshelf{
+  position:relative;overflow:hidden;
+  background-image:url('img_books_shelf.jpg');
+  background-size:cover;background-position:center 30%;
+  background-attachment:fixed;
+}
+.shelf-overlay{position:absolute;inset:0;background:rgba(6,4,2,.83)}
+.shelf-inner{position:relative;z-index:2;padding:clamp(4rem,8vw,7rem) 5vw}
+.shelf-head{text-align:center;margin-bottom:clamp(2.5rem,5vw,4rem)}
+.shelf-caption-top{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.78rem,1.4vw,.9rem);color:#c4b090;opacity:.35;letter-spacing:.12em;display:block;margin-top:.8rem}
+
+/* 5 books */
+.books-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:1100px;margin:0 auto}
+.book{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 0 2rem;min-height:clamp(260px,35vw,420px);cursor:pointer;overflow:hidden;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.book:hover{transform:translateY(-10px)}
+.book-spine{position:absolute;inset:0;border-radius:2px 6px 6px 2px;transition:filter .5s}
+.book:nth-child(1) .book-spine{background:linear-gradient(160deg,#2a1a0e 0%,#1a0e06 40%,#0e0804 100%);border-left:3px solid rgba(180,120,30,.3)}
+.book:nth-child(2) .book-spine{background:linear-gradient(160deg,#1a1408 0%,#120e06 40%,#0a0804 100%);border-left:3px solid rgba(160,110,20,.25)}
+.book:nth-child(3) .book-spine{background:linear-gradient(160deg,#0a1008 0%,#08100a 40%,#060c08 100%);border-left:3px solid rgba(60,100,60,.2)}
+.book:nth-child(4) .book-spine{background:linear-gradient(160deg,#1e1008 0%,#160c04 40%,#0c0804 100%);border-left:3px solid rgba(180,100,20,.25)}
+.book:nth-child(5) .book-spine{background:linear-gradient(160deg,#0e0e14 0%,#0a0c14 40%,#080810 100%);border-left:3px solid rgba(80,80,140,.2)}
+.book-deco{position:absolute;top:0;left:0;right:0;bottom:0;border:1px solid rgba(200,150,60,.1);margin:8px;pointer-events:none}
+.book-deco::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:24px;height:1px;background:rgba(200,150,60,.35)}
+.book-deco::after{content:'';position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:24px;height:1px;background:rgba(200,150,60,.35)}
+.book-icon{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:.8rem;opacity:.5;z-index:2}
+.book-name-jp{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.85rem,1.8vw,1.1rem);color:#e8d8b8;letter-spacing:.18em;writing-mode:vertical-rl;text-orientation:mixed;z-index:2;margin-bottom:.5rem}
+.book-name-en{font-family:'Cinzel',serif;font-size:clamp(.42rem,.9vw,.52rem);letter-spacing:.2em;color:#c8963c;opacity:0;z-index:2;transition:opacity .4s;text-transform:uppercase;text-align:center}
+.book:hover .book-name-en{opacity:.7}
+.book-enter{font-family:'Cinzel',serif;font-size:clamp(.4rem,.8vw,.5rem);letter-spacing:.28em;text-transform:uppercase;color:#c4b090;opacity:0;z-index:2;transform:translateY(8px);transition:opacity .4s .05s,transform .4s .05s;margin-top:.6rem}
+.book:hover .book-enter{opacity:.6;transform:none}
+.book-shine{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(105deg,rgba(255,220,120,.04) 0%,transparent 40%,rgba(255,220,120,.02) 100%);pointer-events:none;z-index:1;opacity:0;transition:opacity .5s}
+.book:hover .book-shine{opacity:1}
+.shelf-caption-bot{text-align:center;margin-top:2.5rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.78rem,1.4vw,.9rem);color:#c4b090;opacity:.3;letter-spacing:.1em}
+
+/* ═══════════════════════════════
+   3. LOG + MUSIC — big layout
+   Log left, giant video right
+═══════════════════════════════ */
+#log-music{
+  padding:clamp(4rem,8vw,7rem) 0;
+  background:linear-gradient(180deg,rgba(6,4,2,0),rgba(10,8,5,.96) 8%,rgba(10,8,5,.96) 92%,rgba(6,4,2,0));
+}
+.log-music-grid{
+  max-width:1400px;margin:0 auto;padding:0 5vw;
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:clamp(2rem,5vw,5rem);
+  align-items:center;
+}
+
+/* log column */
+.lm-log-col{}
+.log-table{width:100%;border-collapse:collapse;margin:1.5rem 0}
+.log-table tr{border-bottom:1px solid rgba(200,150,60,.07)}
+.log-table td{padding:.8rem 0;font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.72rem,1.3vw,.84rem)}
+.log-table td:first-child{color:#c8963c;opacity:.6;width:5rem;white-space:nowrap}
+.log-table td:last-child{color:#c4b090;opacity:.65;padding-left:.8rem}
+.log-note{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.75rem,1.3vw,.86rem);color:#c4b090;opacity:.48;line-height:2.2;margin-top:1rem;border-top:1px solid rgba(200,150,60,.08);padding-top:1rem}
+
+/* music frame — big */
+.lm-music-col{}
+.frame-lbl{
+  font-family:'Cinzel',serif;font-size:clamp(.5rem,1.1vw,.62rem);
+  letter-spacing:.35em;text-transform:uppercase;
+  color:#c8963c;opacity:.55;display:block;margin-bottom:1rem;
+}
+.gold-frame{
+  position:relative;
+  border:2px solid rgba(200,150,60,.4);
+  padding:14px;
+  background:rgba(10,8,5,1);
+  box-shadow:0 0 60px rgba(200,150,60,.06), inset 0 0 40px rgba(0,0,0,.4);
+}
+.gold-frame::before{
+  content:'';position:absolute;
+  top:5px;left:5px;right:5px;bottom:5px;
+  border:1px solid rgba(200,150,60,.18);
+  pointer-events:none;z-index:2;
+}
+.fc{position:absolute;width:18px;height:18px;z-index:3}
+.fc-tl{top:3px;left:3px;border-top:2px solid rgba(200,150,60,.6);border-left:2px solid rgba(200,150,60,.6)}
+.fc-tr{top:3px;right:3px;border-top:2px solid rgba(200,150,60,.6);border-right:2px solid rgba(200,150,60,.6)}
+.fc-bl{bottom:3px;left:3px;border-bottom:2px solid rgba(200,150,60,.6);border-left:2px solid rgba(200,150,60,.6)}
+.fc-br{bottom:3px;right:3px;border-bottom:2px solid rgba(200,150,60,.6);border-right:2px solid rgba(200,150,60,.6)}
+.yt-inner{position:relative;aspect-ratio:16/9;overflow:hidden}
+.yt-inner iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt-credit{display:flex;justify-content:space-between;align-items:center;margin-top:.6rem}
+.yt-credit span{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.18em;color:#5a4a32;opacity:.7}
+.music-tabs{display:flex;gap:0;margin-top:1rem;border-bottom:1px solid rgba(200,150,60,.1)}
+.mt{font-family:'Cinzel',serif;font-size:clamp(.48rem,1vw,.58rem);letter-spacing:.18em;text-transform:uppercase;background:none;border:none;color:#6a5a42;padding:.65rem 1.2rem;cursor:pointer;transition:color .3s;border-bottom:1px solid transparent;margin-bottom:-1px}
+.mt.on,.mt:hover{color:#c8963c;border-bottom-color:#c8963c}
+
+/* ═══════════════════════════════
+   4. MAP — full width, image dominant
+   Clickable hotspots overlaid on map
+═══════════════════════════════ */
+#map-section{
+  padding:clamp(4rem,6vw,6rem) 0;
+  position:relative;overflow:hidden;
+}
+.map-header{
+  text-align:center;
+  padding:0 5vw;
+  margin-bottom:clamp(2rem,4vw,3.5rem);
+}
+.map-desc{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.78rem,1.4vw,.88rem);
+  color:#c4b090;opacity:.5;line-height:2;
+  margin:.8rem auto 0;max-width:400px;
+}
+
+/* Full-width map container */
+.map-visual{
+  position:relative;
+  width:100%;max-width:1400px;
+  margin:0 auto;
+  padding:0 3vw;
+}
+.map-visual img{
+  width:100%;height:auto;
+  object-fit:contain;display:block;
+  filter:brightness(.88) saturate(.82);
+}
+/* Fade left/right edges into page */
+.map-visual::before{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(to right,rgba(8,6,4,.6) 0%,transparent 8%,transparent 92%,rgba(8,6,4,.6) 100%),
+    linear-gradient(to bottom,transparent 0%,transparent 92%,rgba(8,6,4,.5) 100%);
+  pointer-events:none;z-index:2;
+}
+
+/* Hotspot links overlaid on map */
+.map-hotspots{
+  position:absolute;
+  /* match the img_map.png layout exactly */
+  /* coordinates are % of the container, tuned to the parchment map */
+  inset:0;
+  pointer-events:none; /* parent is none so img click works */
+}
+.map-hot{
+  position:absolute;
+  pointer-events:all;
+  display:flex;flex-direction:column;align-items:center;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+  text-decoration:none;
+  transition:transform .3s;
+}
+.map-hot:hover{transform:translate(-50%,-50%) scale(1.12)}
+.map-hot-icon{
+  width:clamp(28px,3.5vw,46px);
+  height:clamp(28px,3.5vw,46px);
+  background:rgba(6,4,2,.75);
+  border:1px solid rgba(200,150,60,.55);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(.7rem,1.4vw,1.1rem);
+  transition:all .3s;
+  box-shadow:0 0 16px rgba(200,150,60,.15);
+}
+.map-hot:hover .map-hot-icon{
+  background:rgba(200,150,60,.18);
+  border-color:rgba(200,150,60,.9);
+  box-shadow:0 0 24px rgba(200,150,60,.35);
+}
+.map-hot-label{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.52rem,1vw,.65rem);
+  letter-spacing:.12em;
+  color:#e8d8b8;
+  margin-top:.35rem;
+  background:rgba(6,4,2,.7);
+  padding:.15rem .5rem;
+  white-space:nowrap;
+  border:1px solid rgba(200,150,60,.2);
+  opacity:0;transition:opacity .3s;
+}
+.map-hot:hover .map-hot-label{opacity:1}
+.map-hot-sub{
+  font-family:'Cinzel',serif;
+  font-size:clamp(.4rem,.75vw,.5rem);
+  letter-spacing:.15em;text-transform:uppercase;
+  color:#c8963c;opacity:0;
+  margin-top:.1rem;transition:opacity .3s .05s;
+  white-space:nowrap;
+}
+.map-hot:hover .map-hot-sub{opacity:.7}
+
+/* ═══════════════════════════════
+   5. LOCATIONS — cinematic full-bleed
+   Left-right alternating, NO cards
+═══════════════════════════════ */
+#locations{padding:0}
+
+/* anchor wrapper — reset defaults, inherit all .loc styles */
+a.loc{text-decoration:none;color:inherit}
+.loc{position:relative;height:clamp(440px,65vw,740px);overflow:hidden;display:flex;align-items:flex-end}
+
+.loc-photo{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 1.8s cubic-bezier(.16,1,.3,1),filter .8s}
+.loc:hover .loc-photo{transform:scale(1.04)}
+
+/* left-side text */
+.loc-fade-l{position:absolute;inset:0;background:linear-gradient(to right,rgba(6,4,2,.92) 0%,rgba(6,4,2,.55) 38%,rgba(6,4,2,.08) 65%,transparent 100%),linear-gradient(to top,rgba(6,4,2,.5) 0%,transparent 35%)}
+/* right-side text */
+.loc-fade-r{position:absolute;inset:0;background:linear-gradient(to left,rgba(6,4,2,.92) 0%,rgba(6,4,2,.55) 38%,rgba(6,4,2,.08) 65%,transparent 100%),linear-gradient(to top,rgba(6,4,2,.5) 0%,transparent 35%)}
+
+.loc-text{position:absolute;bottom:0;z-index:2;padding:clamp(2.5rem,5vw,4rem) clamp(3rem,7vw,7rem);max-width:530px}
+.loc-text.right{left:auto;right:0;text-align:right}
+.loc-text.right .rule{margin-left:auto;margin-right:0}
+.loc-text.right .loc-enter{flex-direction:row-reverse}
+
+.loc-num{font-family:'Cinzel',serif;font-size:clamp(.46rem,.9vw,.55rem);letter-spacing:.55em;color:#c8963c;opacity:.55;display:block;margin-bottom:.6rem}
+.loc-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(2.2rem,5.5vw,4.2rem);color:#ede0c4;line-height:1;letter-spacing:.05em;display:block}
+.loc-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.85rem,1.7vw,1.05rem);color:#c4b090;opacity:.5;display:block;margin-top:.4rem;letter-spacing:.08em}
+.loc-kw{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.65rem,1.2vw,.75rem);color:#c4b090;opacity:.38;display:block;margin-top:.5rem;letter-spacing:.1em}
+.loc-enter{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.6rem;font-family:'Cinzel',serif;font-size:clamp(.46rem,.9vw,.56rem);letter-spacing:.3em;text-transform:uppercase;color:#c4b090;opacity:.5;border-bottom:1px solid rgba(200,150,60,.2);padding-bottom:.3rem;transition:all .4s}
+.loc-enter::after{content:'→';letter-spacing:0;font-family:serif}
+.loc:hover .loc-enter{opacity:.9;color:#c8963c;border-bottom-color:rgba(200,150,60,.6)}
+.loc-sep{height:1px;background:linear-gradient(to right,transparent,rgba(200,150,60,.1),transparent)}
+
+/* Photo assignments — using uploaded images */
+/* 禁書庫: img_forbidden.jpg = dark leather book spines */
+.loc-forbidden .loc-photo{background-image:url('img_forbidden.jpg');background-position:center 20%}
+/* 修道院: img_monastery_cloister.jpg = golden vaulted cloister */
+.loc-monastery .loc-photo{background-image:url('img_monastery_cloister.jpg')}
+/* 黒い森: img_forest_warm.jpg = misty pines warm light */
+.loc-forest .loc-photo{background-image:url('img_forest_warm.jpg')}
+/* 旅籠酒場: img_tavern.jpg = library bar */
+.loc-tavern .loc-photo{background-image:url('img_tavern.jpg')}
+/* 巡礼路: img_road_fog.jpg = foggy cobblestone */
+.loc-road .loc-photo{background-image:url('img_road_fog.jpg')}
+
+/* ═══════════════════════════════
+   6. ATELIER — 香りの工房
+   img_atelier.jpg = medieval table+pottery
+   Photo DOMINATES. Text minimal left.
+═══════════════════════════════ */
+#atelier{position:relative;min-height:clamp(420px,58vw,680px);overflow:hidden;display:flex;align-items:center}
+.atelier-photo{position:absolute;inset:0;background-image:url('img_atelier.jpg');background-size:cover;background-position:center 30%;filter:brightness(.42) saturate(.6);transition:transform 1.8s ease}
+#atelier:hover .atelier-photo{transform:scale(1.03)}
+.atelier-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(6,4,2,.96) 0%,rgba(6,4,2,.62) 40%,rgba(6,4,2,.12) 70%,transparent 100%)}
+.atelier-content{position:relative;z-index:2;padding:clamp(3rem,6vw,5rem) clamp(3rem,8vw,8rem);max-width:520px}
+.atelier-tagline{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(1.4rem,3.5vw,2.4rem);color:#e8d8b8;line-height:1.5;letter-spacing:.08em;margin:1.2rem 0 1rem}
+.atelier-body{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.75rem,1.4vw,.85rem);color:#c4b090;opacity:.5;line-height:2.3;margin-bottom:2rem}
+.atelier-link{display:inline-flex;align-items:center;gap:.6rem;font-family:'Cinzel',serif;font-size:clamp(.48rem,1vw,.58rem);letter-spacing:.3em;text-transform:uppercase;color:#c4b090;border:1px solid rgba(200,150,60,.22);padding:.7rem 1.8rem;transition:all .35s}
+.atelier-link:hover{color:#c8963c;border-color:rgba(200,150,60,.55)}
+.atelier-link::after{content:'→';font-family:serif;letter-spacing:0}
+
+/* ═══════════════════════════════
+   NEWSLETTER
+═══════════════════════════════ */
+#oath{padding:clamp(3.5rem,6vw,5.5rem) 0;text-align:center;background:linear-gradient(180deg,transparent,rgba(10,8,5,.6) 20%,rgba(10,8,5,.6) 80%,transparent)}
+.oath-inner{max-width:520px;margin:0 auto;padding:0 5vw}
+.oath-icon{font-size:1.8rem;opacity:.28;display:block;margin-bottom:1rem}
+.oath-h{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(1.1rem,2.5vw,1.6rem);color:#e0cba8;letter-spacing:.14em;margin-bottom:.5rem}
+.oath-sub{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.72rem,1.3vw,.82rem);color:#c4b090;opacity:.42;line-height:2;margin-bottom:1.8rem}
+.oath-form{display:flex;max-width:400px;margin:0 auto}
+.oath-in{flex:1;background:rgba(14,10,6,.85);border:1px solid rgba(200,150,60,.16);border-right:none;color:#c4b090;padding:.78rem 1.2rem;font-family:'Noto Serif JP',serif;font-size:clamp(.72rem,1.3vw,.82rem);outline:none;transition:border-color .3s}
+.oath-in::placeholder{color:#c4b090;opacity:.28}
+.oath-in:focus{border-color:rgba(200,150,60,.38)}
+.oath-btn{background:rgba(200,150,60,.08);border:1px solid rgba(200,150,60,.22);color:#c8963c;padding:.78rem 1.4rem;font-family:'Cinzel',serif;font-size:clamp(.46rem,.9vw,.56rem);letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s;white-space:nowrap}
+.oath-btn:hover{background:rgba(200,150,60,.18);border-color:rgba(200,150,60,.5)}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+footer{position:relative;z-index:20;border-top:1px solid rgba(200,150,60,.07);padding:clamp(3rem,6vw,5rem) 5vw clamp(2rem,3vw,3rem)}
+.foot-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:clamp(1.5rem,3vw,3.5rem);margin-bottom:3rem}
+.foot-raven{font-size:1.8rem;opacity:.25;display:block;margin-bottom:.6rem}
+.foot-en{font-family:'Cinzel',serif;font-size:clamp(.7rem,1.4vw,.85rem);letter-spacing:.22em;color:#c8963c;display:block;margin-bottom:.2rem}
+.foot-jp-s{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.52rem,1vw,.62rem);letter-spacing:.12em;color:#5a4a32;display:block;margin-bottom:.9rem}
+.foot-desc{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.68rem,1.2vw,.78rem);color:#c4b090;opacity:.32;line-height:1.9}
+.foot-h{font-family:'Cinzel',serif;font-size:clamp(.46rem,.9vw,.56rem);letter-spacing:.38em;text-transform:uppercase;color:#c8963c;opacity:.5;display:block;margin-bottom:1.1rem}
+.foot-ul{list-style:none}
+.foot-ul li{margin-bottom:.55rem}
+.foot-ul a{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.68rem,1.2vw,.78rem);color:#c4b090;opacity:.38;transition:opacity .3s}
+.foot-ul a:hover{opacity:.82}
+.foot-bottom{max-width:1280px;margin:0 auto;padding-top:1.8rem;border-top:1px solid rgba(200,150,60,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.foot-copy{font-family:'Cinzel',serif;font-size:clamp(.42rem,.85vw,.52rem);letter-spacing:.18em;color:#5a4a32;opacity:.55}
+
+/* ═══════════════════════════════
+   MOBILE
+═══════════════════════════════ */
+@media(max-width:768px){
+  .hero-text{grid-template-columns:1fr;gap:2rem}
+  .hero-quote-wrap{justify-content:flex-start}
+  .log-music-grid{grid-template-columns:1fr}
+  .books-row{grid-template-columns:repeat(3,1fr)}
+  .books-row .book:nth-child(4),.books-row .book:nth-child(5){display:none}
+  .foot-inner{grid-template-columns:1fr 1fr}
+  .foot-inner>div:first-child{grid-column:span 2}
+  .map-hot-icon{width:28px;height:28px;font-size:.75rem}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .hero-quote-wrap{display:none}
+  .books-row{grid-template-columns:repeat(2,1fr);gap:4px}
+  .books-row .book:nth-child(3){display:none}
+  .loc{height:clamp(340px,80vw,520px)}
+  .loc-text{padding:2rem}
+  .foot-inner{grid-template-columns:1fr}
+  .foot-inner>div:first-child{grid-column:span 1}
+  .map-hot-label,.map-hot-sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+<canvas id="rain"></canvas>
+
+<!-- VEIL -->
+<div id="veil">
+  <div class="veil-main">RAVEN ARCHIVE</div>
+  <div class="veil-line"></div>
+  <div class="veil-sub">失われた世界の記録庫</div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">
+    <span class="logo-en">🐦‍⬛ RAVEN ARCHIVE</span>
+    <span class="logo-jp">失われた世界の記録庫</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#bookshelf">記録の領域へ</a></li>
+    <li><a href="#log-music">音楽</a></li>
+    <li><a href="#atelier">香り</a></li>
+    <li><a href="#locations">装束</a></li>
+    <li><a href="#log-music">記録庫</a></li>
+    <li><a href="#oath">巡礼者の書庫</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="nav-bag">🛍 (0)</a>
+  </div>
+</nav>
+
+<!-- ══════════ 1. HERO ══════════ -->
+<!-- img_hero.jpg: ゴシック回廊・黄金の光 -->
+<section id="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-text">
+    <div>
+      <span class="hero-site">RAVEN<br>ARCHIVE</span>
+      <span class="hero-sub-jp">失われた世界の記録庫</span>
+      <span class="hero-sub2">音楽、香り、装束、そして物語を巡る旅へ</span>
+      <a href="#bookshelf" class="hero-cta">記録庫へ入る</a>
+    </div>
+    <div class="hero-quote-wrap">
+      <div class="hero-quote-box">
+        <span class="hero-quote">記憶は、<br>静かにあなたを<br>待っている。</span>
+        <div class="hero-quote-rule"></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>SCROLL TO EXPLORE</span></div>
+</section>
+
+<!-- ══════════ 2. 本棚 ══════════ -->
+<!-- bg: img_books_shelf.jpg: 古書の背表紙接写 -->
+<section id="bookshelf">
+  <div class="shelf-overlay"></div>
+  <div class="shelf-inner">
+    <div class="shelf-head rv">
+      <span class="lbl" style="display:block;text-align:center;letter-spacing:.55em;">記憶の領域</span>
+      <span class="shelf-caption-top">— 扉を選び、失われた世界へ —</span>
+    </div>
+    <div class="books-row rv d1">
+      <a href="index.html#log-music" class="book">
+        <div class="book-spine"></div><div class="book-deco"></div><div class="book-shine"></div>
+        <span class="book-icon">🎵</span>
+        <span class="book-name-jp">音楽の記録</span>
+        <span class="book-name-en">Music Records</span>
+        <span class="book-enter">Enter</span>
+      </a>
+      <a href="scent.html" class="book">
+        <div class="book-spine"></div><div class="book-deco"></div><div class="book-shine"></div>
+        <span class="book-icon">🕯</span>
+        <span class="book-name-jp">香りの記録</span>
+        <span class="book-name-en">Scent Records</span>
+        <span class="book-enter">Enter</span>
+      </a>
+      <a href="index.html#garb" class="book">
+        <div class="book-spine"></div><div class="book-deco"></div><div class="book-shine"></div>
+        <span class="book-icon">🧥</span>
+        <span class="book-name-jp">装束の記録</span>
+        <span class="book-name-en">Garb Records</span>
+        <span class="book-enter">Enter</span>
+      </a>
+      <a href="index.html#log-music" class="book">
+        <div class="book-spine"></div><div class="book-deco"></div><div class="book-shine"></div>
+        <span class="book-icon">📖</span>
+        <span class="book-name-jp">旅人の日誌</span>
+        <span class="book-name-en">Traveler's Journal</span>
+        <span class="book-enter">Enter</span>
+      </a>
+      <a href="index.html#market" class="book">
+        <div class="book-spine"></div><div class="book-deco"></div><div class="book-shine"></div>
+        <span class="book-icon">🏷</span>
+        <span class="book-name-jp">市場の記録</span>
+        <span class="book-name-en">Market Records</span>
+        <span class="book-enter">Enter</span>
+      </a>
+    </div>
+    <p class="shelf-caption-bot rv d2">— 本を開くように、世界の扉を開く。 —</p>
+  </div>
+</section>
+
+<!-- ══════════ 3. LOG + MUSIC ══════════ -->
+<section id="log-music">
+  <div class="log-music-grid">
+
+    <!-- ログブック col -->
+    <div class="lm-log-col rv">
+      <span class="lbl">Today's Log</span>
+      <span class="ttl" style="font-size:clamp(1.1rem,2.5vw,1.8rem);">今夜の記録</span>
+      <div class="rule"></div>
+      <table class="log-table">
+        <tr><td>月齢</td><td>十三夜</td></tr>
+        <tr><td>天候</td><td>雨</td></tr>
+        <tr><td>場所</td><td>修道院の回廊</td></tr>
+        <tr><td>香り</td><td>古羊皮紙と蜜蝋</td></tr>
+        <tr><td>推奨装束</td><td>黒のロングコート</td></tr>
+      </table>
+      <p class="log-note">
+        静かな石壁に雨音が反響する夜、<br>
+        古い写本の頁をめくると、<br>
+        遠い誰かの祈りが聞こえた気がした。
+      </p>
+    </div>
+
+    <!-- 額縁YouTube — big -->
+    <div class="lm-music-col rv d1">
+      <span class="frame-lbl">Tonight's Music — 今夜の音楽</span>
+      <div class="gold-frame">
+        <div class="fc fc-tl"></div><div class="fc fc-tr"></div>
+        <div class="fc fc-bl"></div><div class="fc fc-br"></div>
+        <div class="yt-inner">
+          <iframe src="https://www.youtube.com/embed/7QLou4IXORE"
+            title="RAVEN ARCHIVE — 今夜の音楽"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="yt-credit">
+        <span>RAVEN ARCHIVE — 今夜の音楽</span>
+        <span>🎬 YouTube</span>
+      </div>
+      <div class="music-tabs">
+        <button class="mt on">修道院の夜</button>
+        <button class="mt">北方の森</button>
+        <button class="mt">写本室</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 4. MAP ══════════ -->
+<!-- img_map.png: 架空の羊皮紙地図 — full width + clickable hotspots -->
+<section id="map-section">
+  <div class="map-header rv">
+    <span class="lbl" style="display:block;text-align:center;letter-spacing:.5em;">Memory Map</span>
+    <span class="ttl" style="display:block;text-align:center;">記憶の地図</span>
+    <div class="rule" style="margin:1rem auto 0;"></div>
+    <p class="map-desc">失われた世界の領域を巡る</p>
+  </div>
+
+  <!-- Map image + hotspot links -->
+  <div class="map-visual rv d1">
+    <img src="img_map.png" alt="記憶の地図 — RAVEN ARCHIVE" loading="lazy" id="map-img">
+
+    <!-- Hotspots — positioned as % of container, matching the parchment map image -->
+    <!-- Coordinates tuned to the new img_map.png layout:
+         禁書庫=左中, 修道院=中央やや下, 黒い森=右上, 旅籠酒場=右中, 巡礼路=中央下 -->
+    <div class="map-hotspots" id="map-hotspots">
+
+      <!-- 修道院 — center castle -->
+      <a href="monastery.html" class="map-hot" style="left:52%;top:53%;" title="修道院">
+        <div class="map-hot-icon">⛪</div>
+        <span class="map-hot-label">修道院</span>
+        <span class="map-hot-sub">The Monastery</span>
+      </a>
+
+      <!-- 禁書庫 — left side, large building -->
+      <a href="ravenmedia/archive-index.html" class="map-hot" style="left:21%;top:57%;" title="禁書庫">
+        <div class="map-hot-icon">🔒</div>
+        <span class="map-hot-label">禁書庫</span>
+        <span class="map-hot-sub">Forbidden Archive</span>
+      </a>
+
+      <!-- 黒い森 — top right, forest area -->
+      <a href="forest.html" class="map-hot" style="left:74%;top:25%;" title="黒い森">
+        <div class="map-hot-icon">🌲</div>
+        <span class="map-hot-label">黒い森</span>
+        <span class="map-hot-sub">The Blackwood</span>
+      </a>
+
+      <!-- 旅籠酒場 — right side, tavern building -->
+      <a href="tavern.html" class="map-hot" style="left:76%;top:60%;" title="旅籠酒場">
+        <div class="map-hot-icon">🍷</div>
+        <span class="map-hot-label">旅籠酒場</span>
+        <span class="map-hot-sub">The Tavern</span>
+      </a>
+
+      <!-- 巡礼路 — bottom center, road -->
+      <a href="pilgrim.html" class="map-hot" style="left:50%;top:80%;" title="巡礼路">
+        <div class="map-hot-icon">⚔</div>
+        <span class="map-hot-label">巡礼路</span>
+        <span class="map-hot-sub">The Pilgrim Road</span>
+      </a>
+
+    </div><!-- /map-hotspots -->
+  </div>
+</section>
+
+<!-- ══════════ 5. LOCATIONS — cinematic ══════════ -->
+<section id="locations">
+
+  <!-- 禁書庫: img_forbidden.jpg = 暗い革装丁の古書棚 -->
+  <a href="ravenmedia/archive-index.html" class="loc loc-forbidden" id="forbidden">
+    <div class="loc-photo"></div>
+    <div class="loc-fade-l"></div>
+    <div class="loc-text">
+      <span class="loc-num">01 — FORBIDDEN ARCHIVE</span>
+      <span class="loc-jp">禁書庫</span>
+      <span class="loc-en">The Forbidden Archive</span>
+      <span class="loc-kw">封印された知識 · 異端の記録</span>
+      <span class="loc-enter">禁書庫へ入る</span>
+    </div>
+  </a>
+  <div class="loc-sep"></div>
+
+  <!-- 修道院: img_monastery_cloister.jpg = ゴシック回廊・黄金光 -->
+  <a href="monastery.html" class="loc loc-monastery" id="monastery">
+    <div class="loc-photo"></div>
+    <div class="loc-fade-r"></div>
+    <div class="loc-text right">
+      <span class="loc-num">02 — THE MONASTERY</span>
+      <span class="loc-jp">修道院</span>
+      <span class="loc-en">The Monastery</span>
+      <span class="loc-kw">祈りと石と蝋燭の沈黙</span>
+      <span class="loc-enter">修道院を訪れる</span>
+    </div>
+  </a>
+  <div class="loc-sep"></div>
+
+  <!-- 黒い森: img_forest_warm.jpg = 霧の松林・温かい光 -->
+  <a href="forest.html" class="loc loc-forest" id="forest">
+    <div class="loc-photo"></div>
+    <div class="loc-fade-l"></div>
+    <div class="loc-text">
+      <span class="loc-num">03 — THE BLACKWOOD</span>
+      <span class="loc-jp">黒い森</span>
+      <span class="loc-en">The Blackwood</span>
+      <span class="loc-kw">霧に沈む古の気配</span>
+      <span class="loc-enter">黒い森を歩く</span>
+    </div>
+  </a>
+  <div class="loc-sep"></div>
+
+  <!-- 旅籠酒場: img_tavern.jpg = ライブラリバー -->
+  <a href="tavern.html" class="loc loc-tavern" id="tavern">
+    <div class="loc-photo"></div>
+    <div class="loc-fade-r"></div>
+    <div class="loc-text right">
+      <span class="loc-num">04 — THE WAYFARERS' INN</span>
+      <span class="loc-jp">旅籠酒場</span>
+      <span class="loc-en">The Wayfarers' Inn</span>
+      <span class="loc-kw">旅人と酒と歌の記憶</span>
+      <span class="loc-enter">旅籠酒場へ立ち寄る</span>
+    </div>
+  </a>
+  <div class="loc-sep"></div>
+
+  <!-- 巡礼路: img_road_fog.jpg = 霧の石畳道 -->
+  <a href="pilgrim.html" class="loc loc-road" id="road">
+    <div class="loc-photo"></div>
+    <div class="loc-fade-l"></div>
+    <div class="loc-text">
+      <span class="loc-num">05 — THE PILGRIM ROAD</span>
+      <span class="loc-jp">巡礼路</span>
+      <span class="loc-en">The Pilgrim Road</span>
+      <span class="loc-kw">果てなき旅の記録</span>
+      <span class="loc-enter">巡礼路を歩く</span>
+    </div>
+  </a>
+
+</section>
+
+<!-- ══════════ 6. ATELIER ══════════ -->
+<!-- img_atelier.jpg: 中世の木卓と陶器 -->
+<section id="atelier">
+  <span id="garb" class="anchor-pt"></span>
+  <span id="market" class="anchor-pt"></span>
+  <div class="atelier-photo"></div>
+  <div class="atelier-overlay"></div>
+  <div class="atelier-content rv">
+    <span class="lbl">Scented Light</span>
+    <p class="atelier-tagline">古い羊皮紙と<br>蜜蝋の香り</p>
+    <div class="rule"></div>
+    <p class="atelier-body">
+      写本に染みついた時間の香り、<br>
+      静寂の中で、記憶がほどけていく。
+    </p>
+    <a href="scent.html" class="atelier-link">探訪する</a>
+  </div>
+</section>
+
+<!-- ══════════ NEWSLETTER ══════════ -->
+<section id="oath">
+  <div class="oath-inner rv">
+    <span class="oath-icon">✉️</span>
+    <p class="oath-h">記録の便りを受け取る</p>
+    <p class="oath-sub">新たな記録や旅の案内を、静かにお届けします。</p>
+    <div class="oath-form">
+      <input type="email" class="oath-in" placeholder="メールアドレスを入力">
+      <button class="oath-btn">受け取る →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <span class="foot-raven">🐦‍⬛</span>
+      <span class="foot-en">RAVEN ARCHIVE</span>
+      <span class="foot-jp-s">失われた世界の記録庫</span>
+      <p class="foot-desc">音楽、香り、装束、そして物語を巡る旅へ。</p>
+    </div>
+    <div>
+      <span class="foot-h">場所</span>
+      <ul class="foot-ul">
+        <li><a href="monastery.html">修道院</a></li>
+        <li><a href="ravenmedia/archive-index.html">禁書庫</a></li>
+        <li><a href="forest.html">黒い森</a></li>
+        <li><a href="tavern.html">旅籠酒場</a></li>
+        <li><a href="pilgrim.html">巡礼路</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="foot-h">音楽</span>
+      <ul class="foot-ul">
+        <li><a href="index.html#log-music">今夜の音楽</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="foot-h">香り</span>
+      <ul class="foot-ul">
+        <li><a href="scent.html">香りの工房</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="foot-h">装束</span>
+      <ul class="foot-ul">
+        <li><a href="index.html#garb">巡礼者の装束</a></li>
+        <li><a href="index.html#archive">記録庫</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div>
+      <span class="foot-copy" style="opacity:.7;font-size:.62rem;color:#8a7a60;">🐦‍⬛ RAVEN ARCHIVE</span>
+    </div>
+    <div style="display:flex;gap:2rem">
+      <span class="foot-copy">配送について</span>
+      <span class="foot-copy">返品の儀式</span>
+      <span class="foot-copy">プライバシー</span>
+      <span class="foot-copy">お問い合わせ</span>
+    </div>
+    <span class="foot-copy">© RAVEN ARCHIVE</span>
+  </div>
+</footer>
+
+<script>
+/* Veil */
+setTimeout(()=>{
+  const v=document.getElementById('veil');
+  v.classList.add('out');
+  setTimeout(()=>v.remove(),2200);
+},3200);
+
+/* Cursor */
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+},{passive:true});
+document.querySelectorAll('a,button,.book,.loc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('h'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('h'));
+});
+
+/* Nav */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('solid',window.scrollY>50);
+},{passive:true});
+
+/* Rain */
+const canvas=document.getElementById('rain');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resize();
+window.addEventListener('resize',()=>{resize();init();},{passive:true});
+let drops=[];
+function init(){
+  drops=[];
+  const n=Math.floor(canvas.width*.075);
+  for(let i=0;i<n;i++)drops.push({
+    x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+    len:Math.random()*22+7,spd:Math.random()*3.2+1.6,
+    op:Math.random()*.22+.04,w:Math.random()*.5+.15
+  });
+}
+init();
+(function loop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drops.forEach(d=>{
+    ctx.beginPath();ctx.moveTo(d.x,d.y);
+    ctx.lineTo(d.x-d.len*.13,d.y+d.len);
+    ctx.strokeStyle=`rgba(200,185,150,${d.op})`;
+    ctx.lineWidth=d.w;ctx.stroke();
+    d.y+=d.spd;d.x-=d.spd*.13;
+    if(d.y>canvas.height){d.y=-d.len;d.x=Math.random()*canvas.width;}
+  });
+  requestAnimationFrame(loop);
+})();
+
+/* Scroll Reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}
+  });
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* Music tabs */
+document.querySelectorAll('.mt').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.mt').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
+});
+
+/* ════════════════════════════════════════
+   PILGRIM TRACKING — visit recording
+════════════════════════════════════════ */
+(function(){
+  const REALMS = ['monastery','forbidden','forest','tavern','road'];
+
+  function getPilgrim(){
+    try{
+      const raw = localStorage.getItem('raven_pilgrim');
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){return null}
+  }
+  function setPilgrim(d){
+    try{ localStorage.setItem('raven_pilgrim', JSON.stringify(d)); }catch(e){}
+  }
+  function formatDate(ts){
+    const d = new Date(ts);
+    return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+  }
+
+  /* Init pilgrim if not exists */
+  let pilgrim = getPilgrim();
+  if(!pilgrim){
+    const num = String(Math.floor(10000+Math.random()*90000));
+    pilgrim = { num, since:Date.now(), visits:{}, log:[] };
+    setPilgrim(pilgrim);
+  }
+
+  /* Record visit when location div scrolls into view */
+  const locObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const id = e.target.id;
+      if(!REALMS.includes(id)) return;
+      if(!pilgrim.visits[id]){
+        pilgrim.visits[id] = Date.now();
+        if(!pilgrim.log) pilgrim.log=[];
+        pilgrim.log.push({ ts:Date.now(), realm_id:id });
+        setPilgrim(pilgrim);
+        /* Update all status bars */
+        renderStatusBars();
+      }
+    });
+  },{threshold:0.35});
+
+  REALMS.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) locObs.observe(el);
+  });
+
+  /* ── Status bar rendered at bottom of each location div ── */
+  function renderStatusBars(){
+    pilgrim = getPilgrim(); // re-read
+    const count = Object.keys(pilgrim.visits||{}).length;
+    document.querySelectorAll('.pilgrim-bar').forEach(bar=>{
+      bar.querySelector('.pb-num').textContent = count+' / 5';
+      bar.querySelector('.pb-num').style.color = count>=5 ? '#c8963c' : '#8a7a60';
+    });
+  }
+
+  /* Inject status bars into each location div */
+  REALMS.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const count = Object.keys(pilgrim.visits||{}).length;
+    const bar = document.createElement('div');
+    bar.className = 'pilgrim-bar';
+    bar.innerHTML = `
+      <span class="pb-no">巡礼者 No.${pilgrim.num}</span>
+      <span class="pb-progress">巡礼進捗 <span class="pb-num">${count} / 5</span></span>
+      <a href="pilgrim.html" class="pb-link">巡礼者の手帳を見る →</a>
+    `;
+    el.appendChild(bar);
+  });
+})();
+</script>
+
+<style>
+/* Pilgrim status bar — bottom of each location section */
+.pilgrim-bar{
+  position:absolute;
+  bottom:0;right:0;
+  z-index:5;
+  display:flex;align-items:center;gap:2rem;
+  padding:.65rem 2rem;
+  background:rgba(6,4,2,.65);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(200,150,60,.08);
+  border-left:1px solid rgba(200,150,60,.08);
+}
+.pb-no{
+  font-family:'Cinzel',serif;font-size:.5rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:#6a5a40;opacity:.6;
+}
+.pb-progress{
+  font-family:'Cinzel',serif;font-size:.5rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:#6a5a40;opacity:.6;
+}
+.pb-num{
+  color:#8a7a60;
+  transition:color .5s;
+}
+.pb-link{
+  font-family:'Cinzel',serif;font-size:.5rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:#8a7a60;opacity:.7;
+  border-bottom:1px solid rgba(200,150,60,.2);
+  padding-bottom:1px;
+  transition:all .3s;
+}
+.pb-link:hover{color:#c8963c;border-bottom-color:rgba(200,150,60,.6);opacity:1}
+@media(max-width:600px){
+  .pilgrim-bar{gap:1rem;padding:.5rem 1rem}
+  .pb-no{display:none}
+}
+</style>
+</body>
+</html>
+

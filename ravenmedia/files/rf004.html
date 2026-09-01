@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水が記憶を持つ日の記録 RF–004 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f; --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a; --teal:rgba(40,90,90,0.7); --divider:rgba(138,112,64,0.3); }
+body { background:var(--bg); background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#081412 0%,transparent 55%),radial-gradient(ellipse 50% 60% at 80% 70%,#060e0c 0%,transparent 50%); font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh; }
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:rgba(40,110,100,0.7);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(40,110,100,0.3),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.tag.water{color:rgba(40,110,100,0.7);border-color:rgba(40,110,100,0.25);}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(40,110,100,0.2);overflow:hidden;background:#060c0a;}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#081210 0%,#0c1a16 40%,#060c0a 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(40,110,100,0.2);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(40,110,100,0.2);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(40,110,100,0.15),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(40,110,100,0.3);letter-spacing:0.08em;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(40,110,100,0.35);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(40,110,100,0.12);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.82);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.35);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.82);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.5);line-height:1.7;border-left:1px solid rgba(138,112,64,0.18);padding-left:12px;}
+.testimony{margin:36px 0;border-left:2px solid rgba(40,110,100,0.3);padding-left:24px;}
+.testimony-header{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(40,110,100,0.5);text-transform:uppercase;margin-bottom:10px;}
+.testimony p{font-family:'EB Garamond',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.65)!important;line-height:1.9!important;margin-bottom:0.8em!important;text-align:left!important;}
+.testimony p:first-of-type::first-letter{all:unset;}
+.testimony cite{display:block;margin-top:10px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(40,110,100,0.4);font-style:normal;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.35);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.55)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.35);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RF–004</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RF–004　｜　Codex Festivus — 季節の記録　｜　光の月</div>
+  <h1 class="article-title">水が記憶を持つ日に関する記録<br>― 光の月、井戸と川に映る顔について</h1>
+  <p class="article-subtitle">観察記録、水面目撃証言、および記憶の水への定着に関する考察</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno VI — XIII（複数年）</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">発生地</span><span class="meta-value">巡礼路全域の水源</span></div>
+    <div class="meta-tags">
+      <span class="tag water">夏至</span>
+      <span class="tag water">水</span>
+      <span class="tag">記憶</span>
+      <span class="tag">光の月</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">〜</div>
+      <div class="fp-label">光の月、巡礼路沿いの古井戸<br>水が記憶を持つ日</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Talgrim北方の古井戸、光の月の正午、記録者による観察図</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      光の月、日が最も長い日の正午、<br>
+      水面を覗き込んではならない。<br>
+      自分の顔が映らないことよりも、<br>
+      別の誰かの顔が映ることの方が、ずっと怖い。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    巡礼路沿いの集落に伝わる禁忌の中で、最も広く共有されているのが「光の月の正午に水を覗くな」という戒めである。川でも、井戸でも、雨水を溜めた桶でも、水面を持つものすべてに適用される。理由として語られる説は複数あるが、記録として残っているものを照合すると、共通する核心がある。この日の水は、記憶を持つ。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 水面に映るもの</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    正常な水面は、覗き込んだ者の顔を映す。<span class="margin-note">水が記憶を持つという現象は、光の月の正午から日没まで続くとされる。夜明けには通常に戻る。ただし、何かを見てしまった者の目には、しばらく残像が残ると証言する者が多い。</span>光の月の正午に限り、それが逆転する。覗き込んだ者の顔の代わりに、水の記憶が映る。水が過去に触れたもの、水が流れてきた場所、水が運んできた記憶。川であれば、上流で起きたことが映る。井戸であれば、地下水脈が通り過ぎてきた場所の記憶が映る。そして時に、顔が映る。知らない顔が。あるいは、知っているはずのない顔が。
+  </p>
+
+  <div class="testimony">
+    <div class="testimony-header">証言記録 — Anno IX　証言者：Lena Marsh、Talgrim在住、薬草師</div>
+    <p>光の月の正午、薬草を洗っていた桶の水を覗いた。自分の顔が映らなかった。代わりに、老いた女性の顔が映っていた。見知らぬ顔だったが、私の目と同じ色をしていた。女性は何かを言おうとしていた。口が動いていた。声は聞こえなかった。三十秒ほど見ていたが、突然水面が揺れて消えた。翌日から、私は夢の中でその女性の記憶を見るようになった。彼女がどこで生まれ、何を愛し、何を後悔したか。三ヶ月後、夢は止まった。</p>
+    <cite>— Talgrim民話記録集より、Anno IX</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 水と記憶の関係</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    Askveldの香料師は、この現象について独自の見解を持っている。<span class="margin-note">Askveldでは光の月に、前年に作った蝋燭を水に浸す慣習がある。記憶を一度水に解き放ち、新しい記憶を封じ直すための儀礼とされる。</span>水は記憶を溶かし、運び、別の場所で析出させる、と彼女は言う。川が記憶を上流から下流へ運ぶように、地下水脈が土地の記憶を別の土地へ届けるように。光の月の正午は、年に一度、その流れが逆向きになる日だ。水が運んできた記憶が、水面に浮かび上がる。
+  </p>
+
+  <p>
+    この日に水を汲んで保存すると、何かが変わるという話もある。Veskenportの宿の女主人は、光の月の正午に港の水を一瓶だけ汲み、一年間保存すると言っていた。何に使うのかと聞くと、「何かを忘れたい人が来た時に飲ませる」と答えた。効果があるかどうかを問うと、「飲んだ人は誰も確認しに戻ってこない」とだけ言った。それが効果の証明なのか、別の意味なのかは、わからない。
+  </p>
+
+  <div class="inscription">
+    <p>
+      水は嘘をつかない。<br>
+      ただ、あなたが見たいものではなく、<br>
+      水が見せたいものを映すだけだ。
+    </p>
+    <cite>— Askveld香料師組合の格言より</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 覗いてはならない理由</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    禁忌の理由を「怖いから」と説明する古老は少ない。<span class="margin-note">「見てしまった者は、見たものの記憶を引き受ける」という説が最も広く伝わっている。記憶は水から人へ移動する。水は軽くなり、人は重くなる。</span>多くは「引き受けることになるから」と言う。水面に映った記憶は、見た者に移る。その記憶が誰のものかはわからない。どこから来たものかもわからない。しかし一度見てしまうと、その記憶は見た者のものになる。夢で見る。ふとした瞬間に思い出す。やがて、自分の記憶との区別がつかなくなる。
+  </p>
+
+  <p>
+    これを恐れる者は多い。しかし、意図的に覗きに行く者も少なくない。失った記憶を探す者。亡くした人の記憶を求める者。あるいは、自分の記憶が重すぎて、誰かに渡したいと思っている者。最後の理由で来た者は、水面を覗くのではなく、水に顔を近づけて、何かを語りかける。そうすると、自分の記憶が水に溶けていく感覚があると証言する者がいる。
+  </p>
+
+  <p>
+    Talgrimの交換慣習との類似を、記録者は見逃さなかった。水も、市場も、記憶の交換所なのかもしれない。ただ、水は値段をつけない。水は黙って、受け取る。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="rf003.html" class="nav-link">← RF–003</a>
+  <div class="nav-center">RF–004 ／ Codex Festivus</div>
+  <a href="rf005.html" class="nav-link">次の記録：RF–005 →</a>
+</nav>
+</div>
+</body>
+</html>

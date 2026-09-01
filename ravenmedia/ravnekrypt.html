@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>終着点 Ravnekrypt — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f;
+  --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a;
+  --divider:rgba(138,112,64,0.3);
+}
+body {
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,#1a1008 0%,transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 100%,#0d0a05 0%,transparent 50%);
+  font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh;
+}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--rust);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(107,46,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-value.sealed{color:rgba(107,46,26,0.9);font-style:normal;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+
+/* 扉絵 */
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(107,46,26,0.3);overflow:hidden;background:#080604;}
+.frontispiece-frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;opacity:0.85;filter:sepia(0.4) brightness(0.75);}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#0d0a06 0%,#140f08 40%,#080604 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:28px;color:rgba(107,46,26,0.3);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(107,46,26,0.3);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(107,46,26,0.2),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(107,46,26,0.4);letter-spacing:0.08em;}
+
+/* INCIPIT */
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(107,46,26,0.4);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(107,46,26,0.15);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.8);line-height:1.9;}
+
+/* BODY */
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.35);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.82);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.5);line-height:1.7;border-left:1px solid rgba(138,112,64,0.18);padding-left:12px;}
+
+/* 封印告知 */
+.seal-notice {
+  margin: 48px 0;
+  padding: 28px 32px;
+  border: 1px solid rgba(107,46,26,0.4);
+  background: rgba(10,6,4,0.7);
+  position: relative;
+  text-align: center;
+}
+.seal-notice::before {
+  content:'';
+  position:absolute;top:-1px;left:10%;right:10%;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(107,46,26,0.5),transparent);
+}
+.seal-notice::after {
+  content:'✦';
+  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  background:var(--bg);padding:0 10px;
+  color:rgba(107,46,26,0.5);font-size:10px;
+}
+.seal-notice .seal-icon {
+  font-size:28px;
+  color:rgba(107,46,26,0.4);
+  margin-bottom:16px;
+  display:block;
+}
+.seal-notice p {
+  font-family:'IM Fell English',serif;
+  font-style:italic;
+  font-size:15px!important;
+  color:rgba(180,140,100,0.5)!important;
+  line-height:1.9!important;
+  margin:0!important;
+  text-align:center;
+}
+.seal-notice cite {
+  display:block;margin-top:14px;
+  font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:0.2em;color:rgba(107,46,26,0.45);font-style:normal;
+}
+
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.2);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.35);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.55)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.35);font-style:normal;}
+
+/* NAV */
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-link.disabled{color:rgba(138,112,64,0.2);pointer-events:none;}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RA–005</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RA–005　｜　Via Peregrina, Caput V</div>
+  <h1 class="article-title">終着点 Ravnekrypt<br>― 地下図書館の目録序文</h1>
+  <p class="article-subtitle">巡礼者たちが持ち寄った断章の保管場所、および司書不在の謎について</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno XIV</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value sealed">封印中</span></div>
+    <div class="meta-item"><span class="meta-label">聖地</span><span class="meta-value">Ravnekrypt — 巡礼路最奥</span></div>
+    <div class="meta-tags">
+      <span class="tag">禁書庫</span><span class="tag">断章</span><span class="tag">終着</span><span class="tag">封印</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">†</div>
+      <div class="fp-label">
+        Ravnekrypt — Anno XIV<br>
+        地下図書館、司書不在
+      </div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Ravnekrypt地下回廊、記録者による最後の素描より</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      辿り着いた者は、必ず同じことを言う。<br>
+      「思っていたより、静かだった」と。<br>
+      終わりとはいつも、予想より穏やかに訪れる。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    Askveldを出て五日目、道は森に消えた。地図にはまだ先が描いてある。しかし足元の石畳は途切れ、代わりに古い根が地面を覆っていた。鴉の声がした。一羽ではなかった。複数の声が、木々の上から重なっていた。道に迷ったとは思わなかった。ただ、別の種類の道を歩いていると感じた。
+  </p>
+
+  <p>
+    七日目の夕方、岩壁が見えた。崖ではなく、人の手で積まれた石の壁だった。蔦に覆われ、苔が厚く育ち、どれだけの年月が経ったかわからない。壁の中央に、扉があった。鉄製で、鍵穴はなかった。代わりに、扉の表面に文字が刻まれていた。読もうとしたが、知らない言語だった。ただ、一つだけ読めた文字があった。鴉の形をした紋章。それを見た瞬間、扉が開いた。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 地下の回廊</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    扉の先は、下への石段だった。<span class="margin-note">Ravnekryptという名は古語で「鴉の地下室」を意味する。いつ建造されたか、誰が建造したか、記録は存在しない。</span>蝋燭が必要だと思い、Askveldでもらった一本を取り出した。火を灯した。香りが広がった。石の匂い、地下の湿気、古い羊皮紙の乾いた気配。香料師の言った通りだった。この場所の空気が、すでに蝋燭の中にあった。私はすでにここに来たことがあるような、奇妙な感覚の中で石段を降りた。
+  </p>
+
+  <p>
+    地下は広かった。天井は高く、石の柱が規則正しく並んでいた。そして棚があった。天井まで届く、無数の棚。そこに収められているのは、羊皮紙の束、小さな木箱、丸めた地図、乾燥した花、割れた楽器の破片、小瓶、石板。すべてが、誰かが持ち寄った<em>断章</em>だった。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 司書のいない図書館</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    司書はいなかった。<span class="margin-note">複数の巡礼記録に「司書は常に不在だが、必要なものが棚から落ちてくる」という記述がある。偶然か、意図か、判断は記録者に委ねられている。</span>受付もない。管理台帳もない。ただ、棚が続いている。私は歩いた。何を探しているのかを、心の中で思い浮かべながら。死者に関する記録。禁じられた知識。蘇りの方法。言葉にしなかった。ただ、思った。
+  </p>
+
+  <p>
+    三歩歩いた時、棚から何かが落ちた。音もなく、ゆっくりと。羊皮紙の束だった。拾い上げた。文字が書いてある。古い言語だが、なぜか読めた。読める気がした。最初の一行だけ、確かに理解できた。
+  </p>
+
+  <p>
+    しかし、その内容をここに記すことが、私にはできない。
+  </p>
+
+  <div class="seal-notice">
+    <span class="seal-icon">†</span>
+    <p>
+      この先の記録は封印されています。<br><br>
+      巡礼の歩みを重ねた者のみが、<br>
+      続きを知ることができます。<br><br>
+      知るべき時に、扉は開かれるでしょう。
+    </p>
+    <cite>— Ravnekrypt 管理規定より</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 循環する巡礼</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    地上に戻ると、夜になっていた。<span class="margin-note">Ravnekryptを離れた巡礼者は、一様に「出発点へ戻りたい」と感じると記録されている。巡礼は終わらない。ただ、次の周回が始まる。</span>星が出ていた。私はしばらく、扉の前に立っていた。扉はすでに閉じていた。鴉が一羽、壁の上に止まっていた。Veskenportで見た、あの鴉と同じ目をしていた。待っていたかのような目。
+  </p>
+
+  <p>
+    羊皮紙の束は、持ち帰らなかった。Ravnekryptのものは、Ravnekryptに留まるべきだと感じた。代わりに、Talgrimの古書商にもらった白紙の本を取り出した。ここまでの記録を、すべて書き込んだ。Veskenportの霧、Grauhallenの沈黙、Talgrimの夢、Askveldの香り、そしてこの地下の回廊のことを。書き終えて、その本を棚に戻した。
+  </p>
+
+  <p>
+    私の断章も、これでアーカイブに加わった。
+  </p>
+
+  <div class="inscription">
+    <p>
+      すべてはアーカイブへ。<br>
+      何も忘却へは渡さない。<br>
+      Omnia in Archivum. Nihil Oblivioni.
+    </p>
+    <cite>— Ravnekrypt 石壁の刻文より</cite>
+  </div>
+
+  <p>
+    翌朝、私はVeskenportへ向かって歩き始めた。なぜそうするのか、うまく説明できない。ただ、そうする時だとわかった。巡礼は終わらない。終着点は、次の出発点だった。
+  </p>
+
+  <p>
+    霧の中に、また鴉の声がした。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="askveld.html" class="nav-link">← Askveld</a>
+  <div class="nav-center">RA–005 ／ Via Peregrina — 完</div>
+  <span class="nav-link disabled">次の記録は封印中 →</span>
+</nav>
+
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

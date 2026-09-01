@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黒い帆船の夜の記録 RF–003 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f; --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a; --blood:#8b1a1a; --divider:rgba(138,112,64,0.3); }
+body { background:var(--bg); background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#0e1018 0%,transparent 55%),radial-gradient(ellipse 50% 60% at 20% 80%,#080a12 0%,transparent 50%); font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh; }
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:rgba(80,100,140,0.7);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(80,100,140,0.3),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.tag.cold{color:rgba(80,100,160,0.7);border-color:rgba(80,100,160,0.25);}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(80,100,140,0.2);overflow:hidden;background:#060810;}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#080c14 0%,#0e1220 40%,#060810 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(80,100,160,0.2);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(80,100,160,0.2);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(80,100,140,0.15),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(80,100,140,0.3);letter-spacing:0.08em;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(80,100,140,0.35);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(80,100,140,0.12);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.82);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.35);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.82);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.5);line-height:1.7;border-left:1px solid rgba(138,112,64,0.18);padding-left:12px;}
+.testimony{margin:36px 0;border-left:2px solid rgba(80,100,140,0.3);padding-left:24px;}
+.testimony-header{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(80,100,140,0.5);text-transform:uppercase;margin-bottom:10px;}
+.testimony p{font-family:'EB Garamond',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.65)!important;line-height:1.9!important;margin-bottom:0.8em!important;text-align:left!important;}
+.testimony p:first-of-type::first-letter{all:unset;}
+.testimony cite{display:block;margin-top:10px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(80,100,140,0.4);font-style:normal;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.35);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.55)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.35);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RF–003</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RF–003　｜　Codex Festivus — 季節の記録　｜　闇の月</div>
+  <h1 class="article-title">黒い帆船の夜に関する記録<br>― Veskenportに現れる船と、運ばれるものについて</h1>
+  <p class="article-subtitle">漁師の観察記録、港湾台帳の異常記載、および積荷不明物件の目録</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno IV — XIV（断続的）</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">発生地</span><span class="meta-value">Veskenport港、北海沿岸</span></div>
+    <div class="meta-tags">
+      <span class="tag cold">冬至</span>
+      <span class="tag cold">航海</span>
+      <span class="tag">黒い船</span>
+      <span class="tag">闇の月</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">⚓</div>
+      <div class="fp-label">闇の月、Veskenport港<br>黒い帆船、夜明け前</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Veskenport港、闇の月の夜明け前、漁師Einar Karlの証言をもとに再構成</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      闇の月、夜が最も長い夜、<br>
+      Veskenportの漁師たちは網を畳む。<br>
+      海に出るのは、その夜だけは禁じられている。<br>
+      理由を聞くと、全員が同じ答えを返す。<br>
+      「先客がいるから」。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    Veskenportの港湾台帳には、闇の月の夜明け前に限り、正体不明の船の係留記録が繰り返し登場する。最古の記録はAnno IVまで遡る。船の名称欄は常に空白。船籍欄も空白。積荷欄には一語だけ記されている。「断章」。この記録が何を意味するか、港湾管理者たちは代々黙認してきた。問い合わせをしようとした者が一名いたが、翌年の台帳にその者の名前は登場しない。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 船の記録</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    黒い帆船は必ず霧の中から現れる。<span class="margin-note">Veskenportの霧は年間を通じて濃いが、闇の月の夜明け前の霧だけは質が異なると複数の観察者が記録している。「重さがある」「音を吸う」という表現が多い。</span>帆は黒く、船体も黒い。灯りはない。音もない。にもかかわらず、桟橋に誤りなく接岸する。操舵手の姿は確認されていない。甲板に人影が見えたという証言が三件あるが、いずれも「人の形をしたもの」という表現にとどまっており、人間であるとは断言していない。
+  </p>
+
+  <p>
+    船は夜明けとともに消える。正確には、霧が晴れた時に桟橋を見ると、もうない。離岸する場面を目撃した者はいない。ただ、船が係留されていた場所の桟橋には、必ず濡れた跡が残る。海水ではない。雨水でもない。成分を調べた者がいたが、記録は焼失している。
+  </p>
+
+  <div class="testimony">
+    <div class="testimony-header">証言記録 — Anno XII　証言者：Einar Karl、Veskenport在住、漁師</div>
+    <p>三十年漁師をしているが、その夜だけは海に出ない。父もそうだった。祖父もそうだった。理由は教わらなかった。ただ「出るな」とだけ言われた。一度だけ、夜明け前に桟橋から船を見た。甲板に何かが積んであった。箱ではない。包みでもない。人が横になっているような形だった。動いていた。寝返りを打つように、ゆっくりと。翌朝、桟橋に小さな石が一つ落ちていた。拾って家に持ち帰ったが、三日後に消えていた。</p>
+    <cite>— Veskenport漁師組合口述記録より、Anno XII</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 積荷について</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    船が何を運んでいるかについて、確認された事例が二件ある。<span class="margin-note">港湾台帳の「断章」という記載が何を意味するか、Ravnekryptの記録と照合すると、興味深い一致が見られる。Ravnekryptに保管された断章の一部は、来歴不明とされている。</span>Anno VIIの記録では、夜明け直前に桟橋近くにいた港湾管理者が、船から何かが降ろされる場面を目撃している。「光を持たない者たちが、箱のようなものを運んでいた」という記述がある。その管理者は翌年に職を辞し、Grauhallenへ向かったと記録されている。
+  </p>
+
+  <p>
+    Anno Xの事例はより具体的だ。翌朝の桟橋に、誰のものともわからない荷物が三つ残されていた。開けると、いずれも羊皮紙の束だった。文字は書いてあったが、知られているどの言語にも一致しなかった。Talgrimの古書商は「読めないが、価値がある」と言った。現在、三束ともRavnekryptの封印区画に保管されている。
+  </p>
+
+  <div class="inscription">
+    <p>
+      船は何かを運んでくる。<br>
+      船は何かを運んでいく。<br>
+      どちらが本来の目的かを、問うてはならない。
+    </p>
+    <cite>— Veskenport岸壁の刻文より、記録年不明</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 見た者が翌年旅に出る理由</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    黒い帆船を見た者は翌年、旅に出る。<span class="margin-note">この現象は強制ではない。見た者が旅に出たくなるのか、旅に出る運命の者だけが船を見ることができるのか、因果の順序は不明である。</span>これはVeskenportで広く知られた事実であり、呪いとも祝福とも呼ばれる。漁師たちがその夜に海へ出ない理由の一つがここにある。見てしまうと、海に留まれなくなるからだ。
+  </p>
+
+  <p>
+    Anno XIIIに船を見たとされる人物が七名いる。翌Anno XIVに、七名全員が異なる方向へ旅立った。うち四名の行先はわかっている。全員、RAVEN ARCHIVEの巡礼路へ向かっている。残り三名の行先は不明だが、Ravnekryptの棚に三名の名前を記した羊皮紙が新たに加わったことが、その後の記録者によって確認されている。
+  </p>
+
+  <p>
+    記録者はAnno IVまで遡って台帳を確認した。船の記録は毎年ある。一年も欠けていない。しかし一点だけ、気になる記述があった。Anno IVの台帳に、ある管理者が余白に書き残した一文。「今年は船が二隻来た」。それ以降の余白の書き込みは存在しない。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="rf002.html" class="nav-link">← RF–002</a>
+  <div class="nav-center">RF–003 ／ Codex Festivus</div>
+  <a href="rf004.html" class="nav-link">次の記録：RF–004 →</a>
+</nav>
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市場と記憶 — Talgrim の交換誌 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0f0d09; --parch:#c8ad7f; --parch2:#d4bc8f;
+  --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a;
+  --divider:rgba(138,112,64,0.3);
+}
+body {
+  background:var(--bg);
+  background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#1e160a 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 10% 60%,#150f08 0%,transparent 50%);
+  font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh;
+}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.7;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--rust);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(107,46,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 12px rgba(0,0,0,0.6);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.65);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(138,112,64,0.25);overflow:hidden;background:#0a0806;}
+.frontispiece-frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;opacity:0.88;filter:sepia(0.3) brightness(0.85);}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#110e08 0%,#1a150a 40%,#0d0a06 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(138,112,64,0.2);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.25);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(138,112,64,0.2),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(138,112,64,0.35);letter-spacing:0.08em;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(107,46,26,0.5);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(107,46,26,0.2);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.85);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.4);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.85);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.5);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.55);line-height:1.7;border-left:1px solid rgba(138,112,64,0.2);padding-left:12px;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.2);background:rgba(20,15,8,0.5);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.4);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.6)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.4);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.4);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RA–003</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RA–003　｜　Via Peregrina, Caput III</div>
+  <h1 class="article-title">市場と記憶 ― Talgrim の交換誌</h1>
+  <p class="article-subtitle">過去を売る慣習と、前の持ち主の夢を見る者たちの証言</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno XIII</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">一部開架</span></div>
+    <div class="meta-item"><span class="meta-label">聖地</span><span class="meta-value">Talgrim — 巡礼路中継点</span></div>
+    <div class="meta-tags">
+      <span class="tag">市場</span><span class="tag">記憶</span><span class="tag">古書</span><span class="tag">交易</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">⚖</div>
+      <div class="fp-label">Talgrim — Anno XIII<br>市場と記憶の交換所</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Talgrim市場、記録者による俯瞰素描より</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      売れないものはない、とTalgrimの人々は言う。<br>
+      ただし、値段をつけるのは売り手ではない。<br>
+      買い手が、自分の何かを差し出すことで決まる。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    Grauhallenの丘を下りて三日後、道が急に広くなった。人の声がした。久しぶりに聞く、複数の人間の声。それだけで、胸が少し緩んだ。Talgrimは巡礼路唯一の市場町で、あらゆる方角から人が集まる場所だと、修道士の書き置きに記されていた。着いてみると、確かにそうだった。しかし私が想像していた市場とは、少し違った。
+  </p>
+
+  <p>
+    売られているものが、奇妙だった。香辛料や布地や食料もある。しかしそれとは別に、名前のわからない品々が並んでいた。古い手紙の束、誰かの靴底が擦り切れた旅靴、見知らぬ土地の地図、中身の消えた小瓶。どれも、値段が書いていない。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 記憶の売り方</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    市場を歩いていると、一人の老婆に呼び止められた。<span class="margin-note">Talgrimの交換慣習は「記憶売買」と訳されるが、正確には記憶そのものではなく、記憶が宿った品物の譲渡である。</span>彼女の前には、小さな木箱が置いてあった。中には何も入っていなかった。「これは何ですか」と私は聞いた。「箱です」と彼女は答えた。「中身は？」「あなたが持ち込んだものが入ります」。私には意味がわからなかった。しかし、その箱から目が離せなかった。
+  </p>
+
+  <p>
+    老婆が説明してくれた。Talgrimでは、旅人は品物を買うのではなく、<em>交換する</em>のだという。品物に対して、自分の記憶を差し出す。声に出さなくてもいい。ただ、差し出す気持ちを持って品物に触れれば、それで取引は成立する。その記憶は品物に宿り、次に誰かがその品物を手にすると、夢の中で前の持ち主の記憶を見るという。
+  </p>
+
+  <div class="inscription">
+    <p>
+      忘れたいものを売れ。<br>
+      忘れられないものを買え。<br>
+      どちらも、あなたのものになる。
+    </p>
+    <cite>— Talgrim市場 入口の石碑より</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 古着と夢</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    私は一着の外套を手に取った。<span class="margin-note">Talgrimで売られる古着には、必ず前の持ち主の「出自の欠片」が添えられている。名前ではなく、季節の記憶や風景の断片が。</span>厚い羊毛で、縁に細かい刺繍が施されていた。誰かが長い時間をかけて縫ったものだとわかった。触れた瞬間、かすかに海の匂いがした。この外套を作った人は、海のそばに住んでいたのだろう。あるいは、海を見ながら縫ったのかもしれない。
+  </p>
+
+  <p>
+    私は老婆の言う通りにした。差し出す記憶を決めた。言葉にしない。ただ、思い浮かべた。外套を買った。その夜、宿で眠ると、夢を見た。海岸の崖の上に立っている。私ではない誰かの目で、遠くの船を見ている。風が強く、手元の布が揺れている。針を持っていた。夢の中で、私は縫い続けた。目が覚めると、手のひらに針を持つ感触が残っていた。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 古書商の話</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    市場の端に、古書を売る男がいた。<span class="margin-note">Talgrimの古書商は「記憶の仲介人」とも呼ばれる。本に宿った記憶の量と質を読み取る能力を持つとされるが、真偽は不明。</span>私は彼のところへ行き、探しているものについて、初めてはっきりと話した。死者に関する古い記録。蘇りに関わる、禁じられた知識。男は私の顔をしばらく見た。それから、こう言った。「Ravnekryptへ行きなさい。ただし、覚悟して行きなさい」。
+  </p>
+
+  <p>
+    それ以上は話してくれなかった。代わりに、薄い本を一冊くれた。中身は白紙だった。「道中に書きなさい」と彼は言った。「Ravnekryptの扉は、記録を持つ者にしか開かない」。私は礼を言って、その本を受け取った。荷物の中で、最も大切なものになった。
+  </p>
+
+  <p>
+    Talgrimを離れる朝、市場はすでに賑わっていた。人々が品物を手に取り、何かを思い浮かべ、そっと置く。あるいはそのまま持っていく。誰も値段を言わない。誰も払わない。ただ交換だけがある。私はその光景を、しばらく眺めた。記憶とは、こんなにも静かに動くものなのか。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="grauhallen.html" class="nav-link">← Grauhallen</a>
+  <div class="nav-center">RA–003 ／ Via Peregrina</div>
+  <a href="askveld.html" class="nav-link">次の記録：Askveld →</a>
+</nav>
+
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

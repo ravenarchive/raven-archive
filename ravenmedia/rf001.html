@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔女の夜の記録 RF–001 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f;
+  --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a;
+  --blood:#8b1a1a; --divider:rgba(138,112,64,0.3);
+}
+body {
+  background:var(--bg);
+  background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#1a0e08 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 80% 80%,#120808 0%,transparent 50%);
+  font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh;
+}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--blood);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(139,26,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.tag.danger{color:rgba(139,26,26,0.8);border-color:rgba(139,26,26,0.3);}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(139,26,26,0.25);overflow:hidden;background:#080604;}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#0f0806 0%,#1a0e08 40%,#080604 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(139,26,26,0.25);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(139,26,26,0.25);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(139,26,26,0.2),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(139,26,26,0.35);letter-spacing:0.08em;}
+.warning-band{max-width:740px;margin:32px auto 0;padding:0 32px;}
+.warning-inner{border:1px solid rgba(139,26,26,0.3);background:rgba(20,5,5,0.6);padding:14px 20px;display:flex;align-items:flex-start;gap:14px;}
+.warning-glyph{font-family:'Cinzel',serif;font-size:16px;color:rgba(139,26,26,0.6);flex-shrink:0;margin-top:2px;}
+.warning-text{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:rgba(200,150,150,0.55);line-height:1.8;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(139,26,26,0.45);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(139,26,26,0.15);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.82);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.35);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.82);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.5);line-height:1.7;border-left:1px solid rgba(138,112,64,0.18);padding-left:12px;}
+.testimony{margin:36px 0;padding:0;border-left:2px solid rgba(139,26,26,0.35);padding-left:24px;position:relative;}
+.testimony-header{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(139,26,26,0.55);text-transform:uppercase;margin-bottom:10px;}
+.testimony p{font-family:'EB Garamond',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.65)!important;line-height:1.9!important;margin-bottom:0.8em!important;text-align:left!important;}
+.testimony p:first-of-type::first-letter{all:unset;}
+.testimony cite{display:block;margin-top:10px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(139,26,26,0.4);font-style:normal;}
+.ritual-block{margin:36px 0;padding:24px 28px;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.55);position:relative;}
+.ritual-block::before{content:'儀式の記録';position:absolute;top:-9px;left:20px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(138,112,64,0.4);background:var(--bg);padding:0 10px;text-transform:uppercase;}
+.ritual-step{display:flex;gap:16px;margin-bottom:16px;align-items:flex-start;}
+.ritual-step:last-child{margin-bottom:0;}
+.step-num{font-family:'Cinzel',serif;font-size:11px;color:rgba(139,26,26,0.5);flex-shrink:0;width:24px;padding-top:3px;}
+.step-text{font-family:'EB Garamond',serif;font-style:italic;font-size:14px;color:rgba(200,173,127,0.6);line-height:1.8;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.35);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.55)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.35);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece,.warning-band{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RF–001</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RF–001　｜　Codex Festivus — 季節の記録　｜　春の終わりの月</div>
+  <h1 class="article-title">魔女の夜に関する記録<br>― Grauhallenの丘で起きたことについて</h1>
+  <p class="article-subtitle">複数の証言、審問記録、および現地調査報告の照合による編纂</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno IX — XIII（複数年）</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">一部開架</span></div>
+    <div class="meta-item"><span class="meta-label">発生地</span><span class="meta-value">Grauhallen丘陵、Talgrim北方森林</span></div>
+    <div class="meta-tags">
+      <span class="tag danger">要注意</span>
+      <span class="tag">夜の集会</span>
+      <span class="tag">火</span>
+      <span class="tag">春の終わり</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">☽</div>
+      <div class="fp-label">春の終わりの月、Grauhallen丘陵<br>Anno IX より Anno XIII</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">丘上の炎、目撃者Marta Veenの証言をもとに記録者が再構成</p>
+</div>
+
+<div class="warning-band">
+  <div class="warning-inner">
+    <span class="warning-glyph">†</span>
+    <p class="warning-text">本記録は複数の証言を照合した編纂文書である。一部の証言者の精神状態には疑義が呈されている。読者は慎重に判断されたい。</p>
+  </div>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      春の終わりの月、夜が最も深くなる頃、<br>
+      Grauhallenの丘では空が先に暗くなる。<br>
+      理由を知る者は、口を閉ざす。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    巡礼路沿いの集落に伝わる魔女の夜は、春の終わりを告げる祭儀として古くから記録されている。しかしGrauhallen周辺において記録されてきたその慣習は、一般的な春の祭りとは根本的に異なる性質を持つ。本記録は、Anno IXからAnno XIIIにかけて収集された七名の証言、Grauhallen修道院の破損した年次記録、およびTalgrimの古書商が保管していた審問調書の断片を照合し編纂したものである。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 夜の始まり</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    集落では日が傾くと、家の扉にイラクサの束が吊るされる。<span class="margin-note">イラクサは境界を示す植物とされる。生と死、此岸と彼岸の境界線を引く力があると伝わる。</span>窓には蜜蝋の蝋燭を一本。玄関の石畳には炭で鴉の翼を描く。これは魔除けではない、と古老たちは言う。「迎え入れる準備だ」と。何を迎えるのかについては、誰も明言しない。
+  </p>
+
+  <p>
+    日没を過ぎると、住民は二つに分かれる。家に留まる者と、丘へ向かう者。丘へ向かう者は松明を持たない。月明かりだけを頼りに歩く。それでも道を外れないのは、道を知っているからではなく、<em>道が向こうから現れる</em>からだと複数の証言が一致している。
+  </p>
+
+  <div class="testimony">
+    <div class="testimony-header">証言記録 — Anno X　証言者：Klaas Brandt、Talgrim在住、農夫</div>
+    <p>丘の途中で、前を歩く人影に気づいた。知人だと思ったが、振り返らなかった。声をかけたが、返事がなかった。頂上に着いた時、その人影はいなかった。翌朝、同じ道を昼に歩いたが、足跡は私のものだけだった。</p>
+    <cite>— Talgrim審問記録断片より、Anno X</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 丘の上の集会</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    丘の頂上では、七本の火が円を描くように焚かれる。<span class="margin-note">七という数は巡礼路沿いの集落で特別な意味を持つ。七つの聖地、七つの季節の祭り、七日間の沈黙修行。</span>中央には何もない空間がある。集まった者たちはそれぞれ勝手に火のそばに立ち、沈黙している。誰も主導しない。誰も命じない。それでも全員が同じ方向を向いている。向いている方向には、暗い空があるだけだ。しかし証言者の全員が「そこに何かがいた」と述べている。
+  </p>
+
+  <div class="ritual-block">
+    <div class="ritual-step"><span class="step-num">一</span><span class="step-text">日没前に家の扉へイラクサの束を吊るし、玄関に鴉の翼を炭で描く。これは招待状である。</span></div>
+    <div class="ritual-step"><span class="step-num">二</span><span class="step-text">松明を持たずに丘へ向かう。道に迷っても立ち止まること。道は自ら現れる。</span></div>
+    <div class="ritual-step"><span class="step-num">三</span><span class="step-text">頂上の七つの火の外周に立つ。中央には入らない。入った者の記録は残っていない。</span></div>
+    <div class="ritual-step"><span class="step-num">四</span><span class="step-text">夜明けまで沈黙を守る。名を呼ばれても答えない。呼ぶ声が誰のものかを確認しようとしない。</span></div>
+    <div class="ritual-step"><span class="step-num">五</span><span class="step-text">夜明けとともに散会する。帰路では振り返らない。振り返った者の証言は存在するが、内容の記録は焼却されている。</span></div>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 奇妙な記録</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    厳粛な記録だけが残るわけではない。<span class="margin-note">民間祭儀の記録には常に「笑える話」が混在する。恐怖と笑いは同じ源泉から湧く。どちらも、理解できないものへの反応である。</span>Talgrim在住の粉屋Henk Mulderは、集会に初めて参加しようとして道に迷い、夜明けまで同じ場所をぐるぐると歩き続けた。翌朝集落に戻ると、靴の中に見知らぬ硬貨が三枚入っていた。どの国の通貨かも、いつの時代のものかも誰にも判断できなかった。古書商は「価値がある」と言ったが、買い取りは断った。
+  </p>
+
+  <p>
+    別の集落では、集会から戻った女性が台所のテーブルに見知らぬ料理が並んでいるのを発見した。温かかった。翌朝には消え、皿は綺麗に洗われていた。三年目から彼女は皿を一枚余分に用意して出かけるようになった。誰のためかと問われ、彼女はこう答えた。「来る人のために」。
+  </p>
+
+  <div class="inscription">
+    <p>
+      死者は怖くない。<br>
+      怖いのは、死者が何かを知っていて、<br>
+      それをまだ教えてくれていないことだ。
+    </p>
+    <cite>— Talgrim古書商、口述記録より　Anno XIII</cite>
+  </div>
+
+  <p>
+    本記録を編纂するにあたり、記録者は自らGrauhallenの丘を訪れた。集会があったかどうかは確認できなかった。暗くて何も見えなかった。ただ、七か所に炭の跡があった。円を描くように。帰路、振り返らなかった。背後に何かがいる気配があったからではない。何もいない気配が、あまりにも完全だったからだ。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="index.html" class="nav-link">← 禁書庫へ戻る</a>
+  <div class="nav-center">RF–001 ／ Codex Festivus</div>
+  <a href="rf002.html" class="nav-link">次の記録：RF–002 →</a>
+</nav>
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

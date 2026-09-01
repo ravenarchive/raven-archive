@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅籠酒場 — RAVEN ARCHIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────
+   BASE
+───────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background-color:#0d0803;
+  color:#d4b888;
+  font-family:'Noto Serif JP','Cormorant Garamond',Georgia,serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:none;
+  min-height:100vh;
+}
+a{text-decoration:none;color:inherit}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;border:1px solid rgba(220,160,60,.75);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:screen}
+#cur.h{width:36px;height:36px;background:rgba(220,160,60,.08)}
+@media(pointer:coarse){#cur{display:none}}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:8000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.05}
+
+/* VEIL */
+#veil{position:fixed;inset:0;z-index:7000;background:#08050100;background-color:#080400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;transition:opacity 2s ease}
+#veil.out{opacity:0;pointer-events:none}
+.veil-main{font-family:'Cinzel',serif;font-size:clamp(.9rem,2.5vw,1.1rem);letter-spacing:.4em;color:#c8903c;opacity:0;animation:vfade 1.8s ease forwards .3s}
+.veil-line{width:48px;height:1px;background:linear-gradient(90deg,transparent,#c8903c,transparent);opacity:0;animation:vfade 1.8s ease forwards .7s}
+.veil-sub{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.6rem,1.8vw,.75rem);letter-spacing:.2em;color:#7a5a30;opacity:0;animation:vfade 1.8s ease forwards 1s}
+@keyframes vfade{from{opacity:0;transform:translateY(10px)}to{opacity:.85;transform:translateY(0)}}
+
+/* ─────────────────────────────────────
+   BACKGROUND — warm tavern atmosphere
+───────────────────────────────────── */
+.tavern-bg{
+  position:fixed;inset:0;z-index:0;
+  background-image:url('img_tavern.jpg');
+  background-size:cover;background-position:center 30%;
+  filter:brightness(.32) saturate(.7);
+}
+/* Warm vignette — heavier at top, lighter at center */
+.tavern-vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 40%,rgba(40,18,4,.35) 0%,rgba(13,8,3,.75) 80%),
+    linear-gradient(to bottom,rgba(13,8,3,.7) 0%,rgba(13,8,3,.2) 25%,rgba(13,8,3,.2) 70%,rgba(13,8,3,.85) 100%);
+}
+/* Warm amber glow at center-bottom (fireplace illusion) */
+.fire-glow-bg{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:800px;height:500px;
+  background:radial-gradient(ellipse at 50% 100%,rgba(200,90,10,.14) 0%,transparent 70%);
+  pointer-events:none;z-index:2;
+  animation:firepulse 4s ease-in-out infinite;
+}
+@keyframes firepulse{0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+
+/* ─────────────────────────────────────
+   NAV
+───────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:400;padding:1.3rem 5vw;display:flex;align-items:center;justify-content:space-between;background:rgba(13,8,3,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,150,60,.08)}
+.logo{display:flex;flex-direction:column;gap:3px;text-decoration:none}
+.logo-en{font-family:'Cinzel',serif;font-size:clamp(.72rem,1.8vw,.9rem);letter-spacing:.28em;color:#e0cba8;font-weight:400}
+.logo-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.52rem,1.2vw,.62rem);letter-spacing:.18em;color:#7a5a30}
+.nav-back{font-family:'Cinzel',serif;font-size:clamp(.5rem,1.1vw,.6rem);letter-spacing:.22em;text-transform:uppercase;color:#9a7a50;border:1px solid rgba(200,150,60,.2);padding:.38rem .9rem;transition:all .3s}
+.nav-back:hover{color:#c8963c;border-color:rgba(200,150,60,.5)}
+
+/* ─────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────── */
+.page{
+  position:relative;z-index:20;
+  max-width:960px;margin:0 auto;
+  padding:clamp(7rem,12vh,9rem) 5vw clamp(6rem,10vh,9rem);
+}
+
+/* ─────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────── */
+.tavern-header{text-align:center;margin-bottom:clamp(3rem,6vh,5rem)}
+.th-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.5em;text-transform:uppercase;color:#c8963c;opacity:.65;display:block;margin-bottom:.9rem}
+.th-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(2.2rem,5.5vw,3.4rem);color:#ede0c4;letter-spacing:.25em;display:block;text-shadow:0 0 80px rgba(200,100,20,.2)}
+.th-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.9rem,2vw,1.2rem);color:#c4b090;opacity:.55;letter-spacing:.1em;display:block;margin-top:.8rem}
+.th-rule{width:48px;height:1px;background:linear-gradient(to right,transparent,rgba(200,150,60,.55),transparent);margin:1.4rem auto}
+.th-sub{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.82rem,1.6vw,.96rem);color:#c4b090;opacity:.5;line-height:2.1;letter-spacing:.05em}
+
+/* ─────────────────────────────────────
+   SHARED COMPONENTS
+───────────────────────────────────── */
+.sec{margin-bottom:clamp(3rem,6vh,5rem)}
+.sec-label{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;color:#c8963c;opacity:.6;display:block;margin-bottom:.6rem}
+.sec-title{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(1.1rem,2.5vw,1.5rem);color:#e8d8b8;letter-spacing:.1em;display:block;margin-bottom:1.2rem}
+.sec-rule{width:36px;height:1px;background:linear-gradient(90deg,rgba(200,150,60,.6),transparent);opacity:.5;margin-bottom:1.8rem}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(200,150,60,.1),transparent);margin:clamp(2rem,4vh,3.5rem) 0}
+
+/* Fade-in animation for cards */
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card-fadein{animation:cardIn .8s cubic-bezier(.16,1,.3,1) forwards}
+
+/* ─────────────────────────────────────
+   INNKEEPER
+───────────────────────────────────── */
+.innkeeper-block{
+  display:grid;grid-template-columns:auto 1fr;gap:1.8rem;
+  align-items:start;
+  border:1px solid rgba(200,150,60,.12);
+  background:rgba(13,8,3,.6);
+  backdrop-filter:blur(10px);
+  padding:2rem 2.2rem;
+  position:relative;
+}
+.innkeeper-block::before{content:'';position:absolute;top:6px;left:6px;right:6px;bottom:6px;border:1px solid rgba(200,150,60,.05);pointer-events:none}
+.keeper-avatar{
+  width:clamp(54px,8vw,70px);height:clamp(54px,8vw,70px);
+  border-radius:50%;
+  border:1px solid rgba(200,150,60,.3);
+  background:radial-gradient(ellipse at 40% 35%,rgba(120,75,15,.8) 0%,rgba(60,32,6,.9) 70%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(1.4rem,3vw,1.9rem);
+  flex-shrink:0;
+}
+.keeper-info{display:flex;flex-direction:column;gap:.5rem}
+.keeper-name{font-family:'Cinzel',serif;font-size:clamp(.56rem,1.1vw,.65rem);letter-spacing:.28em;text-transform:uppercase;color:#c8963c;opacity:.7}
+.keeper-speech{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.9rem,1.8vw,1.05rem);
+  color:#e0d0b8;line-height:1.9;letter-spacing:.04em;
+  min-height:3rem;
+  transition:opacity .5s ease;
+}
+.keeper-speech.fading{opacity:0}
+
+/* ─────────────────────────────────────
+   BOT ANNOUNCEMENT
+───────────────────────────────────── */
+.bot-block{
+  background:rgba(10,6,2,.65);
+  border:1px solid rgba(200,150,60,.1);
+  border-left:2px solid rgba(200,150,60,.35);
+  padding:1.2rem 1.6rem;
+  display:flex;align-items:flex-start;gap:1rem;
+  backdrop-filter:blur(8px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.bot-icon{font-size:1.1rem;opacity:.8;flex-shrink:0;margin-top:.05rem}
+.bot-text-wrap{display:flex;flex-direction:column;gap:.3rem}
+.bot-name{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:#c8963c;opacity:.6}
+.bot-text{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.8rem,1.5vw,.9rem);color:#c4b090;opacity:.7;line-height:1.85}
+.bot-block.switching{opacity:0;transform:translateY(-6px)}
+
+/* ─────────────────────────────────────
+   NOTICE BOARD — 旅人の書置き
+───────────────────────────────────── */
+.notice-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:10px;
+}
+.notice-card{
+  background:rgba(28,18,8,.7);
+  border:1px solid rgba(200,150,60,.1);
+  padding:1.3rem 1.4rem;
+  position:relative;
+  backdrop-filter:blur(6px);
+  transition:border-color .35s,background .35s;
+  opacity:0;
+}
+.notice-card.visible{animation:cardIn .7s cubic-bezier(.16,1,.3,1) forwards}
+.notice-card:hover{border-color:rgba(200,150,60,.25);background:rgba(40,25,10,.7)}
+/* Parchment fold corner */
+.notice-card::after{
+  content:'';position:absolute;top:0;right:0;
+  width:16px;height:16px;
+  background:linear-gradient(225deg,rgba(200,150,60,.15) 50%,transparent 50%);
+}
+.notice-line{width:24px;height:1px;background:rgba(200,150,60,.2);margin-bottom:.9rem}
+.notice-text{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.78rem,1.4vw,.88rem);
+  color:#d4b888;opacity:.75;
+  line-height:1.85;letter-spacing:.04em;
+  margin-bottom:.9rem;
+}
+.notice-num{
+  font-family:'Cinzel',serif;font-size:.52rem;
+  letter-spacing:.18em;color:#8a6a40;opacity:.6;
+}
+
+/* Write form */
+.write-form{
+  margin-top:1.4rem;
+  display:flex;gap:0;
+  opacity:.7;transition:opacity .3s;
+}
+.write-form:hover{opacity:1}
+.write-input{
+  flex:1;background:rgba(18,11,4,.8);
+  border:1px solid rgba(200,150,60,.18);border-right:none;
+  color:#d4b888;padding:.75rem 1.1rem;
+  font-family:'Noto Serif JP',serif;font-size:.85rem;
+  outline:none;transition:border-color .3s;
+  max-width:100%;
+}
+.write-input::placeholder{color:#d4b888;opacity:.28}
+.write-input:focus{border-color:rgba(200,150,60,.4)}
+.write-btn{
+  background:rgba(200,150,60,.08);border:1px solid rgba(200,150,60,.22);
+  color:#c8963c;padding:.75rem 1.4rem;
+  font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;white-space:nowrap;
+}
+.write-btn:hover{background:rgba(200,150,60,.18);border-color:rgba(200,150,60,.55)}
+
+/* ─────────────────────────────────────
+   CANDLES — decorative row
+───────────────────────────────────── */
+.candle-row{
+  display:flex;justify-content:center;
+  gap:clamp(2rem,6vw,5rem);
+  padding:clamp(2rem,4vh,3rem) 0;
+  position:relative;
+}
+.candle-row::before{
+  content:'';position:absolute;
+  left:5%;right:5%;top:50%;height:1px;
+  background:linear-gradient(to right,transparent,rgba(200,150,60,.1),transparent);
+  transform:translateY(-50%);
+}
+.candle{display:flex;flex-direction:column;align-items:center;gap:0}
+/* Flame */
+.candle-flame{
+  width:8px;height:14px;
+  background:radial-gradient(ellipse at 50% 80%,#fff8e0 0%,#f0c040 40%,rgba(240,120,20,0) 100%);
+  border-radius:50% 50% 30% 30%;
+  animation:flicker 2.5s ease-in-out infinite;
+  position:relative;
+  filter:blur(.4px);
+}
+.candle:nth-child(2) .candle-flame{animation-delay:.7s}
+.candle:nth-child(3) .candle-flame{animation-delay:1.4s}
+.candle:nth-child(4) .candle-flame{animation-delay:.35s}
+.candle:nth-child(5) .candle-flame{animation-delay:1.1s}
+@keyframes flicker{
+  0%,100%{transform:scaleX(1) scaleY(1);opacity:1}
+  25%{transform:scaleX(.85) scaleY(1.08);opacity:.85}
+  50%{transform:scaleX(1.1) scaleY(.95);opacity:.95}
+  75%{transform:scaleX(.9) scaleY(1.05);opacity:.8}
+}
+/* Glow halo */
+.candle-halo{
+  width:22px;height:22px;
+  background:radial-gradient(circle,rgba(255,180,40,.25) 0%,transparent 70%);
+  border-radius:50%;
+  margin-bottom:-8px;
+  animation:flicker 2.5s ease-in-out infinite;
+  filter:blur(3px);
+}
+.candle:nth-child(2) .candle-halo{animation-delay:.7s}
+/* Wax body */
+.candle-body{
+  width:12px;
+  height:clamp(36px,5vw,52px);
+  background:linear-gradient(to bottom,#e8dcc8 0%,#d4c4a4 40%,#b8a880 100%);
+  border-radius:1px 1px 2px 2px;
+  position:relative;
+}
+.candle-body::after{
+  content:'';position:absolute;
+  left:3px;top:4px;width:2px;
+  height:calc(100% - 8px);
+  background:rgba(160,140,100,.3);
+  border-radius:1px;
+}
+/* Base plate */
+.candle-base{
+  width:18px;height:4px;
+  background:linear-gradient(to bottom,#a09060,#806840);
+  border-radius:1px;
+}
+
+/* ─────────────────────────────────────
+   FIREPLACE SECTION
+───────────────────────────────────── */
+#fireplace{
+  position:relative;
+  text-align:center;
+  padding:clamp(3rem,6vh,5rem) 0 clamp(2rem,4vh,3.5rem);
+}
+/* Fireplace surround */
+.fireplace-frame{
+  display:inline-block;
+  border:2px solid rgba(200,150,60,.25);
+  padding:clamp(2.5rem,5vw,4rem) clamp(2.5rem,6vw,5rem);
+  position:relative;
+  background:rgba(13,8,3,.55);
+  backdrop-filter:blur(12px);
+  max-width:580px;
+  width:100%;
+}
+.fireplace-frame::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(200,150,60,.1);pointer-events:none}
+/* Corner ornaments */
+.fp-corner{position:absolute;width:20px;height:20px}
+.fp-tl{top:4px;left:4px;border-top:2px solid rgba(200,150,60,.5);border-left:2px solid rgba(200,150,60,.5)}
+.fp-tr{top:4px;right:4px;border-top:2px solid rgba(200,150,60,.5);border-right:2px solid rgba(200,150,60,.5)}
+.fp-bl{bottom:4px;left:4px;border-bottom:2px solid rgba(200,150,60,.5);border-left:2px solid rgba(200,150,60,.5)}
+.fp-br{bottom:4px;right:4px;border-bottom:2px solid rgba(200,150,60,.5);border-right:2px solid rgba(200,150,60,.5)}
+
+/* Animated fire */
+.fire-display{
+  width:90px;height:70px;margin:0 auto 1.8rem;
+  position:relative;display:flex;justify-content:center;align-items:flex-end;
+}
+.log-l,.log-r{position:absolute;bottom:4px;width:60px;height:10px;background:linear-gradient(to right,#4a2a0a,#3a1a05);border-radius:4px}
+.log-l{transform:rotate(-20deg);left:8px}
+.log-r{transform:rotate(20deg);right:8px}
+.flame{
+  position:absolute;
+  border-radius:50% 50% 30% 30%;
+  filter:blur(.5px);
+  transform-origin:50% 100%;
+}
+.fl-1{width:30px;height:50px;background:radial-gradient(ellipse at 50% 80%,#fff0a0,#f0a030,rgba(200,50,0,0));bottom:12px;left:50%;transform:translateX(-50%);animation:burn1 1.8s ease-in-out infinite}
+.fl-2{width:20px;height:36px;background:radial-gradient(ellipse at 50% 80%,#fff8c0,#e09020,rgba(200,80,0,0));bottom:12px;left:42%;transform:translateX(-50%);animation:burn2 2.2s ease-in-out infinite .3s}
+.fl-3{width:16px;height:28px;background:radial-gradient(ellipse at 50% 80%,#fffad0,#e0a030,rgba(200,100,0,0));bottom:12px;left:58%;transform:translateX(-50%);animation:burn3 1.6s ease-in-out infinite .6s}
+.ember{position:absolute;width:3px;height:3px;border-radius:50%;background:#f0a020;animation:emberfloat 3s ease-out infinite}
+.em1{left:45%;bottom:55px;animation-delay:0s}
+.em2{left:55%;bottom:50px;animation-delay:.9s}
+.em3{left:50%;bottom:60px;animation-delay:1.8s}
+@keyframes burn1{0%,100%{transform:translateX(-50%) scaleX(1) scaleY(1)}40%{transform:translateX(-50%) scaleX(.85) scaleY(1.1)}70%{transform:translateX(-50%) scaleX(1.1) scaleY(.92)}}
+@keyframes burn2{0%,100%{transform:translateX(-50%) rotate(-4deg) scaleY(1)}50%{transform:translateX(-50%) rotate(5deg) scaleY(1.12)}}
+@keyframes burn3{0%,100%{transform:translateX(-50%) rotate(3deg) scaleY(1)}50%{transform:translateX(-50%) rotate(-4deg) scaleY(.9)}}
+@keyframes emberfloat{0%{opacity:.8;transform:translateY(0) translateX(0)}80%{opacity:.3;transform:translateY(-30px) translateX(8px)}100%{opacity:0;transform:translateY(-40px) translateX(12px)}}
+
+.fireplace-label{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:#c8963c;opacity:.6;display:block;margin-bottom:.7rem}
+.fireplace-title{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(1.2rem,3vw,1.7rem);color:#e8d8b8;letter-spacing:.12em;display:block;margin-bottom:.8rem}
+.fireplace-desc{font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(.8rem,1.5vw,.92rem);color:#c4b090;opacity:.5;line-height:2;margin-bottom:2rem}
+.discord-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.8rem;
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.88rem,1.8vw,1rem);
+  letter-spacing:.14em;
+  color:#e8d8b8;
+  background:rgba(13,8,3,.7);
+  border:1px solid rgba(200,150,60,.3);
+  padding:clamp(1rem,2.5vw,1.2rem) clamp(2.5rem,5vw,4rem);
+  transition:all .5s ease;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.discord-btn::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(200,120,20,.07) 0%,transparent 70%);opacity:0;transition:opacity .5s}
+.discord-btn:hover{border-color:rgba(200,150,60,.65);color:#f0ddb8}
+.discord-btn:hover::before{opacity:1}
+.discord-icon{font-size:1.1rem;opacity:.7}
+
+/* ─────────────────────────────────────
+   PILGRIM STATUS BAR
+───────────────────────────────────── */
+.pilgrim-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:30;
+  display:flex;align-items:center;justify-content:center;gap:2.5rem;
+  padding:.6rem 2rem;
+  background:rgba(13,8,3,.8);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(200,150,60,.08);
+}
+.pb-item{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#6a4a20}
+.pb-item span{color:#9a7a50}
+.pb-link{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#7a6040;border-bottom:1px solid rgba(200,150,60,.18);padding-bottom:1px;transition:all .3s}
+.pb-link:hover{color:#c8963c;border-bottom-color:rgba(200,150,60,.5)}
+@media(max-width:600px){.pilgrim-bar{gap:1.2rem;flex-wrap:wrap}}
+
+/* ─────────────────────────────────────
+   FOOTER
+───────────────────────────────────── */
+.tavern-foot{text-align:center;padding:2.5rem 0 5rem;border-top:1px solid rgba(200,150,60,.06);margin-top:1rem}
+.tavern-foot a{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:#6a4a20;transition:color .3s}
+.tavern-foot a:hover{color:#c8963c}
+
+/* ─────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────── */
+@media(max-width:600px){
+  .notice-grid{grid-template-columns:1fr 1fr}
+  .candle-row{gap:1.5rem}
+}
+@media(max-width:400px){
+  .notice-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+<div class="tavern-bg"></div>
+<div class="tavern-vignette"></div>
+<div class="fire-glow-bg"></div>
+<div id="veil">
+  <div class="veil-main">旅籠酒場</div>
+  <div class="veil-line"></div>
+  <div class="veil-sub">The Wayfarers' Inn</div>
+</div>
+<div id="cur"></div>
+
+<nav>
+  <a href="index.html" class="logo">
+    <span class="logo-en">🐦‍⬛ RAVEN ARCHIVE</span>
+    <span class="logo-jp">失われた世界の記録庫</span>
+  </a>
+  <a href="index.html" class="nav-back">← 記録庫へ戻る</a>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="tavern-header">
+    <span class="th-label">The Wayfarers' Inn</span>
+    <span class="th-jp">旅籠酒場</span>
+    <span class="th-en">The Wayfarers' Inn</span>
+    <div class="th-rule"></div>
+    <span class="th-sub">
+      暖炉の火が揺れている。<br>
+      巡礼者が集まる夜、この場所はひとつの記憶になる。
+    </span>
+  </header>
+
+  <!-- CANDLE ROW -->
+  <div class="candle-row">
+    <div class="candle"><div class="candle-halo"></div><div class="candle-flame"></div><div class="candle-body"></div><div class="candle-base"></div></div>
+    <div class="candle"><div class="candle-halo"></div><div class="candle-flame"></div><div class="candle-body"></div><div class="candle-base"></div></div>
+    <div class="candle"><div class="candle-halo"></div><div class="candle-flame"></div><div class="candle-body"></div><div class="candle-base"></div></div>
+    <div class="candle"><div class="candle-halo"></div><div class="candle-flame"></div><div class="candle-body"></div><div class="candle-base"></div></div>
+    <div class="candle"><div class="candle-halo"></div><div class="candle-flame"></div><div class="candle-body"></div><div class="candle-base"></div></div>
+  </div>
+
+  <!-- INNKEEPER -->
+  <div class="sec">
+    <span class="sec-label">The Innkeeper</span>
+    <span class="sec-title">酒場の主人</span>
+    <div class="sec-rule"></div>
+    <div class="innkeeper-block">
+      <div class="keeper-avatar">🧔</div>
+      <div class="keeper-info">
+        <span class="keeper-name">酒場の主人</span>
+        <p class="keeper-speech" id="keeper-speech">……</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BOT ANNOUNCEMENT -->
+  <div class="sec">
+    <span class="sec-label">Raven Keeper</span>
+    <span class="sec-title">酒場の知らせ</span>
+    <div class="sec-rule"></div>
+    <div class="bot-block" id="bot-block">
+      <span class="bot-icon">🪶</span>
+      <div class="bot-text-wrap">
+        <span class="bot-name">Raven Keeper</span>
+        <p class="bot-text" id="bot-text">……</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- NOTICE BOARD -->
+  <div class="sec">
+    <span class="sec-label">Notice Board</span>
+    <span class="sec-title">旅人の書置き</span>
+    <div class="sec-rule"></div>
+    <div class="notice-grid" id="notice-grid"></div>
+    <div class="write-form" id="write-form" style="margin-top:1.4rem">
+      <input type="text" class="write-input" id="write-input" placeholder="一言だけ残していく……（50文字以内）" maxlength="50">
+      <button class="write-btn" onclick="postNote()">書き残す</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FIREPLACE -->
+  <section id="fireplace">
+    <div class="fireplace-frame">
+      <div class="fp-corner fp-tl"></div><div class="fp-corner fp-tr"></div>
+      <div class="fp-corner fp-bl"></div><div class="fp-corner fp-br"></div>
+      <!-- Fire animation -->
+      <div class="fire-display">
+        <div class="log-l"></div><div class="log-r"></div>
+        <div class="flame fl-1"></div>
+        <div class="flame fl-2"></div>
+        <div class="flame fl-3"></div>
+        <div class="ember em1"></div>
+        <div class="ember em2"></div>
+        <div class="ember em3"></div>
+      </div>
+      <span class="fireplace-label">Pilgrim's Chamber</span>
+      <span class="fireplace-title">暖炉の奥へ進む</span>
+      <p class="fireplace-desc">
+        暖炉の奥には、<br>
+        巡礼者だけが入れる部屋があります。
+      </p>
+      <a href="https://discord.gg/your-invite-here" target="_blank" rel="noopener" class="discord-btn">
+        <span class="discord-icon">🔥</span>
+        <span>暖炉の奥へ進む</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="tavern-foot">
+    <a href="pilgrim.html">巡礼者の手帳を見る →</a>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Pilgrim bar -->
+<div class="pilgrim-bar">
+  <span class="pb-item">巡礼者 <span id="pb-num">—</span></span>
+  <span class="pb-item">巡礼進捗 <span id="pb-prog">— / 5</span></span>
+  <a href="pilgrim.html" class="pb-link">巡礼者の手帳を見る →</a>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   INNKEEPER — 50 lines
+═══════════════════════════════════════════ */
+const KEEPER = [
+  '今日は巡礼者が多い。',
+  '森へ行くなら朝がいい。',
+  '禁書庫は静かだった。',
+  '蜂蜜酒は飲み過ぎるな。',
+  '昔はこの酒場も満席だった。',
+  '旅人は皆、何かを探している。',
+  '今夜は霧が深い。',
+  '修道院の鐘が聞こえたか。',
+  '羊皮紙は濡らすな。',
+  '黒い森には近づかないほうがいい。',
+  '巡礼路は明日も続いている。',
+  'カラスが三羽飛んでいった。',
+  '古い地図を買った旅人がいた。',
+  '今夜の蜂蜜酒は上出来だ。',
+  '雨は止みそうにない。',
+  '扉の鍵をなくした者がいた。',
+  '静かな夜が一番怖い。',
+  '修道士が一人、立ち寄った。',
+  '今日は誰も帰らなかった。',
+  '灯火は早めに消せ。',
+  '巡礼は急がなくていい。',
+  '昨日、禁書庫で光が見えた。',
+  '羊飼いが羊を一頭なくしたそうだ。',
+  '旅商人が珍しい鍵を持っていた。',
+  '朽ちた橋は渡れなくなった。',
+  '森の奥で鹿を見た者がいる。',
+  '石碑の前で誰かが祈っていた。',
+  '蝋燭はまだある。心配するな。',
+  '今夜は星が見えない。',
+  'この酒場は何年前からここにある？',
+  '旅の疲れは一晩では取れない。',
+  '古銭を拾った者がいたそうだ。',
+  '手紙を持ってきた者がいた。宛先は消えていた。',
+  '湖に何かがいると、子どもが言っていた。',
+  '今朝、黒衣の修道士が通り過ぎた。',
+  '巡礼路は長い。しかし終わりはある。',
+  '欠けた日記が落ちていた。',
+  '羽根を一枚拾った。誰のものかは分からない。',
+  '今日の客は口が重かった。',
+  '霧が晴れたら、また旅立つ者がいる。',
+  '夢の中でも旅をするとは、大した者だ。',
+  '記録する者が一人いた。何を記録しているのかは聞かなかった。',
+  '酒場の火は絶やさない。それだけが決まりだ。',
+  '空のジョッキを置いていった者がいる。',
+  '石の壁の染みが、最近人の顔に見える。',
+  'ここに来る者は皆、疲れた顔をしている。',
+  '巡礼の証を持った者が来た。静かに飲んで、去った。',
+  '今夜は長くなりそうだ。',
+  '記憶は重い。だから旅をするのだろう。',
+  '火が揺れている。誰かが扉を開けたか。',
+];
+
+/* ═══════════════════════════════════════════
+   RAVEN KEEPER BOT — 50 messages
+═══════════════════════════════════════════ */
+const BOT = [
+  '黒い森で珍しい報告が届きました。',
+  '新しい禁書が収蔵されました。',
+  '修道院に新しい巡礼者が到着しました。',
+  '旅籠に新しい蝋燭が灯りました。',
+  '今夜は霧が深くなります。',
+  '誰かが巡礼路を歩いています。',
+  '古い手紙が見つかりました。',
+  '石碑の文字が、少し読めるようになりました。',
+  '湖の水面が揺れています。',
+  'カラスが記録庫の周りを飛んでいます。',
+  '新しい巡礼者が記録されました。',
+  '禁書庫の扉が一瞬だけ開きました。',
+  '森の奥で白い鹿の目撃情報がありました。',
+  '修道院の鐘が定刻外に鳴りました。',
+  '旅商人が新しい品を持って到着しました。',
+  '羊皮紙の切れ端が届きました。文字は読めません。',
+  '今夜の蜂蜜酒が完成しました。',
+  '巡礼路の一部で霧が濃くなっています。',
+  '誰かが暖炉に薪を足しました。',
+  '古地図に新しい道が描き加えられています。',
+  '黒衣の修道士が記録庫を訪れました。',
+  '欠けた日記の残りのページが見つかりました。',
+  '朽ちた橋の修復が始まりました。',
+  '夜の巡礼路に灯火が一つ灯っています。',
+  '森番から報告：今夜は静かです。',
+  '禁書庫の蝋燭が一本、風もないのに消えました。',
+  '新しい写本が修道院に届きました。',
+  '巡礼者の証が新たに一枚刻まれました。',
+  '古い鍵が酒場の前に落ちていました。',
+  '記録庫の扉の蝋印が少し溶けています。',
+  '今夜は星が見えません。雲が厚い。',
+  '羊飼いから、珍しい羊毛が届きました。',
+  '修道院の食堂で、誰かが歌っていました。',
+  '黒い森で、焚き火の跡が見つかりました。',
+  '旅籠の書置き板に新しい言葉が増えました。',
+  '巡礼路に、古銭が一枚落ちていました。',
+  '禁書庫の記録に、新しい名前が加わりました。',
+  '今夜の記録が更新されました。',
+  '湖に月が映っています。静かな夜です。',
+  '石碑の前に、新しい花が供えられました。',
+  '記録庫のカラスが一羽、外へ飛び立ちました。',
+  '修道士が新しい祈りを書き留めました。',
+  '今朝、巡礼路で鹿の足跡が見つかりました。',
+  '旅商人が去りました。次の寄港は不明です。',
+  '暖炉の火が今夜も絶えていません。',
+  '誰かが書置きを残して、立ち去りました。',
+  '黒い森から、風に乗って何かが聞こえます。',
+  '新しい記録が書庫に加わりました。',
+  '修道院の窓に灯りがついています。',
+  '今夜も、旅は続きます。',
+];
+
+/* ═══════════════════════════════════════════
+   NOTICE BOARD — 20 dummy entries
+═══════════════════════════════════════════ */
+const DUMMY_NOTES = [
+  {text:'今日は雨でした。', num:'No.021'},
+  {text:'修道院の鐘が好き。', num:'No.117'},
+  {text:'また来ます。', num:'No.202'},
+  {text:'黒い森は静かだった。', num:'No.044'},
+  {text:'蜂蜜酒、美味しかった。', num:'No.088'},
+  {text:'巡礼路は長い。', num:'No.133'},
+  {text:'石碑に触れた。', num:'No.007'},
+  {text:'霧の中で道を間違えた。', num:'No.299'},
+  {text:'カラスに見られた。', num:'No.056'},
+  {text:'禁書庫は恐ろしい。', num:'No.181'},
+  {text:'ここに来て良かった。', num:'No.315'},
+  {text:'また旅に出ます。', num:'No.072'},
+  {text:'暖炉の前で眠った。', num:'No.408'},
+  {text:'白い鹿を見た気がした。', num:'No.014'},
+  {text:'蝋燭の炎が揺れていた。', num:'No.263'},
+  {text:'古い手紙を拾った。', num:'No.099'},
+  {text:'今夜は星が見えない。', num:'No.155'},
+  {text:'記録は続けます。', num:'No.348'},
+  {text:'修道士に道を教えてもらった。', num:'No.031'},
+  {text:'旅はまだ終わらない。', num:'No.444'},
+];
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+/* Innkeeper — set on load */
+document.getElementById('keeper-speech').textContent = pick(KEEPER);
+
+/* Bot — set on load, rotate every 10s */
+function rotateBotMsg(){
+  const block = document.getElementById('bot-block');
+  const text  = document.getElementById('bot-text');
+  block.classList.add('switching');
+  setTimeout(()=>{
+    text.textContent = pick(BOT);
+    block.classList.remove('switching');
+  }, 600);
+}
+document.getElementById('bot-text').textContent = pick(BOT);
+setInterval(rotateBotMsg, 10000);
+
+/* Notice board */
+function buildNote(text, num, delay=0){
+  const div = document.createElement('div');
+  div.className = 'notice-card';
+  div.style.animationDelay = delay+'ms';
+  div.innerHTML = `
+    <div class="notice-line"></div>
+    <p class="notice-text">${text}</p>
+    <span class="notice-num">${num}</span>
+  `;
+  return div;
+}
+
+const grid = document.getElementById('notice-grid');
+
+/* Shuffle dummy notes and render */
+const shuffled = [...DUMMY_NOTES].sort(()=>Math.random()-.5);
+shuffled.forEach((n,i)=>{
+  const card = buildNote(n.text, n.num, i*60);
+  grid.appendChild(card);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('visible')));
+});
+
+/* Post new note */
+function generateNum(){
+  const d = getPilgrim();
+  if(d) return 'No.'+d.num;
+  return 'No.'+String(Math.floor(100+Math.random()*900));
+}
+function postNote(){
+  const input = document.getElementById('write-input');
+  const text  = input.value.trim();
+  if(!text) return;
+  const num  = generateNum();
+  const card = buildNote(text, num);
+  card.style.animationDelay = '0ms';
+  grid.insertBefore(card, grid.firstChild);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('visible')));
+  input.value = '';
+}
+document.getElementById('write-input').addEventListener('keydown', e=>{
+  if(e.key==='Enter') postNote();
+});
+
+/* ═══════════════════════════════════════════
+   PILGRIM TRACKING
+═══════════════════════════════════════════ */
+function getPilgrim(){
+  try{const r=localStorage.getItem('raven_pilgrim');return r?JSON.parse(r):null}catch(e){return null}
+}
+function setPilgrim(d){
+  try{localStorage.setItem('raven_pilgrim',JSON.stringify(d))}catch(e){}
+}
+
+(function(){
+  let d = getPilgrim();
+  if(!d){
+    const num = String(Math.floor(10000+Math.random()*90000));
+    d = { num, since:Date.now(), visits:{}, log:[] };
+  }
+  if(!d.visits['tavern']){
+    d.visits['tavern'] = Date.now();
+    if(!d.log) d.log=[];
+    d.log.push({ ts:Date.now(), realm_id:'tavern' });
+    setPilgrim(d);
+  }
+  const count = Object.keys(d.visits||{}).length;
+  document.getElementById('pb-num').textContent  = 'No.'+d.num;
+  document.getElementById('pb-prog').textContent = count+' / 5';
+})();
+
+/* ═══════════════════════════════════════════
+   VEIL + CURSOR
+═══════════════════════════════════════════ */
+setTimeout(()=>{
+  const v=document.getElementById('veil');
+  v.classList.add('out');
+  setTimeout(()=>v.remove(),2100);
+},1900);
+
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+},{passive:true});
+document.querySelectorAll('a,button,.notice-card,.discord-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('h'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('h'));
+});
+</script>
+</body>
+</html>

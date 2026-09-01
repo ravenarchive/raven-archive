@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>香りの記録 — RAVEN ARCHIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────────────────────────────
+   BASE
+───────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#08060400;
+  background-color:#080604;
+  color:#c4b090;
+  font-family:'Noto Serif JP','Cormorant Garamond',Georgia,serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:none;
+}
+a{text-decoration:none;color:inherit}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;border:1px solid rgba(200,150,60,.75);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:screen}
+#cur.h{width:36px;height:36px;background:rgba(200,150,60,.07)}
+@media(pointer:coarse){#cur{display:none}}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:8000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.042}
+
+/* VEIL */
+#veil{position:fixed;inset:0;z-index:7000;background:#050403;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;transition:opacity 2s ease}
+#veil.out{opacity:0;pointer-events:none}
+.veil-m{font-family:'Cinzel',serif;font-size:clamp(.9rem,2.5vw,1.1rem);letter-spacing:.4em;color:#c8903c;opacity:0;animation:vfade 1.8s ease forwards .3s}
+.veil-l{width:48px;height:1px;background:linear-gradient(90deg,transparent,#c8903c,transparent);opacity:0;animation:vfade 1.8s ease forwards .7s}
+.veil-s{font-family:'Noto Serif JP',serif;font-weight:200;font-size:.72rem;letter-spacing:.2em;color:#7a6a50;opacity:0;animation:vfade 1.8s ease forwards 1s}
+@keyframes vfade{from{opacity:0;transform:translateY(10px)}to{opacity:.85;transform:translateY(0)}}
+
+/* ─────────────────────────────────────
+   NAV
+───────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  padding:1.4rem 5vw;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .5s,backdrop-filter .5s;
+}
+nav.solid{background:rgba(8,6,4,.93);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,150,60,.07)}
+.logo{display:flex;flex-direction:column;gap:3px;text-decoration:none}
+.logo-en{font-family:'Cinzel',serif;font-size:clamp(.72rem,1.8vw,.9rem);letter-spacing:.28em;color:#e0cba8;font-weight:400}
+.logo-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:.62rem;letter-spacing:.18em;color:#6a5a40}
+.nav-back{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#8a7a60;border:1px solid rgba(200,150,60,.2);padding:.38rem .9rem;transition:all .3s}
+.nav-back:hover{color:#c8963c;border-color:rgba(200,150,60,.5)}
+
+/* ─────────────────────────────────────
+   REVEAL
+───────────────────────────────────── */
+.rv{opacity:0;transform:translateY(30px);transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1)}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}.rv.d4{transition-delay:.48s}
+
+/* ─────────────────────────────────────
+   HERO — fullscreen
+───────────────────────────────────── */
+#hero{
+  position:relative;
+  height:100svh;min-height:620px;
+  overflow:hidden;
+  display:flex;align-items:flex-end;
+  z-index:20;
+}
+
+.hero-photo{
+  position:absolute;inset:0;
+  /* candle + atelier warmth photo */
+  background-image:url('img_atelier.jpg');
+  background-size:cover;
+  background-position:center 35%;
+  filter:brightness(.38) saturate(.6);
+  animation:hzoom 20s ease-in-out infinite alternate;
+}
+@keyframes hzoom{from{transform:scale(1.05)}to{transform:scale(1)}}
+
+.hero-vignette{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 50%,transparent 10%,rgba(8,6,4,.55) 75%),
+    linear-gradient(to bottom,rgba(8,6,4,.45) 0%,transparent 30%,rgba(8,6,4,.15) 65%,rgba(8,6,4,1) 100%);
+}
+
+.hero-content{
+  position:relative;z-index:2;
+  padding:0 8vw clamp(4rem,9vh,7rem);
+  max-width:780px;
+  opacity:0;animation:hfade 2.5s ease forwards 1s;
+}
+@keyframes hfade{to{opacity:1}}
+
+.hero-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.5em;text-transform:uppercase;color:#c8963c;opacity:.65;display:block;margin-bottom:1rem}
+.hero-title{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(2.4rem,6vw,4rem);
+  color:#ede0c4;letter-spacing:.18em;
+  text-shadow:0 0 100px rgba(200,130,30,.15);
+  display:block;margin-bottom:1.4rem;
+  line-height:1.1;
+}
+.hero-rule{width:44px;height:1px;background:linear-gradient(to right,rgba(200,150,60,.6),transparent);opacity:.5;margin-bottom:1.6rem}
+.hero-sub{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.88rem,1.8vw,1.08rem);
+  color:#c4b090;opacity:.6;
+  line-height:2.2;letter-spacing:.06em;
+  display:block;margin-bottom:1.4rem;
+}
+.hero-desc{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(.85rem,1.6vw,1rem);
+  color:#c4b090;opacity:.42;
+  line-height:2;letter-spacing:.05em;
+}
+
+.scroll-cue{
+  position:absolute;bottom:2.2rem;right:8vw;
+  z-index:5;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  opacity:.35;animation:scpulse 3s ease-in-out infinite;
+}
+.scroll-cue span{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:#c4b090}
+.scroll-cue::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,#c8963c,transparent)}
+@keyframes scpulse{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:.65;transform:translateY(7px)}}
+
+/* ─────────────────────────────────────
+   SHARED
+───────────────────────────────────── */
+section{position:relative;z-index:20}
+.wrap{max-width:1280px;margin:0 auto;padding:0 5vw}
+.lbl{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.48em;text-transform:uppercase;color:#c8963c;opacity:.6;display:block}
+.ttl{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(1.5rem,3.5vw,2.4rem);color:#e8d8b8;letter-spacing:.1em;display:block;margin-top:.5rem}
+.rule{width:40px;height:1px;background:linear-gradient(90deg,#c8963c,transparent);opacity:.4;margin-top:1.1rem}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(200,150,60,.1),transparent)}
+
+/* ─────────────────────────────────────
+   INTRO — short statement
+───────────────────────────────────── */
+#intro{padding:clamp(5rem,10vw,8rem) 0 clamp(4rem,8vw,6rem);text-align:center}
+.intro-body{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(1rem,2.2vw,1.3rem);
+  color:#c4b090;opacity:.55;
+  line-height:2.5;letter-spacing:.1em;
+  max-width:500px;margin:0 auto;
+}
+
+/* ─────────────────────────────────────
+   SCENT CARDS — 4 fullbleed panels
+───────────────────────────────────── */
+#scents{padding-bottom:clamp(5rem,10vw,8rem)}
+
+.scent-card{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  /* Alternating layout */
+}
+.scent-card:nth-child(odd) {flex-direction:row}
+.scent-card:nth-child(even){flex-direction:row-reverse}
+
+/* Photo side */
+.sc-photo{
+  flex:1.4;
+  position:relative;
+  overflow:hidden;
+  min-height:clamp(440px,55vw,680px);
+}
+.sc-photo-img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  filter:brightness(.5) saturate(.65);
+  transition:transform 1.6s cubic-bezier(.16,1,.3,1),filter .8s;
+}
+.scent-card:hover .sc-photo-img{
+  transform:scale(1.05);
+  filter:brightness(.62) saturate(.75);
+}
+
+/* Unique photo per card */
+.sc-monastery .sc-photo-img{
+  background-image:url('img_monastery_cloister.jpg');
+  background-position:center 30%;
+}
+.sc-library .sc-photo-img{
+  background-image:url('img_forbidden.jpg');
+  background-position:center 20%;
+}
+.sc-forest .sc-photo-img{
+  background-image:url('img_forest_warm.jpg');
+}
+.sc-tavern .sc-photo-img{
+  background-image:url('img_tavern.jpg');
+  background-position:center 35%;
+}
+
+/* Fade into text side */
+.sc-photo::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+}
+.scent-card:nth-child(odd)  .sc-photo::after{background:linear-gradient(to right,transparent 55%,rgba(8,6,4,.95) 100%)}
+.scent-card:nth-child(even) .sc-photo::after{background:linear-gradient(to left, transparent 55%,rgba(8,6,4,.95) 100%)}
+
+/* Text side */
+.sc-text{
+  flex:1;
+  background:#08060400;
+  background-color:#0b0906;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(3rem,6vw,5rem) clamp(3rem,7vw,6rem);
+  position:relative;
+}
+/* Gold accent line on inner edge */
+.scent-card:nth-child(odd)  .sc-text::before{content:'';position:absolute;top:10%;bottom:10%;left:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(200,150,60,.2),transparent)}
+.scent-card:nth-child(even) .sc-text::before{content:'';position:absolute;top:10%;bottom:10%;right:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(200,150,60,.2),transparent)}
+
+.sc-num{
+  font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.4em;
+  color:#c8963c;opacity:.45;display:block;margin-bottom:.9rem;
+}
+.sc-icon{font-size:1.6rem;display:block;opacity:.7;margin-bottom:.9rem}
+.sc-name{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(1.4rem,3vw,2rem);
+  color:#e8d8b8;letter-spacing:.12em;display:block;margin-bottom:1.2rem;
+  line-height:1.2;
+}
+.sc-rule{width:32px;height:1px;background:linear-gradient(90deg,rgba(200,150,60,.55),transparent);opacity:.5;margin-bottom:1.5rem}
+
+/* Ingredient list */
+.sc-notes{
+  display:flex;flex-direction:column;gap:.45rem;
+  margin-bottom:1.8rem;
+}
+.sc-note-item{
+  font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;
+  color:#c8963c;opacity:.55;text-transform:uppercase;
+  display:flex;align-items:center;gap:.6rem;
+}
+.sc-note-item::before{content:'';width:12px;height:1px;background:rgba(200,150,60,.4);flex-shrink:0}
+
+/* Description */
+.sc-desc{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.82rem,1.5vw,.92rem);
+  color:#c4b090;opacity:.55;
+  line-height:2.2;letter-spacing:.05em;
+}
+
+/* Separator between cards */
+.sc-sep{height:1px;background:linear-gradient(to right,transparent,rgba(200,150,60,.08),transparent)}
+
+/* ─────────────────────────────────────
+   CLOSING SECTION
+───────────────────────────────────── */
+#closing{
+  padding:clamp(6rem,12vw,10rem) 0;
+  text-align:center;
+  position:relative;
+  background:linear-gradient(180deg,transparent,rgba(14,10,6,.5) 25%,rgba(14,10,6,.5) 75%,transparent);
+}
+
+/* Decorative ring */
+.closing-ring{
+  width:clamp(80px,10vw,120px);
+  height:clamp(80px,10vw,120px);
+  border-radius:50%;
+  border:1px solid rgba(200,150,60,.18);
+  margin:0 auto clamp(2rem,4vw,3.5rem);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.closing-ring::before{
+  content:'';position:absolute;inset:8px;
+  border-radius:50%;
+  border:1px dashed rgba(200,150,60,.1);
+}
+.closing-ring-icon{font-size:clamp(1.6rem,3.5vw,2.4rem);opacity:.55}
+
+.closing-title{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(1.3rem,3vw,2rem);
+  color:#e8d8b8;letter-spacing:.16em;
+  display:block;margin-bottom:clamp(2rem,4vw,3rem);
+  line-height:1.5;
+}
+.closing-rule{
+  width:56px;height:1px;
+  background:linear-gradient(to right,transparent,rgba(200,150,60,.4),transparent);
+  margin:0 auto clamp(2rem,4vw,3rem);
+}
+.closing-body{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.85rem,1.6vw,.98rem);
+  color:#c4b090;opacity:.5;
+  line-height:2.6;letter-spacing:.07em;
+  max-width:480px;margin:0 auto;
+}
+
+/* ─────────────────────────────────────
+   PILGRIM BAR
+───────────────────────────────────── */
+.pilgrim-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:30;
+  display:flex;align-items:center;justify-content:center;gap:2.5rem;
+  padding:.6rem 2rem;
+  background:rgba(8,6,4,.8);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(200,150,60,.07);
+}
+.pb-item{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#5a4a30}
+.pb-item span{color:#8a7a50}
+.pb-link{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#7a6040;border-bottom:1px solid rgba(200,150,60,.18);padding-bottom:1px;transition:all .3s}
+.pb-link:hover{color:#c8963c;border-bottom-color:rgba(200,150,60,.5)}
+
+/* ─────────────────────────────────────
+   FOOTER
+───────────────────────────────────── */
+footer{
+  position:relative;z-index:20;
+  border-top:1px solid rgba(200,150,60,.07);
+  padding:2.5rem 5vw 5rem;
+  text-align:center;
+}
+.foot-en{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;color:#8a7a60;display:block;margin-bottom:.4rem}
+.foot-copy{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.15em;color:#5a4a32;opacity:.55}
+
+/* ─────────────────────────────────────
+   MOBILE
+───────────────────────────────────── */
+@media(max-width:860px){
+  .scent-card,
+  .scent-card:nth-child(odd),
+  .scent-card:nth-child(even){flex-direction:column}
+  .sc-photo{min-height:clamp(280px,55vw,420px);flex:none;width:100%}
+  .scent-card:nth-child(odd)  .sc-photo::after{background:linear-gradient(to bottom,transparent 55%,rgba(8,6,4,.95) 100%)}
+  .scent-card:nth-child(even) .sc-photo::after{background:linear-gradient(to bottom,transparent 55%,rgba(8,6,4,.95) 100%)}
+  .scent-card:nth-child(odd)  .sc-text::before,
+  .scent-card:nth-child(even) .sc-text::before{display:none}
+  .sc-text{padding:2.5rem 1.8rem 3rem}
+  .pilgrim-bar{gap:1.2rem;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+<div id="veil">
+  <div class="veil-m">RAVEN ARCHIVE</div>
+  <div class="veil-l"></div>
+  <div class="veil-s">香りの記録</div>
+</div>
+<div id="cur"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">
+    <span class="logo-en">🐦‍⬛ RAVEN ARCHIVE</span>
+    <span class="logo-jp">失われた世界の記録庫</span>
+  </a>
+  <a href="index.html" class="nav-back">← 記録庫へ戻る</a>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <span class="hero-label">Scent Records</span>
+    <span class="hero-title">香りの記録</span>
+    <div class="hero-rule"></div>
+    <span class="hero-sub">
+      記憶は、<br>
+      ときに言葉より先に香りで蘇る。
+    </span>
+    <span class="hero-desc">
+      この世界には、物語ごとに異なる空気が流れている。<br>
+      香りもまた、失われた世界を記録する方法のひとつ。
+    </span>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span></div>
+</section>
+
+<!-- ══════════ INTRO ══════════ -->
+<section id="intro">
+  <div class="wrap">
+    <p class="intro-body rv">
+      古い木の匂い。<br>
+      雨に濡れた石畳。<br>
+      蝋燭の灯。<br>
+      羊皮紙。<br>
+      蜂蜜酒。<br><br>
+      それらもまた、<br>
+      世界の一部です。
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════ SCENT CARDS ══════════ -->
+<section id="scents">
+
+  <!-- 01 修道院 -->
+  <div class="scent-card sc-monastery rv">
+    <div class="sc-photo">
+      <div class="sc-photo-img"></div>
+    </div>
+    <div class="sc-text">
+      <span class="sc-num">01 / Monastery</span>
+      <span class="sc-icon">⛪</span>
+      <span class="sc-name">修道院の香り</span>
+      <div class="sc-rule"></div>
+      <div class="sc-notes">
+        <span class="sc-note-item">古い木材</span>
+        <span class="sc-note-item">蜜蝋</span>
+        <span class="sc-note-item">石壁</span>
+        <span class="sc-note-item">朝の雨</span>
+      </div>
+      <p class="sc-desc">
+        静寂を閉じ込めたような、<br>
+        祈りの香り。
+      </p>
+    </div>
+  </div>
+
+  <div class="sc-sep"></div>
+
+  <!-- 02 禁書庫 -->
+  <div class="scent-card sc-library rv">
+    <div class="sc-photo">
+      <div class="sc-photo-img"></div>
+    </div>
+    <div class="sc-text">
+      <span class="sc-num">02 / Forbidden Archive</span>
+      <span class="sc-icon">📚</span>
+      <span class="sc-name">禁書庫の香り</span>
+      <div class="sc-rule"></div>
+      <div class="sc-notes">
+        <span class="sc-note-item">革装丁</span>
+        <span class="sc-note-item">羊皮紙</span>
+        <span class="sc-note-item">古いインク</span>
+        <span class="sc-note-item">埃</span>
+        <span class="sc-note-item">蝋燭</span>
+      </div>
+      <p class="sc-desc">
+        何百冊もの物語が眠る、<br>
+        静かな書庫の空気。
+      </p>
+    </div>
+  </div>
+
+  <div class="sc-sep"></div>
+
+  <!-- 03 黒い森 -->
+  <div class="scent-card sc-forest rv">
+    <div class="sc-photo">
+      <div class="sc-photo-img"></div>
+    </div>
+    <div class="sc-text">
+      <span class="sc-num">03 / The Black Forest</span>
+      <span class="sc-icon">🌲</span>
+      <span class="sc-name">黒い森の香り</span>
+      <div class="sc-rule"></div>
+      <div class="sc-notes">
+        <span class="sc-note-item">湿った土</span>
+        <span class="sc-note-item">杉</span>
+        <span class="sc-note-item">霧</span>
+        <span class="sc-note-item">焚火</span>
+        <span class="sc-note-item">黒い羽根</span>
+      </div>
+      <p class="sc-desc">
+        誰も知らない森で、<br>
+        静かに息づく記憶。
+      </p>
+    </div>
+  </div>
+
+  <div class="sc-sep"></div>
+
+  <!-- 04 旅籠酒場 -->
+  <div class="scent-card sc-tavern rv">
+    <div class="sc-photo">
+      <div class="sc-photo-img"></div>
+    </div>
+    <div class="sc-text">
+      <span class="sc-num">04 / The Wayfarers' Inn</span>
+      <span class="sc-icon">🍷</span>
+      <span class="sc-name">旅籠酒場の香り</span>
+      <div class="sc-rule"></div>
+      <div class="sc-notes">
+        <span class="sc-note-item">蜂蜜酒</span>
+        <span class="sc-note-item">暖炉</span>
+        <span class="sc-note-item">オーク樽</span>
+        <span class="sc-note-item">パン</span>
+        <span class="sc-note-item">スパイス</span>
+      </div>
+      <p class="sc-desc">
+        旅人が火を囲み、<br>
+        物語を語る夜。
+      </p>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════ CLOSING ══════════ -->
+<section id="closing">
+  <div class="wrap">
+    <div class="closing-ring rv">
+      <span class="closing-ring-icon">🜃</span>
+    </div>
+    <span class="closing-title rv d1">
+      記憶を持ち帰る日まで。
+    </span>
+    <div class="closing-rule rv d2"></div>
+    <p class="closing-body rv d2">
+      RAVEN ARCHIVEでは、<br>
+      この世界の香りを再現する試みを続けています。<br><br>
+      いつの日か、<br>
+      巡礼の記憶を現実へ持ち帰れるように。<br><br>
+      現在、調香を進めています。
+    </p>
+  </div>
+</section>
+
+<footer>
+  <span class="foot-en">RAVEN ARCHIVE</span>
+  <span class="foot-copy">© 2026 RAVEN ARCHIVE. All rights reserved.</span>
+</footer>
+
+<!-- Pilgrim bar -->
+<div class="pilgrim-bar">
+  <span class="pb-item">巡礼者 <span id="pb-num">—</span></span>
+  <span class="pb-item">巡礼進捗 <span id="pb-prog">— / 5</span></span>
+  <a href="pilgrim.html" class="pb-link">巡礼者の手帳を見る →</a>
+</div>
+
+<script>
+/* VEIL */
+setTimeout(()=>{
+  const v=document.getElementById('veil');
+  v.classList.add('out');
+  setTimeout(()=>v.remove(),2100);
+},1900);
+
+/* CURSOR */
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+},{passive:true});
+document.querySelectorAll('a,.scent-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('h'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('h'));
+});
+
+/* NAV solid on scroll */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('solid',window.scrollY>50);
+},{passive:true});
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}
+  });
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* PILGRIM */
+(function(){
+  try{
+    const raw=localStorage.getItem('raven_pilgrim');
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    const count=Object.keys(d.visits||{}).length;
+    document.getElementById('pb-num').textContent='No.'+d.num;
+    document.getElementById('pb-prog').textContent=count+' / 5';
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沈黙の修道院 Grauhallen 断章集 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0f0d09; --parch:#c8ad7f; --parch2:#d4bc8f;
+  --ink:#1e160a; --gold:#8a7040; --gold2:#a08848;
+  --rust:#6b2e1a; --faded:#7a6545; --divider:rgba(138,112,64,0.3);
+}
+body {
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,#1e160a 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 10% 60%,#150f08 0%,transparent 50%);
+  font-family:'EB Garamond',serif;
+  color:var(--parch);
+  min-height:100vh;
+}
+body::after {
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.7;
+}
+.page{position:relative;z-index:1;}
+
+/* BREADCRUMB */
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);}
+.breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;}
+.breadcrumb .current{color:rgba(138,112,64,0.8);}
+
+/* HEADER */
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--rust);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(107,46,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 12px rgba(0,0,0,0.6);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.65);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+
+/* ════ FRONTISPIECE (扉絵) ════ */
+.frontispiece {
+  max-width: 740px;
+  margin: 48px auto 0;
+  padding: 0 32px;
+}
+
+.frontispiece-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border: 1px solid rgba(138,112,64,0.25);
+  overflow: hidden;
+  background: #0a0806;
+}
+
+/* 画像が入る場所 */
+.frontispiece-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  opacity: 0.88;
+  filter: sepia(0.3) brightness(0.85);
+}
+
+/* 画像がない場合のプレースホルダー */
+.frontispiece-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: linear-gradient(160deg, #110e08 0%, #1a150a 40%, #0d0a06 100%);
+}
+
+.fp-glyph {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  color: rgba(138,112,64,0.2);
+  letter-spacing: 0.3em;
+}
+
+.fp-label {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(138,112,64,0.25);
+  letter-spacing: 0.15em;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* 上下のグラデーションマスク（画像と本文を自然に繋ぐ） */
+.frontispiece-frame::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--bg), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.frontispiece-frame::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 左右の細い縁飾り線 */
+.frontispiece-border-left,
+.frontispiece-border-right {
+  position: absolute;
+  top: 8px; bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(138,112,64,0.2), transparent);
+  z-index: 3;
+}
+.frontispiece-border-left { left: 8px; }
+.frontispiece-border-right { right: 8px; }
+
+/* キャプション */
+.frontispiece-caption {
+  margin-top: 10px;
+  text-align: right;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 11px;
+  color: rgba(138,112,64,0.35);
+  letter-spacing: 0.08em;
+}
+
+/* INCIPIT */
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(107,46,26,0.5);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(107,46,26,0.2);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.85);line-height:1.9;}
+
+/* BODY */
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.4);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.85);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.5);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.article-body strong{font-weight:600;color:var(--parch2);letter-spacing:0.03em;}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.55);line-height:1.7;border-left:1px solid rgba(138,112,64,0.2);padding-left:12px;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.2);background:rgba(20,15,8,0.5);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.4);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.6)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.4);font-style:normal;}
+
+/* NAV */
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.4);text-align:center;}
+
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){
+  .article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}
+  .meta-tags{margin-left:0;margin-top:8px;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RA–002</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RA–002　｜　Via Peregrina, Caput II</div>
+  <h1 class="article-title">沈黙の修道院 Grauhallen 断章集</h1>
+  <p class="article-subtitle">言葉を持たぬ修道士たちが残した楽譜と、蜂蜜酒の醸造記録</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno XII</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">聖地</span><span class="meta-value">Grauhallen — 内陸の丘</span></div>
+    <div class="meta-tags">
+      <span class="tag">修道院</span><span class="tag">音楽</span><span class="tag">沈黙</span><span class="tag">醸造</span>
+    </div>
+  </div>
+</header>
+
+<!-- 扉絵 -->
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <!-- 画像を使用する場合: <img src="images/grauhallen.jpg" alt="Grauhallen修道院"> -->
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">✝</div>
+      <div class="fp-label">
+        Grauhallen — Anno XII<br>
+        沈黙の修道院
+      </div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Grauhallen修道院外観、記録者による素描より</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      音楽は祈りの言語である。<br>
+      だから彼らは、言葉による祈りをやめた。<br>
+      Grauhallenの修道士たちは、そう信じていた。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    Veskenportを発って七日目、内陸へ続く石畳の道が途絶えた場所に、丘があった。その頂に、Grauhallenはあった。灰色の石を積み上げた修道院。窓は小さく、扉は重く、そしてどこからも音がしなかった。鳥の声すら聞こえなかった。まるでその丘だけが、世界の音響から切り離されているようだった。
+  </p>
+
+  <p>
+    門番はいなかった。ただ、扉の前に小さな木の板が立てかけてあり、そこに一言だけ刻まれていた。<em>沈黙せよ</em>。私はその言葉に従った。それ以外の選択肢が、なかったから。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 音のない礼拝堂</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    礼拝堂は広く、そして完全に静かだった。<span class="margin-note">Grauhallenの修道士は「音声説教禁止令」を自ら定めた。理由は記録に残っていない。ただ、最古の記録に「神は言葉の隙間にいる」とある。</span>石の床、石の柱、石の祭壇。しかし壁一面に、楽譜が刻まれていた。羊皮紙ではなく、石に直接。何世代もの修道士たちが、少しずつ書き足したのだろう。線が重なり合い、音符が積み上がり、まるで石そのものが音楽を記憶しているようだった。
+  </p>
+
+  <p>
+    一人の老いた修道士が現れた。彼は私に羊皮紙と炭筆を渡した。会話はすべて、文字のやり取りで行われた。私は探しているものについて書いた。書いてから、すぐに後悔した。言葉にすると、それが急に小さく見えた。しかし修道士は読んで、頷いた。何も書き返さなかった。ただ、礼拝堂の奥、祭壇の裏へ私を連れていった。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 断章の楽譜</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    祭壇の裏に、小さな扉があった。<span class="margin-note">修道院の地下室は「音の墓所」と呼ばれる。歌うことを禁じられた時代に、修道士たちが旋律を石に封じたと伝わる。</span>地下へ続く石段。蝋燭の灯りだけが頼りだった。降りた先に、棚があった。棚には丸めた羊皮紙が無数に詰まっていた。修道士が一つを取り出し、広げた。楽譜だった。しかし不完全だった。旋律の途中で、音符が途切れている。意図的に残されたのか、失われたのか。
+  </p>
+
+  <p>
+    私は炭筆で書いた。「これは何の曲ですか」。修道士は長い時間、考えてから書き返した。「名前はない。名前をつけると、探さなくなるから」。私はその言葉を三度読んだ。何かが、胸の奥で動いた気がした。探しているものの輪郭が、少しだけ変わった。
+  </p>
+
+  <div class="inscription">
+    <p>
+      旋律は完成しない。<br>
+      なぜなら、聴く者が続きを歩くからだ。<br>
+      巡礼とは、断章の続きを生きることである。
+    </p>
+    <cite>— Grauhallen修道院 石壁の刻文より</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 蜂蜜酒と別れ</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    最後の夜、修道士は食堂へ私を招いた。<span class="margin-note">Grauhallenの蜂蜜酒は「Stillemead（沈黙の蜜酒）」と呼ばれる。発酵の過程で一切の音を立てないよう管理されるという。</span>テーブルには黒いパンと、琥珀色の液体が注がれた杯が置いてあった。蜂蜜酒だった。一口飲むと、温かさが喉から胸へ降りていき、しばらく消えなかった。甘さの中に、かすかな苦みがある。何かを惜しむような味だった。
+  </p>
+
+  <p>
+    食事の間、私たちは何も書かなかった。ただ座って、同じものを飲んだ。それだけで、十分だった。沈黙とはこういうものかもしれない。言葉がないのではなく、言葉が必要ない状態のことを。
+  </p>
+
+  <p>
+    翌朝、修道士は一枚の羊皮紙を私に渡した。断章の楽譜の写しだった。「続きを探せ」とだけ書いてあった。私はそれを丁寧に折り、荷物の奥にしまった。次の聖地、Talgrimへの道を歩きながら、私はその楽譜の断片を頭の中で繰り返した。旋律の途切れた場所で、いつも同じ問いが浮かんだ。続きは、本当に存在するのだろうか。
+  </p>
+
+  <p>
+    それともこの問い自体が、答えなのだろうか。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="veskenport.html" class="nav-link">← Veskenport</a>
+  <div class="nav-center">RA–002 ／ Via Peregrina</div>
+  <a href="talgrim.html" class="nav-link">次の記録：Talgrim →</a>
+</nav>
+
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

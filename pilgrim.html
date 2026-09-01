@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>巡礼者の手帳 — RAVEN ARCHIVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────
+   RESET & BASE — same as RAVEN ARCHIVE
+───────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background-color:#080604;
+  color:#c4b090;
+  font-family:'Noto Serif JP','Cormorant Garamond',Georgia,serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:none;
+  min-height:100vh;
+}
+a{text-decoration:none;color:inherit}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;border:1px solid rgba(200,150,60,.75);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:screen}
+#cur.h{width:36px;height:36px;background:rgba(200,150,60,.07)}
+@media(pointer:coarse){#cur{display:none}}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:8000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.042}
+
+/* ─────────────────────────────────────────
+   VEIL
+───────────────────────────────────────── */
+#veil{
+  position:fixed;inset:0;z-index:7000;background:#040302;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;
+  transition:opacity 1.8s ease;
+}
+#veil.out{opacity:0;pointer-events:none}
+.veil-main{font-family:'Cinzel',serif;font-size:clamp(.9rem,2.5vw,1.1rem);letter-spacing:.4em;color:#c8903c;opacity:0;animation:vfade 1.8s ease forwards .3s}
+.veil-line{width:48px;height:1px;background:linear-gradient(90deg,transparent,#c8903c,transparent);opacity:0;animation:vfade 1.8s ease forwards .7s}
+.veil-sub{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.6rem,1.8vw,.75rem);letter-spacing:.2em;color:#7a6a50;opacity:0;animation:vfade 1.8s ease forwards 1s}
+@keyframes vfade{from{opacity:0;transform:translateY(10px)}to{opacity:.85;transform:translateY(0)}}
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  padding:1.4rem 5vw;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,4,2,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(200,150,60,.07);
+}
+.logo{display:flex;flex-direction:column;gap:3px;text-decoration:none}
+.logo-en{font-family:'Cinzel',serif;font-size:clamp(.72rem,1.8vw,.9rem);letter-spacing:.28em;color:#e0cba8;font-weight:400}
+.logo-jp{font-family:'Noto Serif JP',serif;font-weight:200;font-size:clamp(.52rem,1.2vw,.62rem);letter-spacing:.18em;color:#6a5a40}
+.nav-back{
+  font-family:'Cinzel',serif;font-size:clamp(.5rem,1.1vw,.6rem);
+  letter-spacing:.22em;text-transform:uppercase;
+  color:#8a7a60;border:1px solid rgba(200,150,60,.18);
+  padding:.38rem .9rem;transition:all .3s;
+}
+.nav-back:hover{color:#c8963c;border-color:rgba(200,150,60,.5)}
+
+/* ─────────────────────────────────────────
+   PAGE WRAPPER
+───────────────────────────────────────── */
+.page{
+  max-width:780px;
+  margin:0 auto;
+  padding:clamp(6rem,12vw,9rem) 5vw clamp(4rem,8vw,7rem);
+}
+
+/* ─────────────────────────────────────────
+   PAGE HEADER — notebook cover feel
+───────────────────────────────────────── */
+.page-header{
+  text-align:center;
+  margin-bottom:clamp(3rem,6vw,5rem);
+  padding-bottom:clamp(2.5rem,5vw,4rem);
+  border-bottom:1px solid rgba(200,150,60,.1);
+  position:relative;
+}
+.page-header::after{
+  content:'✦';
+  position:absolute;
+  bottom:-0.6rem;left:50%;transform:translateX(-50%);
+  background:#080604;
+  padding:0 .8rem;
+  color:#c8963c;opacity:.45;font-size:.75rem;
+}
+.ph-label{
+  font-family:'Cinzel',serif;font-size:clamp(.5rem,1vw,.6rem);
+  letter-spacing:.5em;text-transform:uppercase;
+  color:#c8963c;opacity:.55;display:block;margin-bottom:.8rem;
+}
+.ph-title{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(1.6rem,4vw,2.4rem);
+  color:#e8d8b8;letter-spacing:.12em;display:block;margin-bottom:.5rem;
+}
+.ph-title-en{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(.82rem,1.6vw,1rem);
+  color:#c4b090;opacity:.45;letter-spacing:.1em;display:block;
+}
+
+/* Pilgrim ID block */
+.pilgrim-id-block{
+  margin-top:2rem;
+  display:inline-flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.pilgrim-no{
+  font-family:'Cinzel',serif;font-size:clamp(.6rem,1.2vw,.72rem);
+  letter-spacing:.35em;text-transform:uppercase;
+  color:#c8963c;opacity:.7;
+}
+.pilgrim-no span{color:#e0cba8;opacity:1}
+.pilgrim-since{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.62rem,1.1vw,.72rem);
+  letter-spacing:.14em;color:#c4b090;opacity:.42;
+}
+.pilgrim-since span{opacity:.75}
+
+/* ─────────────────────────────────────────
+   SECTION SHARED
+───────────────────────────────────────── */
+.section{margin-bottom:clamp(3rem,6vw,5rem)}
+.section-label{
+  font-family:'Cinzel',serif;font-size:clamp(.5rem,1vw,.58rem);
+  letter-spacing:.45em;text-transform:uppercase;
+  color:#c8963c;opacity:.55;display:block;margin-bottom:.8rem;
+}
+.section-title{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(1.1rem,2.5vw,1.5rem);
+  color:#e0cba8;letter-spacing:.1em;display:block;margin-bottom:1.4rem;
+}
+.section-rule{
+  width:40px;height:1px;
+  background:linear-gradient(90deg,#c8963c,transparent);
+  opacity:.35;margin-bottom:2rem;
+}
+
+/* ─────────────────────────────────────────
+   PROGRESS — plain text, no gauges
+───────────────────────────────────────── */
+.progress-wrap{
+  border:1px solid rgba(200,150,60,.1);
+  padding:2rem 2.4rem;
+  position:relative;
+}
+.progress-wrap::before{
+  content:'';position:absolute;
+  top:6px;left:6px;right:6px;bottom:6px;
+  border:1px solid rgba(200,150,60,.05);
+  pointer-events:none;
+}
+.progress-line{
+  display:flex;align-items:baseline;gap:1rem;
+  margin-bottom:.6rem;
+}
+.progress-num{
+  font-family:'Cinzel',serif;font-size:clamp(2rem,5vw,3rem);
+  color:#c8963c;font-weight:400;line-height:1;
+  opacity:.85;
+}
+.progress-denom{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(.9rem,2vw,1.2rem);
+  color:#c4b090;opacity:.45;
+}
+.progress-label{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.72rem,1.3vw,.82rem);
+  color:#c4b090;opacity:.5;letter-spacing:.12em;
+  display:block;margin-top:.3rem;
+}
+.progress-bar-wrap{
+  margin-top:1.4rem;
+  height:1px;
+  background:rgba(200,150,60,.1);
+  position:relative;overflow:hidden;
+}
+.progress-bar-fill{
+  position:absolute;top:0;left:0;height:100%;
+  background:linear-gradient(to right,rgba(200,150,60,.6),rgba(200,150,60,.2));
+  transition:width 1.2s cubic-bezier(.16,1,.3,1);
+}
+
+/* ─────────────────────────────────────────
+   SEALS — wax stamp aesthetic
+───────────────────────────────────────── */
+.seals-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:clamp(.8rem,2vw,1.5rem);
+}
+.seal{
+  display:flex;flex-direction:column;align-items:center;
+  gap:.7rem;
+}
+.seal-stamp{
+  width:clamp(56px,9vw,80px);
+  height:clamp(56px,9vw,80px);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  transition:all .4s;
+}
+/* Unearned seal */
+.seal-stamp.locked{
+  border:1px solid rgba(200,150,60,.12);
+  background:rgba(10,8,5,.6);
+}
+.seal-stamp.locked::before{
+  content:'';position:absolute;inset:4px;
+  border-radius:50%;
+  border:1px solid rgba(200,150,60,.07);
+}
+/* Earned seal — wax look */
+.seal-stamp.earned{
+  border:2px solid rgba(200,150,60,.55);
+  background:radial-gradient(ellipse at 40% 35%,rgba(120,70,15,.9) 0%,rgba(80,40,8,.95) 60%,rgba(50,25,5,1) 100%);
+  box-shadow:0 0 20px rgba(200,130,30,.18), inset 0 1px 2px rgba(255,200,80,.12);
+}
+.seal-stamp.earned::before{
+  content:'';position:absolute;inset:4px;
+  border-radius:50%;
+  border:1px solid rgba(200,150,60,.3);
+}
+.seal-stamp.earned::after{
+  content:'';position:absolute;inset:8px;
+  border-radius:50%;
+  border:1px dashed rgba(200,150,60,.18);
+}
+.seal-icon{
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  position:relative;z-index:1;
+  transition:opacity .4s;
+}
+.seal-stamp.locked .seal-icon{opacity:.2;filter:grayscale(1)}
+.seal-stamp.earned .seal-icon{opacity:.9}
+.seal-name{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.58rem,1.1vw,.68rem);
+  color:#c4b090;opacity:.4;letter-spacing:.08em;
+  text-align:center;line-height:1.5;
+  transition:opacity .4s;
+}
+.seal.earned-seal .seal-name{opacity:.7;color:#e0cba8}
+.seal-sub{
+  font-family:'Cinzel',serif;font-size:clamp(.42rem,.8vw,.5rem);
+  letter-spacing:.18em;text-transform:uppercase;
+  color:#c8963c;opacity:0;transition:opacity .4s;
+  text-align:center;
+}
+.seal.earned-seal .seal-sub{opacity:.55}
+
+/* ─────────────────────────────────────────
+   COMPLETE SEAL — 記録者の証
+───────────────────────────────────────── */
+.complete-block{
+  display:none; /* shown by JS when all 5 earned */
+  text-align:center;
+  padding:3rem 2.5rem;
+  border:1px solid rgba(200,150,60,.2);
+  position:relative;
+  margin-top:3rem;
+}
+.complete-block.visible{display:block}
+.complete-block::before{
+  content:'';position:absolute;
+  top:8px;left:8px;right:8px;bottom:8px;
+  border:1px solid rgba(200,150,60,.08);
+  pointer-events:none;
+}
+.complete-seal-stamp{
+  width:clamp(80px,12vw,110px);
+  height:clamp(80px,12vw,110px);
+  border-radius:50%;
+  border:2px solid rgba(200,150,60,.7);
+  background:radial-gradient(ellipse at 40% 35%,rgba(140,80,15,1) 0%,rgba(90,45,8,1) 60%,rgba(55,28,5,1) 100%);
+  box-shadow:0 0 40px rgba(200,130,30,.25), 0 0 80px rgba(200,130,30,.08), inset 0 2px 4px rgba(255,200,80,.15);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.8rem;
+  position:relative;
+}
+.complete-seal-stamp::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px solid rgba(200,150,60,.4)}
+.complete-seal-stamp::after{content:'';position:absolute;inset:10px;border-radius:50%;border:1px dashed rgba(200,150,60,.2)}
+.complete-seal-icon{font-size:clamp(1.8rem,4vw,2.8rem);position:relative;z-index:1}
+.complete-title{
+  font-family:'Cinzel',serif;font-size:clamp(.55rem,1.1vw,.65rem);
+  letter-spacing:.4em;text-transform:uppercase;
+  color:#c8963c;opacity:.7;display:block;margin-bottom:.8rem;
+}
+.complete-name{
+  font-family:'Noto Serif JP',serif;font-weight:200;
+  font-size:clamp(1.2rem,3vw,1.8rem);
+  color:#e8d8b8;letter-spacing:.12em;display:block;margin-bottom:1.5rem;
+}
+.complete-rule{
+  width:40px;height:1px;
+  background:linear-gradient(to right,transparent,rgba(200,150,60,.5),transparent);
+  margin:0 auto 1.5rem;
+}
+.complete-text{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.75rem,1.4vw,.85rem);
+  color:#c4b090;opacity:.55;line-height:2.4;
+  letter-spacing:.06em;
+}
+
+/* ─────────────────────────────────────────
+   VISIT LOG — diary entries
+───────────────────────────────────────── */
+.log-entries{}
+.log-entry{
+  padding:1.4rem 0;
+  border-bottom:1px solid rgba(200,150,60,.07);
+  display:grid;
+  grid-template-columns:6rem 1fr;
+  gap:1.5rem;
+  align-items:start;
+}
+.log-entry:first-child{border-top:1px solid rgba(200,150,60,.07)}
+.log-date{
+  font-family:'Cinzel',serif;font-size:clamp(.5rem,1vw,.6rem);
+  letter-spacing:.12em;color:#c8963c;opacity:.5;
+  padding-top:.15rem;white-space:nowrap;
+}
+.log-content{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:clamp(.78rem,1.4vw,.88rem);
+  color:#c4b090;opacity:.65;line-height:1.8;
+  letter-spacing:.06em;
+}
+.log-empty{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(.82rem,1.5vw,.95rem);
+  color:#c4b090;opacity:.32;
+  padding:2rem 0;letter-spacing:.08em;
+}
+
+/* ─────────────────────────────────────────
+   RESET BUTTON — very quiet
+───────────────────────────────────────── */
+.reset-wrap{
+  text-align:center;
+  margin-top:clamp(3rem,6vw,5rem);
+  padding-top:2rem;
+  border-top:1px solid rgba(200,150,60,.06);
+}
+.reset-btn{
+  background:none;border:none;
+  font-family:'Cinzel',serif;font-size:clamp(.44rem,.9vw,.52rem);
+  letter-spacing:.3em;text-transform:uppercase;
+  color:#5a4a32;opacity:.4;cursor:pointer;
+  transition:opacity .3s;padding:.4rem;
+}
+.reset-btn:hover{opacity:.7}
+
+/* ─────────────────────────────────────────
+   FOOTER — minimal
+───────────────────────────────────────── */
+.page-foot{
+  text-align:center;
+  padding:2rem 0 0;
+  border-top:1px solid rgba(200,150,60,.07);
+  margin-top:clamp(2rem,4vw,3.5rem);
+}
+.page-foot a{
+  font-family:'Cinzel',serif;font-size:clamp(.48rem,1vw,.58rem);
+  letter-spacing:.28em;text-transform:uppercase;
+  color:#8a7a60;transition:color .3s;
+}
+.page-foot a:hover{color:#c8963c}
+
+/* ─────────────────────────────────────────
+   REVEAL
+───────────────────────────────────────── */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform .9s ease}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+
+/* ─────────────────────────────────────────
+   MOBILE
+───────────────────────────────────────── */
+@media(max-width:600px){
+  .seals-grid{grid-template-columns:repeat(3,1fr)}
+  .seals-grid .seal:nth-child(4),.seals-grid .seal:nth-child(5){
+    grid-column:auto;
+  }
+  /* center last row of 2 in 3-col */
+  .seals-grid{justify-items:center}
+  .log-entry{grid-template-columns:1fr;gap:.4rem}
+  .log-date{opacity:.4}
+}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+
+<!-- VEIL -->
+<div id="veil">
+  <div class="veil-main">RAVEN ARCHIVE</div>
+  <div class="veil-line"></div>
+  <div class="veil-sub">巡礼者の手帳を開いています</div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <span class="logo-en">🐦‍⬛ RAVEN ARCHIVE</span>
+    <span class="logo-jp">失われた世界の記録庫</span>
+  </a>
+  <a href="index.html" class="nav-back">← 記録庫へ戻る</a>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MAIN PAGE
+════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- PAGE HEADER -->
+  <header class="page-header rv">
+    <span class="ph-label">Pilgrim's Notebook</span>
+    <span class="ph-title">巡礼者の手帳</span>
+    <span class="ph-title-en">A Record of Lost Worlds</span>
+    <div class="pilgrim-id-block">
+      <span class="pilgrim-no">巡礼者 &nbsp;<span id="pilgrim-num">No.—</span></span>
+      <span class="pilgrim-since">巡礼開始日 &nbsp;<span id="pilgrim-since">—</span></span>
+    </div>
+  </header>
+
+  <!-- ── 巡礼進捗 ── -->
+  <div class="section rv d1">
+    <span class="section-label">Progress</span>
+    <span class="section-title">巡礼の進捗</span>
+    <div class="section-rule"></div>
+    <div class="progress-wrap">
+      <div class="progress-line">
+        <span class="progress-num" id="prog-num">0</span>
+        <span class="progress-denom">/ 5 領域</span>
+      </div>
+      <span class="progress-label" id="prog-label">旅はまだ始まったばかりだ。</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 巡礼者の証 ── -->
+  <div class="section rv d2">
+    <span class="section-label">Seals</span>
+    <span class="section-title">巡礼者の証</span>
+    <div class="section-rule"></div>
+    <div class="seals-grid" id="seals-grid">
+      <!-- Filled by JS -->
+    </div>
+    <!-- 完全巡礼 -->
+    <div class="complete-block" id="complete-block">
+      <div class="complete-seal-stamp">
+        <span class="complete-seal-icon">🜃</span>
+      </div>
+      <span class="complete-title">Complete</span>
+      <span class="complete-name">記録者の証</span>
+      <div class="complete-rule"></div>
+      <p class="complete-text">
+        あなたは失われた世界の記録を辿り、<br>
+        すべての扉を開いた。<br>
+        <br>
+        旅は終わらない。<br>
+        新たな記憶は、<br>
+        これからも静かに積み重なっていく。
+      </p>
+    </div>
+  </div>
+
+  <!-- ── 今日の記録 ── -->
+  <div class="section rv d3">
+    <span class="section-label">Chronicle</span>
+    <span class="section-title">訪問の記録</span>
+    <div class="section-rule"></div>
+    <div class="log-entries" id="log-entries">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- Reset -->
+  <div class="reset-wrap rv">
+    <button class="reset-btn" id="reset-btn">記録をすべて消去する</button>
+  </div>
+
+  <!-- Page footer -->
+  <div class="page-foot rv">
+    <a href="index.html">記録庫へ戻る →</a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+/* ════════════════════════════════════════
+   PILGRIM DATA DEFINITIONS
+════════════════════════════════════════ */
+const REALMS = [
+  { id:'monastery', jp:'修道院', seal:'祈りの証', icon:'⛪', en:'The Monastery' },
+  { id:'forbidden', jp:'禁書庫', seal:'知識の証', icon:'🔒', en:'The Forbidden Archive' },
+  { id:'forest',    jp:'黒い森', seal:'探索の証', icon:'🌲', en:'The Blackwood' },
+  { id:'tavern',    jp:'旅籠酒場',seal:'語らいの証',icon:'🍷', en:'The Wayfarers\' Inn' },
+  { id:'road',      jp:'巡礼路', seal:'旅路の証', icon:'⚔', en:'The Pilgrim Road' },
+];
+
+const PROGRESS_LABELS = [
+  '旅はまだ始まったばかりだ。',
+  '最初の扉が開かれた。',
+  '記録が積み重なっていく。',
+  '世界の輪郭が見えてくる。',
+  '残すはひとつ。',
+  'すべての扉が開かれた。',
+];
+
+/* ════════════════════════════════════════
+   STORAGE HELPERS
+════════════════════════════════════════ */
+function getData(){
+  try{
+    const raw = localStorage.getItem('raven_pilgrim');
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){return null}
+}
+function setData(d){
+  try{ localStorage.setItem('raven_pilgrim', JSON.stringify(d)); }catch(e){}
+}
+
+function formatDate(ts){
+  const d = new Date(ts);
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}.${m}.${day}`;
+}
+
+function initPilgrim(){
+  let d = getData();
+  if(!d){
+    const num = String(Math.floor(10000 + Math.random()*90000));
+    d = {
+      num,
+      since: Date.now(),
+      visits: {},   // { realm_id: timestamp }
+      log: [],      // [{ ts, realm_id }]  newest first
+    };
+    setData(d);
+  }
+  return d;
+}
+
+/* ════════════════════════════════════════
+   RENDER
+════════════════════════════════════════ */
+function render(d){
+  /* Pilgrim header */
+  document.getElementById('pilgrim-num').textContent = 'No.' + d.num;
+  document.getElementById('pilgrim-since').textContent = formatDate(d.since);
+
+  /* Progress */
+  const count = Object.keys(d.visits).length;
+  document.getElementById('prog-num').textContent = count;
+  document.getElementById('prog-label').textContent = PROGRESS_LABELS[Math.min(count,5)];
+  document.getElementById('prog-bar').style.width = (count/5*100)+'%';
+
+  /* Seals */
+  const grid = document.getElementById('seals-grid');
+  grid.innerHTML = '';
+  REALMS.forEach(r => {
+    const earned = !!d.visits[r.id];
+    const el = document.createElement('div');
+    el.className = 'seal' + (earned?' earned-seal':'');
+    el.innerHTML = `
+      <div class="seal-stamp ${earned?'earned':'locked'}">
+        <span class="seal-icon">${r.icon}</span>
+      </div>
+      <span class="seal-name">${r.seal}</span>
+      <span class="seal-sub">${r.jp}</span>
+    `;
+    grid.appendChild(el);
+  });
+
+  /* Complete seal */
+  const cb = document.getElementById('complete-block');
+  if(count >= 5) cb.classList.add('visible');
+  else cb.classList.remove('visible');
+
+  /* Log */
+  const logEl = document.getElementById('log-entries');
+  if(!d.log || d.log.length === 0){
+    logEl.innerHTML = '<p class="log-empty">まだ記録がない。最初の扉を開く時を待っている。</p>';
+  } else {
+    logEl.innerHTML = '';
+    // newest first
+    [...d.log].reverse().forEach(entry => {
+      const realm = REALMS.find(r=>r.id===entry.realm_id);
+      if(!realm) return;
+      const div = document.createElement('div');
+      div.className = 'log-entry';
+      div.innerHTML = `
+        <span class="log-date">${formatDate(entry.ts)}</span>
+        <span class="log-content">${realm.jp}を訪れた</span>
+      `;
+      logEl.appendChild(div);
+    });
+  }
+}
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+const data = initPilgrim();
+render(data);
+
+/* Reset */
+document.getElementById('reset-btn').addEventListener('click', ()=>{
+  if(!confirm('すべての記録を消去しますか？\nこの操作は取り消せません。')) return;
+  localStorage.removeItem('raven_pilgrim');
+  location.reload();
+});
+
+/* Veil */
+setTimeout(()=>{
+  const v=document.getElementById('veil');
+  v.classList.add('out');
+  setTimeout(()=>v.remove(),1900);
+},1800);
+
+/* Cursor */
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+},{passive:true});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('h'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('h'));
+});
+
+/* Reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}
+  });
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

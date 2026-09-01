@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霧の港町 Veskenport の記録 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:       #0f0d09;
+  --parch:    #c8ad7f;
+  --parch2:   #d4bc8f;
+  --ink:      #1e160a;
+  --gold:     #8a7040;
+  --gold2:    #a08848;
+  --rust:     #6b2e1a;
+  --faded:    #7a6545;
+  --divider:  rgba(138,112,64,0.3);
+}
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%, #1e160a 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 10% 60%, #150f08 0%, transparent 50%);
+  font-family: 'EB Garamond', serif;
+  color: var(--parch);
+  min-height: 100vh;
+}
+
+/* ── grain ── */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:0.7;
+}
+
+.page { position:relative; z-index:1; }
+
+/* ════════════════════════════
+   BREADCRUMB
+════════════════════════════ */
+.breadcrumb {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 32px 32px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.breadcrumb a,
+.breadcrumb span {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(138,112,64,0.5);
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover { color: var(--gold2); }
+
+.breadcrumb .sep {
+  color: rgba(138,112,64,0.3);
+  font-size: 8px;
+}
+
+.breadcrumb .current { color: rgba(138,112,64,0.8); }
+
+/* ════════════════════════════
+   HEADER
+════════════════════════════ */
+.article-header {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 40px 32px 0;
+  position: relative;
+}
+
+.call-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--rust);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.call-badge::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: linear-gradient(to right, rgba(107,46,26,0.4), transparent);
+}
+
+.article-title {
+  font-family: 'IM Fell English', serif;
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: normal;
+  color: var(--parch2);
+  line-height: 1.25;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+
+.article-subtitle {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: clamp(14px, 2vw, 18px);
+  color: rgba(200,173,127,0.65);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+/* meta row */
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 28px;
+  padding: 16px 0;
+  border-top: 1px solid var(--divider);
+  border-bottom: 1px solid var(--divider);
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.meta-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: rgba(138,112,64,0.5);
+  text-transform: uppercase;
+}
+
+.meta-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 13px;
+  color: rgba(200,173,127,0.8);
+  font-style: italic;
+}
+
+.meta-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.tag {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: rgba(138,112,64,0.7);
+  border: 1px solid rgba(138,112,64,0.25);
+  padding: 3px 9px;
+}
+
+/* ════════════════════════════
+   PULL QUOTE / INCIPIT
+════════════════════════════ */
+.incipit {
+  max-width: 740px;
+  margin: 48px auto 0;
+  padding: 0 32px;
+}
+
+.incipit-inner {
+  border-left: 2px solid rgba(107,46,26,0.5);
+  padding: 4px 0 4px 24px;
+  position: relative;
+}
+
+.incipit-inner::before {
+  content: '\201C';
+  font-family: 'IM Fell English', serif;
+  font-size: 80px;
+  color: rgba(107,46,26,0.2);
+  position: absolute;
+  left: -8px;
+  top: -20px;
+  line-height: 1;
+}
+
+.incipit p {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(16px, 2.5vw, 21px);
+  color: rgba(200,173,127,0.85);
+  line-height: 1.9;
+}
+
+/* ════════════════════════════
+   FRONTISPIECE（扉絵）
+════════════════════════════ */
+.frontispiece {
+  max-width: 740px;
+  margin: 48px auto 0;
+  padding: 0 32px;
+}
+.frontispiece-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border: 1px solid rgba(138,112,64,0.25);
+  overflow: hidden;
+  background: #0a0806;
+}
+.frontispiece-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block; opacity: 0.88;
+  filter: sepia(0.3) brightness(0.85);
+}
+.frontispiece-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  background: linear-gradient(160deg, #110e08 0%, #1a150a 40%, #0d0a06 100%);
+}
+.fp-glyph {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  color: rgba(138,112,64,0.2);
+  letter-spacing: 0.3em;
+}
+.fp-label {
+  font-family: 'IM Fell English', serif;
+  font-style: italic; font-size: 12px;
+  color: rgba(138,112,64,0.25);
+  letter-spacing: 0.15em; text-align: center; line-height: 1.8;
+}
+.frontispiece-frame::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 60px;
+  background: linear-gradient(to bottom, var(--bg), transparent);
+  z-index: 2; pointer-events: none;
+}
+.frontispiece-frame::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 80px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  z-index: 2; pointer-events: none;
+}
+.frontispiece-border-left,
+.frontispiece-border-right {
+  position: absolute; top: 8px; bottom: 8px; width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(138,112,64,0.2), transparent);
+  z-index: 3;
+}
+.frontispiece-border-left { left: 8px; }
+.frontispiece-border-right { right: 8px; }
+.frontispiece-caption {
+  margin-top: 10px; text-align: right;
+  font-family: 'IM Fell English', serif;
+  font-style: italic; font-size: 11px;
+  color: rgba(138,112,64,0.35); letter-spacing: 0.08em;
+}
+
+/* ════════════════════════════
+   BODY
+════════════════════════════ */
+.article-body {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+/* section divider */
+.section-mark {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 48px 0 32px;
+}
+
+.section-mark-line {
+  flex:1;
+  height:1px;
+  background: linear-gradient(to right, transparent, var(--divider), transparent);
+}
+
+.section-mark-glyph {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: rgba(138,112,64,0.4);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* paragraphs */
+.article-body p {
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 2;
+  color: rgba(200,173,127,0.85);
+  margin-bottom: 1.8em;
+  text-align: justify;
+}
+
+.article-body p:first-child::first-letter {
+  font-family: 'IM Fell English', serif;
+  font-size: 4.5em;
+  float: left;
+  line-height: 0.75;
+  margin: 0.05em 0.08em 0 0;
+  color: var(--parch2);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+/* drop-cap for section start */
+.drop-cap::first-letter {
+  font-family: 'IM Fell English', serif;
+  font-size: 4.5em;
+  float: left;
+  line-height: 0.75;
+  margin: 0.05em 0.08em 0 0;
+  color: var(--parch2);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+/* inline emphasis */
+.article-body em {
+  font-style: italic;
+  color: var(--parch2);
+}
+
+.article-body strong {
+  font-weight: 600;
+  color: var(--parch2);
+  letter-spacing: 0.03em;
+}
+
+/* marginal note */
+.margin-note {
+  float: right;
+  clear: right;
+  width: 160px;
+  margin: 0 -180px 20px 20px;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(138,112,64,0.55);
+  line-height: 1.7;
+  border-left: 1px solid rgba(138,112,64,0.2);
+  padding-left: 12px;
+}
+
+/* inscription block */
+.inscription {
+  margin: 36px 0;
+  padding: 24px 32px;
+  border: 1px solid rgba(138,112,64,0.2);
+  background: rgba(20,15,8,0.5);
+  position: relative;
+  text-align: center;
+}
+
+.inscription::before {
+  content:'✦';
+  position:absolute;
+  top:-8px; left:50%; transform:translateX(-50%);
+  background: var(--bg);
+  padding: 0 8px;
+  color: rgba(138,112,64,0.4);
+  font-size: 10px;
+}
+
+.inscription p {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 15px !important;
+  color: rgba(200,173,127,0.6) !important;
+  line-height: 1.9 !important;
+  margin: 0 !important;
+  text-align: center;
+}
+
+.inscription cite {
+  display: block;
+  margin-top: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(138,112,64,0.4);
+  font-style: normal;
+}
+
+/* ════════════════════════════
+   FOOTER NAV
+════════════════════════════ */
+.article-nav {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 0 32px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--divider);
+  padding-top: 32px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(138,112,64,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link:hover { color: var(--gold2); }
+
+.nav-center {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(138,112,64,0.4);
+  text-align: center;
+}
+
+/* ════════════════════════════
+   RESPONSIVE
+════════════════════════════ */
+@media (max-width: 900px) {
+  .margin-note { display: none; }
+}
+
+@media (max-width: 600px) {
+  .article-header,
+  .incipit,
+  .article-body,
+  .article-nav,
+  .frontispiece { padding-left: 20px; padding-right: 20px; }
+  .meta-tags { margin-left: 0; margin-top: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- breadcrumb -->
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RA–001</span>
+</nav>
+
+<!-- header -->
+<header class="article-header">
+  <div class="call-badge">請求番号 RA–001　｜　Via Peregrina, Caput I</div>
+
+  <h1 class="article-title">
+    霧の港町 Veskenport の記録
+  </h1>
+  <p class="article-subtitle">
+    巡礼の出発点、そして帰れぬ者たちの岸壁について
+  </p>
+
+  <div class="article-meta">
+    <div class="meta-item">
+      <span class="meta-label">記録年</span>
+      <span class="meta-value">Anno XII</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">状態</span>
+      <span class="meta-value">開架</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">聖地</span>
+      <span class="meta-value">Veskenport — 北海沿岸</span>
+    </div>
+    <div class="meta-tags">
+      <span class="tag">始まりの門</span>
+      <span class="tag">港</span>
+      <span class="tag">冬至</span>
+      <span class="tag">航海</span>
+    </div>
+  </div>
+</header>
+
+<!-- 扉絵 -->
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <!-- 画像使用時: <img src="images/veskenport.jpg" alt="Veskenport港"> -->
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">⚓</div>
+      <div class="fp-label">
+        Veskenport — Anno XII<br>
+        霧の港町、冬至の夜明け前
+      </div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Veskenport港、冬至の三日前、記録者による素描より</p>
+</div>
+
+<!-- incipit -->
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      港町には、出発した者の数だけ、<br>
+      帰らなかった者の数がある。<br>
+      Veskenportはその両方を、霧の中に等しく抱いている。
+    </p>
+  </div>
+</div>
+
+<!-- body -->
+<article class="article-body">
+
+  <p>
+    私がVeskenportに辿り着いたのは、冬至の三日前だった。北の海から吹きつける風は塩と腐葉土の匂いをまとい、港の石畳はすでに薄い霜に覆われていた。旅の始まりにしては、あまりにも静かな場所だった。鴉が一羽、朽ちかけた桟橋の欄干に止まって私を見ていた。まるで、ずっと待っていたかのように。
+  </p>
+
+  <p>
+    私がここへ来た理由を、うまく説明できない。正確には、説明できないのではなく、<em>まだ言葉にする段階ではない</em>と感じている。探しているものがある。それだけは確かだ。ただ、その輪郭がまだ霧の向こうにある。Veskenportに来れば何かがわかるはずだという確信だけが、私をここまで連れてきた。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 霧と岸壁</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    Veskenportという名を、初めて聞いたのはいつだったか。<span class="margin-note">Vesken — 古語で「霧の帳」。港を意味するportと合わさり、「霧が永住する港」を意味するとされる。</span>旅の途中で出会った老いた写本職人が、酒に酔いながら口にした地名だったと思う。彼はすぐにその言葉を飲み込み、話題を変えた。しかしその一瞬、彼の目に浮かんだ表情を私は忘れられない。恐れでも、悲しみでもなく、もっと奥深いところにある何かだった。諦念に似ているが、それよりも穏やかな。すべてを知ってしまった者の顔。
+  </p>
+
+  <p>
+    町には宿が三軒あった。私が選んだのは岸壁に最も近い、壁の染みが地図のように広がった古い建物だった。宿の女主人は名を名乗らなかった。私も聞かなかった。ここではそういうものだと、空気が教えてくれた。
+  </p>
+
+  <p>
+    夜、眠れずに窓の外を眺めると、霧は街灯の光を食べて淡く光っていた。桟橋に人影が見えた。動かない。じっと海を見ている。翌朝、同じ場所を確認したが、誰もいなかった。足跡もなかった。宿の女主人に話すと、彼女はただ頷いた。「よく見える方ね」とだけ言って、温かいスープを置いていった。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 鴉の紋章</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    岸壁の突端に、それはあった。<span class="margin-note">紋章の刻まれた石は、地元では「出発石」と呼ばれる。巡礼者はここに手を置き、自分が何を探しているかを心の中で宣言してから旅立つという。</span>波に削られ、苔に覆われ、それでも消えずに残っている彫刻。鴉の翼を広げた紋章。その下に、かつて文字があったと思われる空白がある。文字は完全に失われていた。意図的に削られたのか、波が奪ったのか、判断できない。ただ、その空白が何かを言っているような気がした。
+  </p>
+
+  <p>
+    地元の漁師の一人が話してくれた。毎年冬至の夜明け前、霧の中から黒い帆船が現れるのだという。誰も乗っていない。積荷もない。ただ静かに桟橋に寄りつき、夜が明けると消えている。何を運んでいるのか、あるいは何を運び去っているのかを、誰も知らない。「見た者は翌年、旅に出る」と漁師は言った。微笑みながら。まるでそれが当然のことであるかのように。
+  </p>
+
+  <div class="inscription">
+    <p>
+      Veskenportを出た者は、帰り道を忘れる。<br>
+      それでいい。<br>
+      巡礼とはそういうものだ。
+    </p>
+    <cite>— ある旅人の日誌より、記録者不明</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 出発の朝</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    三日目の朝、私は宿を発つことにした。<span class="margin-note">巡礼者はVeskenportを離れる際、持ち物の一つを岸壁に残していく慣習がある。何を残すかに決まりはない。残すに値するものを、自分で決める。</span>理由はない。ただ、そうする時だとわかった。荷物をまとめながら、私はふと気づいた。ここへ来た時より荷物が軽い。減ったものを確認しようとして、やめた。きっと必要なものだけが残っている。
+  </p>
+
+  <p>
+    岸壁の石畳を歩きながら、鴉の紋章の前で足を止めた。その空白に手を置いた。冷たかった。海の底から来るような冷たさ。しかし奇妙なことに、手を離した後、掌だけが温かかった。まるで、何かを握り締めたような感触が残っていた。
+  </p>
+
+  <p>
+    Veskenportを振り返ったのは一度だけだ。霧が町を飲み込んでいた。宿も、漁師も、桟橋も、すべてが白い輪郭になっていた。そして霧の中に、一羽の鴉がいた。飛んでいなかった。ただ、浮いていた。私はそれを確かめるために目を細めた。しかし霧はさらに濃くなり、鴉も、町も、消えた。
+  </p>
+
+  <p>
+    次の聖地まで、どのくらいかかるかわからない。地図には道が描いてある。しかし道の終わりには、何も描いてない。
+  </p>
+
+  <p>
+    それでいい。探しているのだから。
+  </p>
+
+</article>
+
+<!-- nav -->
+<nav class="article-nav">
+  <a href="index.html" class="nav-link">← 禁書庫へ戻る</a>
+  <div class="nav-center">RA–001 ／ Via Peregrina</div>
+  <a href="grauhallen.html" class="nav-link">次の記録：Grauhallen →</a>
+</nav>
+
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

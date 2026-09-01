@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>炎の谷 Askveld — 香と蝋燭の処方記録 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0f0d09; --parch:#c8ad7f; --parch2:#d4bc8f;
+  --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a;
+  --divider:rgba(138,112,64,0.3);
+}
+body {
+  background:var(--bg);
+  background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#1e160a 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 10% 60%,#150f08 0%,transparent 50%);
+  font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh;
+}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.7;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--rust);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(107,46,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 12px rgba(0,0,0,0.6);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.65);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(138,112,64,0.25);overflow:hidden;background:#0a0806;}
+.frontispiece-frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;opacity:0.88;filter:sepia(0.3) brightness(0.85);}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#110e08 0%,#1a150a 40%,#0d0a06 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(138,112,64,0.2);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.25);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(138,112,64,0.2),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(138,112,64,0.35);letter-spacing:0.08em;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(107,46,26,0.5);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(107,46,26,0.2);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.85);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.4);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.85);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.5);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.55);line-height:1.7;border-left:1px solid rgba(138,112,64,0.2);padding-left:12px;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.2);background:rgba(20,15,8,0.5);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.4);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.6)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.4);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.4);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RA–004</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RA–004　｜　Via Peregrina, Caput IV</div>
+  <h1 class="article-title">炎の谷 Askveld ― 香と蝋燭の処方記録</h1>
+  <p class="article-subtitle">場所の記憶を火に封じる技法、および谷固有のハーブ目録</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno XII</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">聖地</span><span class="meta-value">Askveld — 地熱の谷</span></div>
+    <div class="meta-tags">
+      <span class="tag">錬金術</span><span class="tag">香</span><span class="tag">谷</span><span class="tag">蝋燭</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">🜂</div>
+      <div class="fp-label">Askveld — Anno XII<br>炎の谷、香料師の工房</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Askveld谷間の工房、記録者による観察図より</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      火は記憶する。<br>
+      場所の匂いを、季節の湿度を、誰かの体温を。<br>
+      蝋燭とはその記憶を、閉じ込めた容器である。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    Talgrimを発って二日、道は下り坂になった。木々の間から白い煙が見えた。火事ではない。地面から湧き出る熱気だった。Askveldの谷は、地の底から温かかった。冬の盛りにもかかわらず、谷の入口を越えた瞬間、空気が変わった。湿った温もりと、複雑な香りが混じり合う、独特の空間だった。
+  </p>
+
+  <p>
+    集落は谷の底に沿って細長く続いていた。どの家からも、細い煙が上がっていた。蝋燭の煙だと、後で気づいた。Askveldでは、常に何かが燃えている。それは習慣ではなく、必要なことだと、ここの人々は考えているようだった。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 香料師の工房</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    案内されたのは、谷の最も深い場所にある工房だった。<span class="margin-note">Askveldの香料師は代々、「場所の記憶を火に封じる」技術を継承している。弟子入りには最低三年の沈黙修行が必要とされる。</span>老いた香料師が一人で作業していた。小柄な女性で、手が蝋で白くなっていた。私が入ると、彼女はちらりと見てから、また手元に視線を戻した。追い払われなかったことを、許可と解釈した。
+  </p>
+
+  <p>
+    工房の棚には、無数の小瓶が並んでいた。ラベルには地名が書いてあった。見知らぬ場所の名前ばかりだったが、一つだけ、読めた。<em>Veskenport</em>。私は思わず手を伸ばしかけた。「触れてはいけない」と香料師が言った。初めて発した言葉だった。「理由は？」「まだあなたが行った場所だから」。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 場所の記憶を封じる技法</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    夕方、香料師は私に作業を見せてくれた。<span class="margin-note">蝋燭の基本処方：蜜蝋に谷固有の鉱物粉を混ぜ、特定の場所で採取したハーブを加える。火を灯すと、そのハーブが育った場所の空気が再現されるとされる。</span>蜜蝋を溶かし、粉末状の何かを加え、ゆっくりと混ぜる。それから、乾燥したハーブを一種類だけ加えた。松の葉だった。「これはどこの松ですか」と私は聞いた。「Grauhallen近くの森の松です。丘の北側、修道院から見て右手の斜面に生えている木です」。
+  </p>
+
+  <p>
+    蝋燭が完成した。香料師がそれに火を灯した。煙が上がり、香りが広がった。私は息を飲んだ。Grauhallenの丘の空気だった。あの石造りの修道院の周囲を包んでいた、冷たく清潔な松の香り。まるでその場所が、部屋の中に出現したようだった。
+  </p>
+
+  <div class="inscription">
+    <p>
+      蝋燭を灯す者は、<br>
+      その場所へ帰る。<br>
+      身体はここにあっても、魂は旅をしている。
+    </p>
+    <cite>— Askveld 香料師組合の訓辞より</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 谷の最後の夜</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    最後の夜、香料師は私に一本の蝋燭をくれた。<span class="margin-note">Askveldを発つ巡礼者への餞別として、香料師は「道の香り」を封じた蝋燭を一本贈る慣習がある。何の香りかは、受け取るまでわからない。</span>「これはどこの記憶ですか」と私は聞いた。「あなたが次に行く場所の記憶です」と彼女は答えた。「まだ行ってもいない場所の？」「私はRavnekryptの空気を知っています。あそこの石の匂い、地下の湿気、古い羊皮紙の乾き。何度も訪ねた場所ですから」。
+  </p>
+
+  <p>
+    私はその蝋燭を大切に荷物に包んだ。まだ灯してはいない。Ravnekryptに辿り着いた時に、灯そうと思っている。到着する前に香りを知ってしまうと、何かが変わる気がした。準備ができた時にだけ、扉は開かれるべきだ。Talgrimの古書商もそう言っていた。
+  </p>
+
+  <p>
+    翌朝、谷を出た。振り返ると、工房の小窓から細い煙が上がっていた。また誰かの記憶が、蝋の中に封じられているのだろう。私はその煙を、しばらく見ていた。煙はまっすぐ空へ昇り、青い空に溶けていった。記憶というものは、最終的には空気に戻るのかもしれない。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="talgrim.html" class="nav-link">← Talgrim</a>
+  <div class="nav-center">RA–004 ／ Via Peregrina</div>
+  <a href="ravnekrypt.html" class="nav-link">次の記録：Ravnekrypt →</a>
+</nav>
+
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

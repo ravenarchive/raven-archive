@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記憶が最も高値で売れる日の記録 RF–005 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f; --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a; --divider:rgba(138,112,64,0.3); }
+body { background:var(--bg); background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#14100a 0%,transparent 55%),radial-gradient(ellipse 50% 60% at 20% 70%,#0e0c08 0%,transparent 50%); font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh; }
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(138,112,64,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(138,112,64,0.2);overflow:hidden;background:#080704;}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#0e0c08 0%,#161208 40%,#080704 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(138,112,64,0.2);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.2);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(138,112,64,0.15),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(138,112,64,0.3);letter-spacing:0.08em;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(138,112,64,0.35);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(138,112,64,0.12);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.82);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.35);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.82);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.5);line-height:1.7;border-left:1px solid rgba(138,112,64,0.18);padding-left:12px;}
+.testimony{margin:36px 0;border-left:2px solid rgba(138,112,64,0.3);padding-left:24px;}
+.testimony-header{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(138,112,64,0.5);text-transform:uppercase;margin-bottom:10px;}
+.testimony p{font-family:'EB Garamond',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.65)!important;line-height:1.9!important;margin-bottom:0.8em!important;text-align:left!important;}
+.testimony p:first-of-type::first-letter{all:unset;}
+.testimony cite{display:block;margin-top:10px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.4);font-style:normal;}
+.price-table{margin:36px 0;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.55);overflow:hidden;}
+.price-table-header{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(138,112,64,0.4);text-transform:uppercase;padding:12px 20px;border-bottom:1px solid rgba(138,112,64,0.15);}
+.price-row{display:grid;grid-template-columns:1fr auto;padding:12px 20px;border-bottom:1px solid rgba(138,112,64,0.08);}
+.price-row:last-child{border-bottom:none;}
+.price-item{font-family:'EB Garamond',serif;font-style:italic;font-size:14px;color:rgba(200,173,127,0.65);line-height:1.6;}
+.price-value{font-family:'Cinzel',serif;font-size:11px;color:rgba(138,112,64,0.6);white-space:nowrap;padding-left:20px;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.35);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.55)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.35);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-link.disabled{color:rgba(138,112,64,0.2);pointer-events:none;}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;} .price-row{grid-template-columns:1fr;} .price-value{padding-left:0;margin-top:4px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RF–005</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RF–005　｜　Codex Festivus — 季節の記録　｜　氷解の月</div>
+  <h1 class="article-title">記憶が最も高値で売れる日に関する記録<br>― Talgrimの特別市と、取引された記憶の目録</h1>
+  <p class="article-subtitle">市場記録、取引台帳の断片、および古書商による相場観察覚書の照合</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno VII — XIII（複数年）</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">発生地</span><span class="meta-value">Talgrim市場、巡礼路中継点</span></div>
+    <div class="meta-tags">
+      <span class="tag">氷解の月</span>
+      <span class="tag">記憶売買</span>
+      <span class="tag">Talgrim</span>
+      <span class="tag">特別市</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">⚖</div>
+      <div class="fp-label">氷解の月、Talgrim特別市<br>記憶が最も高値で売れる日</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Talgrim特別市の記録、古書商の覚書をもとに再構成　Anno XI</p>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      氷解の月になると、Talgrimが変わる。<br>
+      普段は静かな市場が、遠方からの旅人で溢れる。<br>
+      全員が同じものを持ってくる。<br>
+      全員が同じものを探している。<br>
+      記憶を、売りに来ている。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    Talgrimでは年間を通じて記憶の交換が行われているが、氷解の月だけは別格とされている。この月に開かれる特別市では、通常の市では動かない種類の記憶が取引される。古書商の覚書によれば、「氷解の月の記憶は純度が高い」という。冬の間、人は記憶を内側で熟成させる。春の始まりに、その記憶が最も鮮明になる。だから値段が上がる。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. 特別市の仕組み</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    通常の記憶取引と特別市の違いは、仲介者の存在にある。<span class="margin-note">Talgrimの記憶仲介人は「夢読み」とも呼ばれる。品物に宿った記憶の質と量を評価し、相場を決める役割を担う。修業に十年かかるとされる。</span>普段の市では売り手と買い手が直接交渉するが、特別市では必ず記憶仲介人を通す。仲介人は品物に触れるだけで、そこに宿った記憶の種類と深さを評価する。強い感情が込められた記憶ほど高値がつく。喜びより悲しみが高く、悲しみより後悔が高く、後悔より愛が最も高いとされている。
+  </p>
+
+  <p>
+    仲介人が値段をつける際、基準となるのは記憶の「重さ」だと言われる。重い記憶は、受け取る者にとっても重い。それだけ人生に影響を与えるということだ。軽い記憶は値段が低い。「夏の午後に食べたパンの味」より「初めて誰かを失った朝」の方が、遥かに高値がつく。
+  </p>
+
+  <div class="price-table">
+    <div class="price-table-header">Anno XI 特別市 記憶相場記録（古書商覚書より抜粋）</div>
+    <div class="price-row">
+      <div class="price-item">日常の記憶（食事、天気、道中の風景など）</div>
+      <div class="price-value">低値　参考品</div>
+    </div>
+    <div class="price-row">
+      <div class="price-item">職人の技術記憶（手の動き、感覚として宿るもの）</div>
+      <div class="price-value">中値　需要安定</div>
+    </div>
+    <div class="price-row">
+      <div class="price-item">場所の記憶（二度と戻れない土地の感触）</div>
+      <div class="price-value">中高値　季節変動あり</div>
+    </div>
+    <div class="price-row">
+      <div class="price-item">別離の記憶（永遠の別れと知っていた瞬間）</div>
+      <div class="price-value">高値　氷解の月のみ</div>
+    </div>
+    <div class="price-row">
+      <div class="price-item">愛の記憶（最初の、あるいは最後の）</div>
+      <div class="price-value">最高値　買い手稀少</div>
+    </div>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 取引された記憶の記録</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    Anno XIの特別市で最も高値がついた取引を、古書商は詳細に記録している。<span class="margin-note">この記録は古書商の個人覚書であり、当事者の同意を得て保管されている。名前は記録者の判断で伏せた。</span>売り手は中年の男性で、Veskenportから来ていた。品物は古いナイフだった。仲介人が触れた瞬間、表情が変わった。「これは重い」とだけ言った。値段を告げると、買い手が三人名乗り出た。競りになった。最終的に落札した人物は、ナイフを受け取った後、しばらく動かなかった。やがて「こんな記憶だったのか」と言った。売り手の男性は何も言わなかった。ただ、帰り際に少しだけ足取りが軽くなっていた。
+  </p>
+
+  <div class="testimony">
+    <div class="testimony-header">証言記録 — Anno XI　証言者：Talgrim古書商（匿名）</div>
+    <p>三十年この市を見てきたが、氷解の月だけは別だ。普段は売らない記憶を売りに来る。冬の間に決心がついたのだろう。売った後の人間は二種類に分かれる。軽くなる者と、空洞になる者。どちらが正しいかはわからない。ただ、空洞になった者は翌年また来る。今度は買う側として。他人の記憶で、自分の空洞を埋めに来る。それが正しいかどうかも、わからない。</p>
+    <cite>— Talgrim特別市記録　Anno XI</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 売ってはならない記憶</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    仲介人には断る権限がある。<span class="margin-note">仲介人が取引を拒否した場合、理由は告げられない。ただ「この記憶は市場に出してはならない」とだけ言われる。拒否された者は、その記憶を抱えたまま帰るしかない。</span>高値がつく記憶であっても、取引を拒否する場合がある。理由は語られないが、記録者が複数の仲介人に聞き取りをした結果、共通する基準が見えてきた。「まだ終わっていない記憶」は売れない。その記憶に関わる物語が、まだ続いている場合。売り手が思っていなくても、仲介人にはわかるらしい。
+  </p>
+
+  <p>
+    記録者はAnno XIIの特別市で、取引を断られた一人の女性を目撃した。品物は小さな指輪だった。仲介人は触れて、すぐに返した。女性は「なぜですか」と聞いた。仲介人は「これはまだあなたのものです」と言った。女性はしばらく指輪を見ていた。それから、指輪を指にはめた。市場を去る時、彼女は誰かを探すような目をしていた。
+  </p>
+
+  <div class="inscription">
+    <p>
+      売れる記憶は、終わった記憶だ。<br>
+      終わっていない記憶は、まだあなたの仕事がある。<br>
+      市場はそれを知っている。
+    </p>
+    <cite>— Talgrim仲介人組合の口伝より</cite>
+  </div>
+
+  <p>
+    氷解の月の特別市は、三日間続く。初日は品物の査定、二日目が取引、三日目に決済される。三日間の間に、売り手が気が変わることもある。それは許される。ただし、一度取引が完了した記憶は返ってこない。記憶は品物に宿って、別の誰かのものになる。元の持ち主の夢には、もう出てこない。
+  </p>
+
+  <p>
+    それを喜ぶ者と、それを悼む者がいる。同じ人間の中に、両方いることもある。Talgrimはそのどちらも受け入れる。市場とはそういう場所だ。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="rf004.html" class="nav-link">← RF–004</a>
+  <div class="nav-center">RF–005 ／ Codex Festivus — 完</div>
+  <span class="nav-link disabled">次の記録は準備中 →</span>
+</nav>
+</div>
+</body>
+</html>

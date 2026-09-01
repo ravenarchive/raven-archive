@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>死者が戻る夜の記録 RF–002 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f; --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a; --blood:#8b1a1a; --divider:rgba(138,112,64,0.3); }
+body { background:var(--bg); background-image:radial-gradient(ellipse 70% 40% at 50% 0%,#1a0e08 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 80% 80%,#120808 0%,transparent 50%); font-family:'EB Garamond',serif; color:var(--parch); min-height:100vh; }
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--blood);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(139,26,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.tag.danger{color:rgba(139,26,26,0.8);border-color:rgba(139,26,26,0.3);}
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(139,26,26,0.25);overflow:hidden;background:#080604;}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#0f0806 0%,#1a0e08 40%,#080604 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(139,26,26,0.25);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(139,26,26,0.25);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(139,26,26,0.2),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(139,26,26,0.35);letter-spacing:0.08em;}
+.warning-band{max-width:740px;margin:32px auto 0;padding:0 32px;}
+.warning-inner{border:1px solid rgba(139,26,26,0.3);background:rgba(20,5,5,0.6);padding:14px 20px;display:flex;align-items:flex-start;gap:14px;}
+.warning-glyph{font-family:'Cinzel',serif;font-size:16px;color:rgba(139,26,26,0.6);flex-shrink:0;margin-top:2px;}
+.warning-text{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:rgba(200,150,150,0.55);line-height:1.8;}
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(139,26,26,0.45);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(139,26,26,0.15);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,21px);color:rgba(200,173,127,0.82);line-height:1.9;}
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.35);text-transform:uppercase;white-space:nowrap;}
+.article-body p{font-size:clamp(16px,2vw,19px);line-height:2;color:rgba(200,173,127,0.82);margin-bottom:1.8em;text-align:justify;}
+.article-body p:first-child::first-letter,.drop-cap::first-letter{font-family:'IM Fell English',serif;font-size:4.5em;float:left;line-height:0.75;margin:0.05em 0.08em 0 0;color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);}
+.article-body em{font-style:italic;color:var(--parch2);}
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.5);line-height:1.7;border-left:1px solid rgba(138,112,64,0.18);padding-left:12px;}
+.testimony{margin:36px 0;border-left:2px solid rgba(139,26,26,0.35);padding-left:24px;}
+.testimony-header{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:rgba(139,26,26,0.55);text-transform:uppercase;margin-bottom:10px;}
+.testimony p{font-family:'EB Garamond',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.65)!important;line-height:1.9!important;margin-bottom:0.8em!important;text-align:left!important;}
+.testimony p:first-of-type::first-letter{all:unset;}
+.testimony cite{display:block;margin-top:10px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(139,26,26,0.4);font-style:normal;}
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.18);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.35);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.55)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+.inscription cite{display:block;margin-top:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:rgba(138,112,64,0.35);font-style:normal;}
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){.article-header,.incipit,.article-body,.article-nav,.frontispiece,.warning-band{padding-left:20px;padding-right:20px;}.meta-tags{margin-left:0;margin-top:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">RF–002</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">請求番号 RF–002　｜　Codex Festivus — 季節の記録　｜　霜の月</div>
+  <h1 class="article-title">死者が戻る夜に関する記録<br>― Ravnekryptが最も賑わう夜について</h1>
+  <p class="article-subtitle">供物の目録、帰還者の証言、および翌朝の調査記録</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録年</span><span class="meta-value">Anno VIII — XIV（複数年）</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">発生地</span><span class="meta-value">Ravnekrypt、巡礼路全域</span></div>
+    <div class="meta-tags">
+      <span class="tag danger">要注意</span>
+      <span class="tag">死者</span>
+      <span class="tag">供物</span>
+      <span class="tag">霜の月</span>
+    </div>
+  </div>
+</header>
+
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">†</div>
+      <div class="fp-label">霜の月、Ravnekrypt地下図書館<br>死者が戻る夜</div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">Ravnekrypt入口、霜の月の夜明け前、記録者による素描</p>
+</div>
+
+<div class="warning-band">
+  <div class="warning-inner">
+    <span class="warning-glyph">†</span>
+    <p class="warning-text">霜の月の夜に供物を用意する場合、本記録の手順に厳密に従うこと。不完全な供物は、意図せぬ者を招く可能性がある。記録者は責任を負わない。</p>
+  </div>
+</div>
+
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      霜の月になると、Ravnekryptの扉が重くなる。<br>
+      内側から押されているからだ、と古老は言う。<br>
+      出たがっている者がいる。あるいは、入りたがっている者が。
+    </p>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>
+    巡礼路沿いの集落では、霜の月に二日間だけ、死者が地上に戻ると信じられている。一日目は死者が道を探す夜。二日目は死者が家を訪ねる夜。三日目の夜明けに死者は戻る。この三日間の慣習は、集落によって細部が異なるが、本質は一致している。死者を迎え、供物を捧げ、そして帰してやる。帰したくなくても、帰してやる。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">I. Ravnekryptの扉が開く夜</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    霜の月の最初の夜、Ravnekryptの扉は施錠されない。<span class="margin-note">通常、Ravnekryptの扉は触れた者が開こうとした時にのみ開く。しかしこの夜だけは、誰も触れていないのに扉が軋む音がする、と複数の記録者が記している。</span>司書は不在のままだが、地下に降りると、棚の配置が変わっている。普段は奥にしまわれている記録が、手前に出ている。誰かが探していたかのように。あるいは誰かが、置いていったかのように。Anno XIの記録では、普段は存在しない羊皮紙が一枚、入口近くの棚に立てかけられていた。文字は書いてあったが、翌朝には消えていた。読んだ者の証言だけが残っている。
+  </p>
+
+  <div class="testimony">
+    <div class="testimony-header">証言記録 — Anno XI　証言者：Pieter Voss、記録者、Grauhallen出身</div>
+    <p>霜の月の最初の夜、Ravnekryptへ降りた。棚の前に人影があった。振り返らなかったので顔は見えなかった。声をかけると消えた。棚には一枚の羊皮紙があった。そこには私の父の筆跡で、私の名前と、私が子供の頃に失くした小刀の隠し場所が書いてあった。翌朝、その場所を掘ると、小刀があった。三十年間、誰も知らなかった場所だった。</p>
+    <cite>— Ravnekrypt寄贈文書より、Anno XI</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">II. 供物の作法</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    死者への供物は、生者が食べるものと同じものを用意する。<span class="margin-note">供物は「死者が好きだったもの」ではなく「死者が生前最後に食べたもの」を用意するのが正式とされる。理由は記録されていない。</span>ただし、塩だけは使わない。塩は死者を拒絶する素材とされているからだ。食卓に空の皿を一枚用意し、蝋燭を一本灯す。蝋燭が消えた時、死者が食事を終えたことを意味する。消えない場合は、まだ話したいことがあるか、あるいは別の誰かが来ている。
+  </p>
+
+  <p>
+    Talgrimの古書商が記録した興味深い事例がある。ある年、供物を用意した女性の家で、蝋燭が七時間消えなかった。女性は眠れずに座っていた。夜明け近くに蝋燭がようやく消えた時、皿の上に見知らぬ硬貨が一枚置かれていた。どの時代のものかわからないが、表面に鴉の紋章が刻まれていた。女性はそれをRavnekryptに寄贈した。現在も棚の隅に保管されている。
+  </p>
+
+  <div class="inscription">
+    <p>
+      死者は食べない。<br>
+      しかし供物は必ず減る。<br>
+      誰が食べているのかを問うてはならない。
+    </p>
+    <cite>— Veskenport宿の壁に刻まれた文より</cite>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">III. 帰してやること</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p class="drop-cap">
+    三日目の夜明け前に、扉を開けておく。<span class="margin-note">帰さない者は必ず後悔する、と記録は繰り返す。理由の記録は少ない。ただ一件だけ、帰さなかった者の記録がある。その記録は、本書庫において封印中の区画に保管されている。</span>開けた扉から何かが出ていく感覚がある、と証言する者が多い。風ではない。重さを持った何かが通り過ぎる感覚。そして扉を閉めると、家の中が少し軽くなる。悲しいのではない。ただ、軽い。それが正しい終わり方だと、集落の者たちは知っている。
+  </p>
+
+  <p>
+    帰したくない時もある。三日間では足りない時もある。しかし巡礼路の教えは一貫している。死者は借り物である。霜の月の三日間だけ、Ravnekryptから貸し出される。返却期限を守ることが、次の年も会える条件である。
+  </p>
+
+</article>
+
+<nav class="article-nav">
+  <a href="rf001.html" class="nav-link">← RF–001</a>
+  <div class="nav-center">RF–002 ／ Codex Festivus</div>
+  <a href="rf003.html" class="nav-link">次の記録：RF–003 →</a>
+</nav>
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>

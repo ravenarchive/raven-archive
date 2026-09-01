@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAVEN ARCHIVE — 禁書庫目録</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #1a1510;
+    --parchment:  #f0e8d5;
+    --aged:       #c9b48a;
+    --rust:       #7a3b2e;
+    --shadow:     #0d0b08;
+    --faded:      #6b5c42;
+    --divider:    #8b7355;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--shadow);
+    background-image:
+      radial-gradient(ellipse at 50% 0%, #2a1f0e 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%230d0b08'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23151208' opacity='0.6'/%3E%3C/svg%3E");
+    color: var(--parchment);
+    font-family: 'EB Garamond', serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    text-align: center;
+    padding: 56px 24px 0;
+    position: relative;
+  }
+
+  .site-header::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--divider), transparent);
+    margin: 32px auto 0;
+  }
+
+  .header-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--aged);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .site-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--parchment);
+    line-height: 1.1;
+  }
+
+  .site-subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: clamp(13px, 2.5vw, 17px);
+    color: var(--aged);
+    margin-top: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Catalog wrapper ── */
+  .catalog {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Section heading ── */
+  .catalog-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 64px 0 0;
+  }
+
+  .catalog-heading-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--divider));
+  }
+  .catalog-heading-line.left {
+    background: linear-gradient(to left, transparent, var(--divider));
+  }
+
+  .catalog-heading-text {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--divider);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── Table ── */
+  .catalog-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+  }
+
+  .catalog-table thead tr {
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .catalog-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--faded);
+    text-transform: uppercase;
+    padding: 0 12px 12px;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .th-num  { width: 52px; }
+  .th-loc  { width: 130px; }
+  .th-date { width: 110px; text-align: right; }
+
+  .catalog-table tbody tr {
+    border-bottom: 1px solid rgba(139, 115, 85, 0.18);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .catalog-table tbody tr:hover {
+    background: rgba(201, 180, 138, 0.06);
+  }
+
+  .catalog-table tbody tr:hover .entry-title {
+    color: #e8d9b8;
+  }
+
+  .catalog-table td {
+    padding: 22px 12px;
+    vertical-align: top;
+  }
+
+  /* call number */
+  .entry-callnum {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--rust);
+    letter-spacing: 0.1em;
+    padding-top: 3px;
+  }
+
+  /* main title block */
+  .entry-title {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(15px, 2.5vw, 19px);
+    color: var(--parchment);
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .entry-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--faded);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .tag {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--aged);
+    border: 1px solid rgba(201, 180, 138, 0.3);
+    padding: 2px 7px;
+    text-transform: uppercase;
+  }
+
+  /* location */
+  .entry-location {
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    color: var(--faded);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* date */
+  .entry-date {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--faded);
+    letter-spacing: 0.08em;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* status badge */
+  .status-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    padding: 2px 7px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  .status-open    { color: #7a9e6e; border: 1px solid rgba(122,158,110,0.4); }
+  .status-sealed  { color: var(--rust); border: 1px solid rgba(122,59,46,0.4); }
+  .status-partial { color: var(--aged); border: 1px solid rgba(201,180,138,0.3); }
+
+  /* ── Stamp / watermark ── */
+  .stamp {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 72px;
+    height: 72px;
+    border: 2px solid rgba(122, 59, 46, 0.35);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    pointer-events: none;
+    transform: rotate(-18deg);
+  }
+
+  .stamp-text {
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+
+  /* ── Footer rule ── */
+  .catalog-footer {
+    text-align: center;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(139,115,85,0.2);
+  }
+
+  .catalog-footer p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--faded);
+    line-height: 2;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .th-loc, .td-loc { display: none; }
+    .catalog-table th, .catalog-table td { padding: 16px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="header-eyebrow">Codex Ravenorum — Vol. I</p>
+  <h1 class="site-title">RAVEN ARCHIVE</h1>
+  <p class="site-subtitle">禁書庫目録　／　The Forbidden Catalogue</p>
+</header>
+
+<main class="catalog">
+
+  <div class="catalog-heading">
+    <div class="catalog-heading-line left"></div>
+    <span class="catalog-heading-text">巡礼路の記録 — Via Peregrina</span>
+    <div class="catalog-heading-line"></div>
+  </div>
+
+  <table class="catalog-table">
+    <thead>
+      <tr>
+        <th class="th-num">請求番号</th>
+        <th>標題</th>
+        <th class="th-loc td-loc">聖地</th>
+        <th class="th-date">記録年</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr onclick="location.href='veskenport.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RA–001</div></td>
+        <td>
+          <div class="entry-title">霧の港町 Veskenport の記録</div>
+          <div class="entry-subtitle">巡礼の出発点、そして帰れぬ者たちの岸壁について</div>
+          <div class="entry-tags">
+            <span class="tag">始まりの門</span>
+            <span class="tag">港</span>
+            <span class="tag">冬至</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">北海沿岸<br>Veskenport</div></td>
+        <td>
+          <div class="entry-date">Anno XII</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='grauhallen.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RA–002</div></td>
+        <td>
+          <div class="entry-title">沈黙の修道院 Grauhallen 断章集</div>
+          <div class="entry-subtitle">言葉を持たぬ修道士たちが残した楽譜と蜂蜜酒の醸造記録</div>
+          <div class="entry-tags">
+            <span class="tag">修道院</span>
+            <span class="tag">音楽</span>
+            <span class="tag">沈黙</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">内陸の丘<br>Grauhallen</div></td>
+        <td>
+          <div class="entry-date">Anno XII</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='talgrim.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RA–003</div></td>
+        <td>
+          <div class="entry-title">市場と記憶 — Talgrim の交換誌</div>
+          <div class="entry-subtitle">過去を売る慣習と、前の持ち主の夢を見る者たちの証言</div>
+          <div class="entry-tags">
+            <span class="tag">市場</span>
+            <span class="tag">記憶</span>
+            <span class="tag">古着</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">巡礼路中継点<br>Talgrim</div></td>
+        <td>
+          <div class="entry-date">Anno XIII</div>
+          <div class="status-badge status-partial">一部開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='askveld.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RA–004</div></td>
+        <td>
+          <div class="entry-title">炎の谷 Askveld — 香と蝋燭の処方記録</div>
+          <div class="entry-subtitle">場所の記憶を火に封じる技法、および谷固有のハーブ目録</div>
+          <div class="entry-tags">
+            <span class="tag">蝋燭</span>
+            <span class="tag">香料</span>
+            <span class="tag">処方</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">地熱の谷<br>Askveld</div></td>
+        <td>
+          <div class="entry-date">Anno XIII</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='ravnekrypt.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RA–005</div></td>
+        <td>
+          <div class="entry-title">終着点 Ravnekrypt — 地下図書館の目録序文</div>
+          <div class="entry-subtitle">巡礼者たちが持ち寄った断章の保管場所、および司書不在の謎について</div>
+          <div class="entry-tags">
+            <span class="tag">禁書庫</span>
+            <span class="tag">断章</span>
+            <span class="tag">終着</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">巡礼路最奥<br>Ravnekrypt</div></td>
+        <td>
+          <div class="entry-date">Anno XIV</div>
+          <div class="status-badge status-sealed">封印中</div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="catalog-heading">
+    <div class="catalog-heading-line left"></div>
+    <span class="catalog-heading-text">季節の記録 — Codex Festivus</span>
+    <div class="catalog-heading-line"></div>
+  </div>
+
+  <table class="catalog-table">
+    <thead>
+      <tr>
+        <th class="th-num">請求番号</th>
+        <th>標題</th>
+        <th class="th-loc td-loc">季節</th>
+        <th class="th-date">記録年</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr onclick="location.href='rf001.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RF–001</div></td>
+        <td>
+          <div class="entry-title">魔女の夜に関する記録</div>
+          <div class="entry-subtitle">Grauhallenの丘で起きたこと、および七本の火の集会について</div>
+          <div class="entry-tags">
+            <span class="tag">夜の集会</span>
+            <span class="tag">火</span>
+            <span class="tag">春の終わり</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">春の終わりの月<br>Grauhallen丘陵</div></td>
+        <td>
+          <div class="entry-date">Anno IX–XIII</div>
+          <div class="status-badge status-partial">一部開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='rf002.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RF–002</div></td>
+        <td>
+          <div class="entry-title">死者が戻る夜に関する記録</div>
+          <div class="entry-subtitle">Ravnekryptが最も賑わう夜、供物の作法と帰還者の証言</div>
+          <div class="entry-tags">
+            <span class="tag">死者</span>
+            <span class="tag">供物</span>
+            <span class="tag">霜の月</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">霜の月<br>Ravnekrypt</div></td>
+        <td>
+          <div class="entry-date">Anno VIII–XIV</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='rf003.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RF–003</div></td>
+        <td>
+          <div class="entry-title">黒い帆船の夜に関する記録</div>
+          <div class="entry-subtitle">Veskenportに現れる船と、運ばれるものについて</div>
+          <div class="entry-tags">
+            <span class="tag">黒い船</span>
+            <span class="tag">航海</span>
+            <span class="tag">闇の月</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">闇の月<br>Veskenport港</div></td>
+        <td>
+          <div class="entry-date">Anno IV–XIV</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='rf004.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RF–004</div></td>
+        <td>
+          <div class="entry-title">水が記憶を持つ日に関する記録</div>
+          <div class="entry-subtitle">光の月、井戸と川に映る顔、および記憶の水への定着について</div>
+          <div class="entry-tags">
+            <span class="tag">水</span>
+            <span class="tag">記憶</span>
+            <span class="tag">光の月</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">光の月<br>巡礼路全域水源</div></td>
+        <td>
+          <div class="entry-date">Anno VI–XIII</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+      <tr onclick="location.href='rf005.html'" style="cursor:pointer;">
+        <td><div class="entry-callnum">RF–005</div></td>
+        <td>
+          <div class="entry-title">記憶が最も高値で売れる日に関する記録</div>
+          <div class="entry-subtitle">Talgrimの特別市と、取引された記憶の目録</div>
+          <div class="entry-tags">
+            <span class="tag">記憶売買</span>
+            <span class="tag">特別市</span>
+            <span class="tag">氷解の月</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">氷解の月<br>Talgrim市場</div></td>
+        <td>
+          <div class="entry-date">Anno VII–XIII</div>
+          <div class="status-badge status-open">開架</div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="catalog-heading">
+    <div class="catalog-heading-line left"></div>
+    <span class="catalog-heading-text">食と祈りの記録 — Codex Culinarius</span>
+    <div class="catalog-heading-line"></div>
+  </div>
+
+  <table class="catalog-table">
+    <thead>
+      <tr>
+        <th class="th-num">請求番号</th>
+        <th>標題</th>
+        <th class="th-loc td-loc">出典</th>
+        <th class="th-date">記録年</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td><div class="entry-callnum">RC–001</div></td>
+        <td>
+          <div class="entry-title">修道院の食卓 — 滋養と祈りのレシピ集</div>
+          <div class="entry-subtitle">Grauhallen 修道院に伝わる10の調理記録、断食と祝祭の食について</div>
+          <div class="entry-tags">
+            <span class="tag">レシピ</span>
+            <span class="tag">修道院</span>
+            <span class="tag">有料文書</span>
+          </div>
+        </td>
+        <td class="td-loc"><div class="entry-location">Grauhallen<br>写本より</div></td>
+        <td>
+          <div class="entry-date">Anno XIV</div>
+          <div class="status-badge status-sealed">会員限定</div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <footer class="catalog-footer">
+    <p>この目録に収められた文書は、Ravnekrypt の許可なく複製・転載することを禁ずる。</p>
+    <p><em>Omnia in Archivum. Nihil Oblivioni.</em></p>
+    <p style="margin-top:24px; font-size:11px; font-family:'Cinzel',serif; letter-spacing:0.2em; color:var(--faded);">RAVEN ARCHIVE — CODEX RAVENORUM</p>
+  </footer>
+
+</main>
+
+<div class="stamp">
+  <div class="stamp-text">RAVEN<br>ARCHIVE<br>✦</div>
+</div>
+
+</body>
+</html>
