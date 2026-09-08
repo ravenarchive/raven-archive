@@ -547,7 +547,7 @@ footer{position:relative;z-index:20;border-top:1px solid rgba(200,150,60,.07);pa
         <div class="fc fc-tl"></div><div class="fc fc-tr"></div>
         <div class="fc fc-bl"></div><div class="fc fc-br"></div>
         <div class="yt-inner">
-          <iframe src="https://www.youtube.com/embed/YEo4t1r0vBY"
+          <iframe id="yt-frame" src="https://www.youtube.com/embed/YEo4t1r0vBY"
             title="RAVEN ARCHIVE — 今夜の音楽"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
@@ -558,9 +558,9 @@ footer{position:relative;z-index:20;border-top:1px solid rgba(200,150,60,.07);pa
         <span>🎬 YouTube</span>
       </div>
       <div class="music-tabs">
-        <button class="mt on">修道院の夜</button>
-        <button class="mt">北方の森</button>
-        <button class="mt">写本室</button>
+        <button class="mt on"  data-video="YEo4t1r0vBY">修道院の夜</button>
+        <button class="mt"     data-video="YEo4t1r0vBY">北方の森</button>
+        <button class="mt"     data-video="YEo4t1r0vBY">写本室</button>
       </div>
     </div>
   </div>
@@ -846,10 +846,22 @@ const obs=new IntersectionObserver(entries=>{
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
 /* Music tabs */
+/* Music tabs — 動画切り替え */
 document.querySelectorAll('.mt').forEach(b=>{
   b.addEventListener('click',()=>{
+    /* タブのアクティブ切り替え */
     document.querySelectorAll('.mt').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');
+    /* iframeのsrcを切り替え */
+    const videoId = b.getAttribute('data-video');
+    if(videoId){
+      const frame = document.getElementById('yt-frame');
+      /* 一度srcを空にしてからセット（確実に切り替わる） */
+      frame.src = '';
+      setTimeout(()=>{
+        frame.src = 'https://www.youtube.com/embed/' + videoId;
+      }, 80);
+    }
   });
 });
 
