@@ -275,6 +275,62 @@
     .th-loc, .td-loc { display: none; }
     .catalog-table th, .catalog-table td { padding: 16px 8px; }
   }
+
+  /* ── Thumbnail ── */
+  .td-thumb {
+    width: 200px;
+    min-width: 160px;
+    padding: 18px 14px 18px 0;
+    vertical-align: middle;
+  }
+
+  .entry-thumb {
+    display: block;
+    width: 200px;
+    height: 120px;
+    object-fit: cover;
+    object-position: center;
+    /* 古い写真・資料感：少し脱彩色 */
+    filter: brightness(0.75) saturate(0.6) sepia(0.18);
+    /* 角丸なし、細い罫線のみ */
+    border: 1px solid rgba(139, 115, 85, 0.3);
+    transition: filter 0.3s;
+  }
+
+  .catalog-table tbody tr:hover .entry-thumb {
+    filter: brightness(0.85) saturate(0.75) sepia(0.12);
+  }
+
+  /* サムネイルなし（画像未設定）の場合のプレースホルダー */
+  .entry-thumb-placeholder {
+    display: block;
+    width: 200px;
+    height: 120px;
+    background: rgba(201, 180, 138, 0.05);
+    border: 1px solid rgba(139, 115, 85, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .entry-thumb-placeholder span {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: rgba(201, 180, 138, 0.25);
+    text-transform: uppercase;
+  }
+
+  /* モバイル：サムネイルを小さく */
+  @media (max-width: 700px) {
+    .td-thumb { width: 110px; min-width: 90px; padding-right: 10px; }
+    .entry-thumb,
+    .entry-thumb-placeholder { width: 110px; height: 70px; }
+  }
+
+  @media (max-width: 400px) {
+    .td-thumb { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -297,6 +353,7 @@
     <thead>
       <tr>
         <th class="th-num">請求番号</th>
+        <th class="td-thumb" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--faded);text-transform:uppercase;font-weight:400;padding:0 14px 12px 0;"></th>
         <th>標題</th>
         <th class="th-loc td-loc">聖地</th>
         <th class="th-date">記録年</th>
@@ -306,6 +363,10 @@
 
       <tr onclick="location.href='veskenport.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RA–001</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/ra001.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">霧の港町 Veskenport の記録</div>
           <div class="entry-subtitle">巡礼の出発点、そして帰れぬ者たちの岸壁について</div>
@@ -324,6 +385,10 @@
 
       <tr onclick="location.href='grauhallen.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RA–002</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/ra002.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">沈黙の修道院 Grauhallen 断章集</div>
           <div class="entry-subtitle">言葉を持たぬ修道士たちが残した楽譜と蜂蜜酒の醸造記録</div>
@@ -342,6 +407,10 @@
 
       <tr onclick="location.href='talgrim.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RA–003</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/ra003.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">市場と記憶 — Talgrim の交換誌</div>
           <div class="entry-subtitle">過去を売る慣習と、前の持ち主の夢を見る者たちの証言</div>
@@ -360,6 +429,10 @@
 
       <tr onclick="location.href='askveld.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RA–004</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/ra004.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">炎の谷 Askveld — 香と蝋燭の処方記録</div>
           <div class="entry-subtitle">場所の記憶を火に封じる技法、および谷固有のハーブ目録</div>
@@ -378,6 +451,10 @@
 
       <tr onclick="location.href='ravnekrypt.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RA–005</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/ra005.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">終着点 Ravnekrypt — 地下図書館の目録序文</div>
           <div class="entry-subtitle">巡礼者たちが持ち寄った断章の保管場所、および司書不在の謎について</div>
@@ -407,6 +484,7 @@
     <thead>
       <tr>
         <th class="th-num">請求番号</th>
+        <th class="td-thumb" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--faded);text-transform:uppercase;font-weight:400;padding:0 14px 12px 0;"></th>
         <th>標題</th>
         <th class="th-loc td-loc">季節</th>
         <th class="th-date">記録年</th>
@@ -416,6 +494,10 @@
 
       <tr onclick="location.href='rf001.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RF–001</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/rf001.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">魔女の夜に関する記録</div>
           <div class="entry-subtitle">Grauhallenの丘で起きたこと、および七本の火の集会について</div>
@@ -434,6 +516,10 @@
 
       <tr onclick="location.href='rf002.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RF–002</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/rf002.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">死者が戻る夜に関する記録</div>
           <div class="entry-subtitle">Ravnekryptが最も賑わう夜、供物の作法と帰還者の証言</div>
@@ -452,6 +538,10 @@
 
       <tr onclick="location.href='rf003.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RF–003</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/rf003.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">黒い帆船の夜に関する記録</div>
           <div class="entry-subtitle">Veskenportに現れる船と、運ばれるものについて</div>
@@ -470,6 +560,10 @@
 
       <tr onclick="location.href='rf004.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RF–004</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/rf004.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">水が記憶を持つ日に関する記録</div>
           <div class="entry-subtitle">光の月、井戸と川に映る顔、および記憶の水への定着について</div>
@@ -488,6 +582,10 @@
 
       <tr onclick="location.href='rf005.html'" style="cursor:pointer;">
         <td><div class="entry-callnum">RF–005</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/rf005.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">記憶が最も高値で売れる日に関する記録</div>
           <div class="entry-subtitle">Talgrimの特別市と、取引された記憶の目録</div>
@@ -517,6 +615,7 @@
     <thead>
       <tr>
         <th class="th-num">請求番号</th>
+        <th class="td-thumb" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--faded);text-transform:uppercase;font-weight:400;padding:0 14px 12px 0;"></th>
         <th>標題</th>
         <th class="th-loc td-loc">出典</th>
         <th class="th-date">記録年</th>
@@ -526,6 +625,10 @@
 
       <tr>
         <td><div class="entry-callnum">RC–001</div></td>
+        <td class="td-thumb">
+          <!-- 画像差し替え：src="images/rc001.jpg" に変更 -->
+          <div class="entry-thumb-placeholder"><span>No Image</span></div>
+        </td>
         <td>
           <div class="entry-title">修道院の食卓 — 滋養と祈りのレシピ集</div>
           <div class="entry-subtitle">Grauhallen 修道院に伝わる10の調理記録、断食と祝祭の食について</div>
