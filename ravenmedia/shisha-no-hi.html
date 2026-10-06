@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>死者が戻る日 探訪録 — RAVEN ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0a0806; --parch:#c8ad7f; --parch2:#d4bc8f;
+  --gold:#8a7040; --gold2:#a08848; --rust:#6b2e1a;
+  --blood:#8b1a1a; --divider:rgba(138,112,64,0.3);
+}
+body {
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,#1a0e08 0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 80% 80%,#120808 0%,transparent 50%);
+  font-family:'EB Garamond',serif;
+  color:var(--parch);
+  min-height:100vh;
+}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.8;}
+.page{position:relative;z-index:1;}
+
+/* BREADCRUMB */
+.breadcrumb{max-width:740px;margin:0 auto;padding:32px 32px 0;display:flex;align-items:center;gap:10px;}
+.breadcrumb a,.breadcrumb span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;color:rgba(138,112,64,0.5);transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--gold2);} .breadcrumb .sep{color:rgba(138,112,64,0.3);font-size:8px;} .breadcrumb .current{color:rgba(138,112,64,0.8);}
+
+/* HEADER */
+.article-header{max-width:740px;margin:0 auto;padding:40px 32px 0;}
+.call-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--blood);margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.call-badge::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(139,26,26,0.4),transparent);}
+.article-title{font-family:'IM Fell English',serif;font-size:clamp(26px,5vw,44px);font-weight:normal;color:var(--parch2);line-height:1.25;text-shadow:0 2px 16px rgba(0,0,0,0.8);}
+.article-subtitle{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(200,173,127,0.6);margin-top:10px;line-height:1.6;}
+.article-meta{display:flex;align-items:center;gap:24px;margin-top:28px;padding:16px 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(138,112,64,0.5);text-transform:uppercase;}
+.meta-value{font-family:'EB Garamond',serif;font-size:13px;color:rgba(200,173,127,0.8);font-style:italic;}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;color:rgba(138,112,64,0.7);border:1px solid rgba(138,112,64,0.25);padding:3px 9px;}
+.tag.red{color:rgba(139,26,26,0.8);border-color:rgba(139,26,26,0.3);}
+
+/* 扉絵 */
+.frontispiece{max-width:740px;margin:48px auto 0;padding:0 32px;}
+.frontispiece-frame{position:relative;width:100%;aspect-ratio:16/7;border:1px solid rgba(139,26,26,0.2);overflow:hidden;background:#080604;}
+.frontispiece-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(160deg,#0f0806 0%,#1a0e08 40%,#080604 100%);}
+.fp-glyph{font-family:'Cinzel',serif;font-size:32px;color:rgba(139,26,26,0.2);letter-spacing:0.3em;}
+.fp-label{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(139,26,26,0.2);letter-spacing:0.15em;text-align:center;line-height:1.8;}
+.frontispiece-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);z-index:2;pointer-events:none;}
+.frontispiece-border-left,.frontispiece-border-right{position:absolute;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,rgba(139,26,26,0.15),transparent);z-index:3;}
+.frontispiece-border-left{left:8px;} .frontispiece-border-right{right:8px;}
+.frontispiece-caption{margin-top:10px;text-align:right;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:rgba(139,26,26,0.3);letter-spacing:0.08em;}
+
+/* INCIPIT */
+.incipit{max-width:740px;margin:40px auto 0;padding:0 32px;}
+.incipit-inner{border-left:2px solid rgba(139,26,26,0.4);padding:4px 0 4px 24px;position:relative;}
+.incipit-inner::before{content:'\201C';font-family:'IM Fell English',serif;font-size:80px;color:rgba(139,26,26,0.12);position:absolute;left:-8px;top:-20px;line-height:1;}
+.incipit p{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(16px,2.5vw,20px);color:rgba(200,173,127,0.8);line-height:1.9;}
+
+/* BODY */
+.article-body{max-width:740px;margin:0 auto;padding:48px 32px 80px;}
+
+.article-body p {
+  font-size:clamp(16px,2vw,19px);
+  line-height:2.1;
+  color:rgba(200,173,127,0.85);
+  margin-bottom:1.8em;
+  text-align:justify;
+}
+
+/* ドロップキャップ */
+.article-body p:first-child::first-letter {
+  font-family:'IM Fell English',serif;
+  font-size:4.5em;float:left;
+  line-height:0.75;margin:0.05em 0.08em 0 0;
+  color:var(--parch2);text-shadow:2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.article-body em{font-style:italic;color:var(--parch2);}
+
+/* セリフブロック */
+.dialogue {
+  margin: 8px 0 24px 0;
+  padding: 0 0 0 20px;
+  border-left: 1px solid rgba(138,112,64,0.2);
+  font-style: italic;
+  color: rgba(200,173,127,0.7);
+}
+
+/* セクション区切り */
+.section-mark{display:flex;align-items:center;gap:16px;margin:48px 0 32px;}
+.section-mark-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--divider),transparent);}
+.section-mark-glyph{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:rgba(138,112,64,0.3);text-transform:uppercase;white-space:nowrap;}
+
+/* 余白メモ */
+.margin-note{float:right;clear:right;width:160px;margin:0 -180px 20px 20px;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.45);line-height:1.7;border-left:1px solid rgba(138,112,64,0.15);padding-left:12px;}
+
+/* 碑文ブロック */
+.inscription{margin:36px 0;padding:24px 32px;border:1px solid rgba(138,112,64,0.15);background:rgba(15,10,6,0.6);position:relative;text-align:center;}
+.inscription::before{content:'✦';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px;color:rgba(138,112,64,0.3);font-size:10px;}
+.inscription p{font-family:'IM Fell English',serif;font-style:italic;font-size:15px!important;color:rgba(200,173,127,0.5)!important;line-height:1.9!important;margin:0!important;text-align:center;}
+
+/* ループ演出 — 最後のページ折り返し感 */
+.loop-break {
+  text-align:center;
+  margin:48px 0;
+  position:relative;
+}
+.loop-break::before,
+.loop-break::after {
+  content:'';
+  position:absolute;
+  top:50%; left:0; right:0;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(139,26,26,0.3),transparent);
+}
+.loop-break span {
+  position:relative;
+  background:var(--bg);
+  padding:0 16px;
+  font-family:'Cinzel',serif;
+  font-size:10px;
+  letter-spacing:0.3em;
+  color:rgba(139,26,26,0.4);
+  text-transform:uppercase;
+}
+
+/* NAV */
+.article-nav{max-width:740px;margin:0 auto;padding:32px 32px 64px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--divider);gap:16px;flex-wrap:wrap;}
+.nav-link{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(138,112,64,0.5);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold2);}
+.nav-center{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:rgba(138,112,64,0.35);text-align:center;}
+
+/* 読者への問いかけ */
+.reader-call {
+  max-width:740px;
+  margin:0 auto;
+  padding:0 32px 48px;
+}
+.reader-call-inner {
+  border:1px solid rgba(138,112,64,0.15);
+  padding:24px 28px;
+  background:rgba(15,10,6,0.4);
+  text-align:center;
+}
+.reader-call p {
+  font-family:'IM Fell English',serif;
+  font-style:italic;
+  font-size:15px;
+  color:rgba(200,173,127,0.5);
+  line-height:1.9;
+}
+
+@media(max-width:900px){.margin-note{display:none;}}
+@media(max-width:600px){
+  .article-header,.incipit,.article-body,.article-nav,.frontispiece,.reader-call{padding-left:20px;padding-right:20px;}
+  .meta-tags{margin-left:0;margin-top:8px;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="breadcrumb">
+  <a href="../index.html">Raven Archive</a>
+  <span class="sep">／</span>
+  <a href="index.html">禁書庫</a>
+  <span class="sep">／</span>
+  <span class="current">探訪録</span>
+</nav>
+
+<header class="article-header">
+  <div class="call-badge">探訪録　｜　Codex Festivus — 霜の月</div>
+  <h1 class="article-title">死者が戻る日、探訪録</h1>
+  <p class="article-subtitle">レイヴンクリプト港町にて。はじめは全く信じてなかった。</p>
+  <div class="article-meta">
+    <div class="meta-item"><span class="meta-label">記録者</span><span class="meta-value">巡礼者、匿名</span></div>
+    <div class="meta-item"><span class="meta-label">状態</span><span class="meta-value">開架</span></div>
+    <div class="meta-item"><span class="meta-label">発生地</span><span class="meta-value">Ravnekrypt港町</span></div>
+    <div class="meta-tags">
+      <span class="tag red">死者</span>
+      <span class="tag">霜の月</span>
+      <span class="tag">探訪</span>
+      <span class="tag">一人称記録</span>
+    </div>
+  </div>
+</header>
+
+<!-- 扉絵 -->
+<div class="frontispiece">
+  <div class="frontispiece-frame">
+    <div class="frontispiece-placeholder">
+      <div class="fp-glyph">†</div>
+      <div class="fp-label">
+        Ravnekrypt港町、霜の月<br>
+        死者が戻る日
+      </div>
+    </div>
+    <div class="frontispiece-border-left"></div>
+    <div class="frontispiece-border-right"></div>
+  </div>
+  <p class="frontispiece-caption">記録者による現地報告、原文ママ</p>
+</div>
+
+<!-- INCIPIT -->
+<div class="incipit">
+  <div class="incipit-inner">
+    <p>
+      はじめは全く信じてなかった。<br>
+      だって、死者が戻る日だぜ？<br>
+      オカルトが過ぎる。
+    </p>
+  </div>
+</div>
+
+<!-- BODY -->
+<article class="article-body">
+
+  <p>
+    そんなことを考えていると、やかましくブザーが鳴った。どうやら着いたらしい。
+  </p>
+
+  <p>
+    レイヴンアーカイブ、昔は違う名前があったそうだが、今はそう呼ばれている。繰り返し言うが、オレは死者が蘇るなんて信じてるわけじゃない。だが、それでも、どうしても聞きたかった。先日、夜道で刺されて死んでしまった彼女に何があったのかを。警察は不気味なほどすんなりと事故死と断定した。刺されたのにだぞ。こうなると、死者に直接聞きたくもなるというものだ。
+  </p>
+
+  <p>
+    甲板で煙草を吸っていたら陸が見えてきた。ほかの客を見かけないと思ったが、今日は俺一人だったようだ。着くと早速、黒いコートを着た長身の男が話しかけてきた。
+  </p>
+
+  <div class="dialogue">
+    「ようこそ、港町レイヴンクリプトへ。市長です。今宵はわが町の誇る奇祭、死者が戻る日！あなたの会いたい人と会えるかはあなた次第！どうか覗いていってやってください。」
+  </div>
+
+  <p>
+    思ったよりテンションが高い。身長2メートルはありそうな男が身ぶり手ぶりを駆使して楽しそうに語るものだから、非常に威圧感がある。いつも迎えに来てるのかと尋ねると、ほぼ毎日港へ客が来てるのか見に来るそうだ。
+  </p>
+
+  <div class="dialogue">
+    「死者が戻る日に来るということは、あなたにも会いたい人がいるんですね！ああ！会えればいい！会えるのを祈ってます！」
+  </div>
+
+  <p>
+    とガトリング砲のようにしゃべっていた町長は、ふと腕時計を見て、公務があると言って帰っていった。この町の町民はこのテンションなのか？という疑問とともに港町の宿へ向かうことにした。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">宿にて</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p>
+    宿に到着すると、小柄な宿の主人が迎えてくれた。今度はえらくトーンが低い。どうやらみんな市長のテンションというわけではないようだ。部屋はコンパクトなもののベッド、トイレと必要なものは大体そろっている。窓を覗くと大通りが一望できる。なんだいい部屋じゃないか、と感心していたが、窓の横には大きなコウモリと目が合った。<span class="margin-note">どうも、と会釈するとコウモリも少しだけ会釈を返してくれたように感じた。</span>漠然とした不穏さのようなものを感じてならないが、ここまできたら後には引けない。そう思ったオレは、荷ほどきもそこそこに死者が戻る日の会場へ向かうことにした。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">祭りの会場</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p>
+    会場とはいうものの、実際には小高い広場という印象の場所だった。周囲には地元の魚を使ったらしいハンバーガーなどが売られている。不気味な連中の奇祭という噂だったとは思えない普通さだ。なんだ、肩透かしだな、蜘蛛でも売ってれば面白かったのに、などと思いながら会場内を歩いていると、先ほど会った町長と出会った。
+  </p>
+
+  <div class="dialogue">
+    「これはこれは！来てくださったんですね！ああ！うれしい！この日を記念日に制定したいほどに！今日はどんな人と会いに・・？おおっと！口にすると会えなくなるかも！ではでは！会えるといいですね！それでは！」
+  </div>
+
+  <p>
+    そういうと、町長は足早に去っていった。まったく、嵐のような男だ。そんなことを考えていると、人々が集まってきた。どうやらまもなくスタートするらしい。丘のてっぺんで声がガラガラの老人が挨拶をし始め、キャンプファイヤーのようなものに人間サイズの藁人形を放り込み始めた。死者がよみがえるのに、なぜ人間を模した藁を火にくべるんだ？
+  </p>
+
+  <p>
+    そういう疑問も束の間、火のついた松明を放り込んだ。ごうごうと燃えている。燃料がしみこませてあったのか、明らかに藁や木だけではない燃え方をしている。かなりの熱気を感じる。住民たちが遠巻きに燃え盛る炎を見つめていた。
+  </p>
+
+  <p>
+    しばらくたったが、何も起こらない。なんだ、何時間もかけてわざわざここまで来たのに肩透かしだな、酒でも飲んで帰るとするか。そう思った俺は踵を返したら、歓声が上がった。とうとう死者のお出ましか、そう思い振り向いたら盛大にキャンプファイヤーが崩れていた。
+  </p>
+
+  <div class="dialogue">
+    「くるぞくるぞ・・」
+  </div>
+
+  <p>
+    そう口々に町民が言っている。しばらく眺めていると、炎の中から煙が人の形になっているように見える。その煙の塊が、ゆっくりと歩いてこちらにやってくる。なんだこれは、俺の彼女なのか？逃げたほうがいいのか？判断に困る。中間の案として、すこし距離をとってほかの人々の様子を見ることにした。
+  </p>
+
+  <p>
+    周りを見ると、両手を広げてハグの態勢で煙を待ち受けている。さあ、この後何が起こるのか。わくわくしながら眺めていると、町民と煙が触れた。すると、煙も抱きしめる態勢になって、町民が倒れた。次々と町民が倒れている。このままだと、俺もああなるのか。そう思った瞬間に怖くなった俺は逃げることにした。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">逃げられなかった</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p>
+    宿の中には、店主も含めて数人が倒れていた。倒れている町民をまたいで2階にある俺の部屋に向かうと、清掃員の老婆が俺の部屋の前で倒れてふさいでいた。無理やり清掃員と、水の入ったバケツ、モップなどをどかしていたら無駄に時間がかかってしまった。慌てて荷物をまとめていると、外が靄がかっているのに気が付いた。よくみると、その靄は部屋に侵入してきた。
+  </p>
+
+  <p>
+    ああ、逃げきれないかもしれない。そう思ったら、むしろ迎えてやろうという気がしてきた。もうやけだ、全部受け入れてやる。意を決して手を広げると、煙もハグの姿勢で俺に向かってきた。煙に近づくに連れて、少し熱気を感じた。<em>本当に煙だ、窒息で死ぬのはいやだなあ、苦しそうだし。</em>そんなことを考えていたら、とうとう煙に包まれた。
+  </p>
+
+  <div class="inscription">
+    <p>
+      煙に全身が包まれた瞬間、<br>
+      鼻や口、耳などから煙が入る感覚があった。<br>
+      どんどん意識が遠のくのを感じる。<br>
+      ああ、あまり面白くもない人生だ、<br>
+      このまま死ぬのも悪くはないか。
+    </p>
+  </div>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">彼女の記憶の中で</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p>
+    そんなことを考えていたら風景が見えてきた。ベッドに横たわりながら本を読んでいる。俺が読んだ記憶のない本だ、いや、名前は聞いたことあるような。ふと、自分の体に目を落とすと胴体が女性、そして見覚えのある服装をしている。間違いない、俺は彼女になっている。
+  </p>
+
+  <p>
+    だが、体の自由が効かない。これは、おそらく彼女の記憶を追体験しているのだろう。そう思っていると、慌ただしい足音が聞こえてきた。部屋を勢いよく開けてきたのは、初老の男性だ。よく見ると、この男も見覚えがある。そう、<em>彼女の父だ。</em>
+  </p>
+
+  <p>
+    よく聞き取れないが、すごい剣幕でまくし立ててくる。彼女も反論するが、まるで聞いていないようだ。しばらくすると、父親がナイフを持って俺に襲い掛かってきた。なんて力だ、女性の非力さを差し引いても父親の力が異様に強く感じた。何度も殴られ意識が朦朧としたところ、腹に何か刺さった感触があった。
+  </p>
+
+  <p>
+    どうやら俺は刺されたらしい。ああ、これが死ぬということか。血とともに意識が流れるのを感じる。
+  </p>
+
+  <div class="section-mark">
+    <div class="section-mark-line"></div>
+    <span class="section-mark-glyph">翌朝</span>
+    <div class="section-mark-line"></div>
+  </div>
+
+  <p>
+    意識が戻ると、宿の部屋に倒れていた。日が随分と上がっている。犯人は父親だった。だが、政府の高官だったので、さしずめ権力でもみ消したのだろう。ああ、徒労だ。真相を知ったからといって、逮捕に繋げられそうにない。はあ、疲れたな。そう思い俺は、荷物を持ってチェックアウトに向かった。
+  </p>
+
+  <p>
+    宿主は何事もなかったかのように「本日はうちの宿をご利用いただきありがとうございました。何かご不便はございませんでしたか」などと聞いてくる。お前、夜倒れてなかったか？顔が真っ赤になって倒れてたぞ、大丈夫か？と聞いてみると、どうやら何も覚えていないらしい。これ以上何かを喋ると深堀されても面倒だ、そう思った俺は外に出ることにした。
+  </p>
+
+  <p>
+    相変わらず、商店では怪しい人形を売っているし、鮮魚店では見たことのない魚を店頭で掻き捌いている。
+  </p>
+
+  <div class="dialogue">
+    「ああ！また会いましたね！」
+  </div>
+
+  <p>
+    でかい声が聞こえる。振り向くと、町長が日傘をさして立っていた。なんとなく、会う気がしていた。「その顔は思い人に会えたようですね！ああ！最高だ！夢のようだ！」昨日までは不愉快だったが、少しだけ安心している自分に驚いた。
+  </p>
+
+  <p>
+    町長は会えたのか？そう尋ねると、「もちろんですとも！今日は～ちゃんに会えました！次は～君に会いたいですね！」どうやら、会いたい人が何人もいるらしい。俺はあまり他人の素性を聞くタイプじゃないが、もう会うこともないこの男なら聞いてもいいかと思い聞いてみた。
+  </p>
+
+  <div class="dialogue">
+    「いや実はですね！7年ほど昔私が以前勤めていた孤児院で火事なってしまってですね！教え子が5人ほど亡くなってしまいまして！そこで、一人ずつにはなるんですが、毎年死者の日で会えるのを楽しみにしているんです！」
+  </div>
+
+  <p>
+    なんてことだ、立ち話で聞くには重すぎる。さすがに申し訳なくなったオレは話に乗ることにした。そうか、大変だったな、昨日はどんな話をしたんだ、などと人間嫌いなオレなりに話を聞いていると、町長が突然切り出した。
+  </p>
+
+  <div class="dialogue">
+    「そう！今日は町きっての奇祭！死者がよみがえる日！あなたも思い人と会えるといいですね！」
+  </div>
+
+  <div class="loop-break">
+    <span>——— ここで気がついた ———</span>
+  </div>
+
+  <p>
+    一体なにをいっているんだ。昨日祭りがあって、俺も含めて故人と会って、みんな倒れてたじゃないか。そう出かかったが、よく考えたら、<em>俺は今朝ここについたばかりだという事に気が付いた。</em>
+  </p>
+
+  <p>
+    そうだ、俺は刺されて死んでしまった彼女ともう一度会うためにここまでやってきたんだ。そう思いだした俺は、もう一度、宿に向かって歩き出した。後ろで「どんな方とお会いに？おおっと！ここで話すと会えなくなるかも！」という声が聞こえたが、聞こえないふりをした。
+  </p>
+
+</article>
+
+<!-- 読者への問いかけ -->
+<div class="reader-call">
+  <div class="reader-call-inner">
+    <p>
+      あなたにも、もう一度会いたい人がいますか。<br>
+      Ravnekryptへの船は、今夜も出ています。
+    </p>
+  </div>
+</div>
+
+<nav class="article-nav">
+  <a href="index.html" class="nav-link">← 禁書庫へ戻る</a>
+  <div class="nav-center">探訪録 ／ 霜の月</div>
+  <a href="rf002.html" class="nav-link">関連記録：死者が戻る夜 →</a>
+</nav>
+
+</div>
+<script src="frontispiece.js"></script>
+</body>
+</html>
